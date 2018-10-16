@@ -20,9 +20,18 @@ use nguyenanhung\MyDatabase\Interfaces\BaseModelInterface;
 /**
  * Class BaseModel
  *
+ * Class Base Model sử dụng Query Builder của Illuminate Database
+ *
+ * Class này chỉ khai báo các hàm cơ bản và thông dụng trong quá trính sử dụng
+ * các cú pháp, function khác đều có thể sử dụng theo tài liệu chính thức của Illuminate Database
+ *
+ * @see       https://laravel.com/docs/5.4/database
+ *
  * @package   nguyenanhung\MyDatabase\Model
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
+ * @since     2018-10-16
+ * @version   0.1.2
  */
 class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
 {
@@ -310,6 +319,23 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
         return $result;
+    }
+
+    /**
+     * Hàm getResultDistinct là alias của hàm getDistinctResult
+     *
+     * Các tham số đầu ra và đầu vào theo quy chuẩn của hàm getDistinctResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 23:49
+     *
+     * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getResultDistinct($selectField = '')
+    {
+        return $this->getDistinctResult($selectField);
     }
 
     /**

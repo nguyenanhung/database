@@ -131,6 +131,20 @@ interface BaseModelInterface
     public function getDistinctResult($selectField = '');
 
     /**
+     * Hàm getResultDistinct là alias của hàm getDistinctResult
+     *
+     * Các tham số đầu ra và đầu vào theo quy chuẩn của hàm getDistinctResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 23:49
+     *
+     * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getResultDistinct($selectField = '');
+
+    /**
      * Function getResult
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
