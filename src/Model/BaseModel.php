@@ -219,14 +219,22 @@ class BaseModel implements ProjectInterface, BaseModelInterface
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         if ($format == 'result') {
             $result = $db->get();
+            $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         } else {
             $result = $db->first();
+            $this->debug->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
         }
         if ($format == 'json') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
+
             return $result->toJson();
         } elseif ($format == 'array') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
+
             return $result->toArray();
         } elseif ($format == 'base') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
+
             return $result->toBase();
         } else {
             return $result;
@@ -266,9 +274,14 @@ class BaseModel implements ProjectInterface, BaseModelInterface
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->first();
+        $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
         if (!empty($fieldOutput) && isset($result->$fieldOutput)) {
+            $this->debug->debug(__FUNCTION__, 'Tìm thấy thông tin cột dữ liệu ' . $fieldOutput . ' -> ' . $result->$fieldOutput);
+
             return $result->$fieldOutput;
         } else {
+            $this->debug->error(__FUNCTION__, 'Không tìm thấy cột dữ liệu ' . $fieldOutput);
+
             return $result;
         }
     }
@@ -279,22 +292,93 @@ class BaseModel implements ProjectInterface, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 13:59
      *
-     * @param string $field Mảng dữ liệu danh sách các field cần so sánh
+     * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getDistinctResult($field = '')
+    public function getDistinctResult($selectField = '')
     {
-        if (!is_array($field)) {
-            $field = [$field];
+        if (!is_array($selectField)) {
+            $selectField = [$selectField];
         }
         $this->connection();
         $db = Capsule::table($this->table);
         $db->distinct();
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->get($field);
+        $result = $db->get($selectField);
+        $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
         return $result;
+    }
+
+    /**
+     * Function getResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 16:14
+     *
+     * @param array|string $wheres              Mãng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param string       $selectField         Mảng dữ liệu danh sách các field cần so sánh
+     * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
+     *                                          example $options = [
+     *                                          'format' => null,
+     *                                          'orderBy => [
+     *                                          'id' => 'desc'
+     *                                          ]
+     *                                          ];
+     *
+     * @return array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
+     *                                                     map theo biến format truyền vào
+     */
+    public function getResult($wheres = [], $selectField = '*', $options = NULL)
+    {
+        if (!is_array($selectField)) {
+            $selectField = [$selectField];
+        }
+        if (isset($options['format'])) {
+            $format = strtolower($options['format']);
+        } else {
+            $format = NULL;
+        }
+        $this->connection();
+        $db = Capsule::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $db->whereIn($field, $value);
+                } else {
+                    $db->where($field, '=', $value);
+                }
+            }
+        } else {
+            $db->where($this->primaryKey, '=', $wheres);
+        }
+        if (isset($options['orderBy']) && is_array($options['orderBy'])) {
+            foreach ($options['orderBy'] as $column => $direction) {
+                $db->orderBy($column, $direction);
+            }
+        }
+        if (isset($options['orderBy']) && $options['orderBy'] == 'random') {
+            $db->inRandomOrder();
+        }
+        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $result = $db->get($selectField);
+        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        if ($format == 'json') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
+
+            return $result->toJson();
+        } elseif ($format == 'array') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
+
+            return $result->toArray();
+        } elseif ($format == 'base') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
+
+            return $result->toBase();
+        } else {
+            return $result;
+        }
     }
 
     /**
@@ -311,8 +395,9 @@ class BaseModel implements ProjectInterface, BaseModelInterface
     {
         $this->connection();
         $db = Capsule::table($this->table);
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $id = $db->insertGetId($data);
+        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $id);
 
         return $id;
     }
@@ -344,9 +429,10 @@ class BaseModel implements ProjectInterface, BaseModelInterface
             $db->where($this->primaryKey, '=', $wheres);
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->update($data);
+        $resultId = $db->update($data);
+        $this->debug->info(__FUNCTION__, 'Result Update Rows: ' . $resultId);
 
-        return $result;
+        return $resultId;
     }
 
     /**
@@ -375,8 +461,9 @@ class BaseModel implements ProjectInterface, BaseModelInterface
             $db->where($this->primaryKey, '=', $wheres);
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->delete();
+        $resultId = $db->delete();
+        $this->debug->info(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
 
-        return $result;
+        return $resultId;
     }
 }

@@ -124,11 +124,32 @@ interface BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 13:59
      *
-     * @param string $field Mảng dữ liệu danh sách các field cần so sánh
+     * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getDistinctResult($field = '');
+    public function getDistinctResult($selectField = '');
+
+    /**
+     * Function getResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 16:14
+     *
+     * @param array|string $wheres              Mãng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param string       $selectField         Mảng dữ liệu danh sách các field cần so sánh
+     * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
+     *                                          example $options = [
+     *                                          'format' => null,
+     *                                          'orderBy => [
+     *                                          'id' => 'desc'
+     *                                          ]
+     *                                          ];
+     *
+     * @return array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
+     *                                                     map theo biến format truyền vào
+     */
+    public function getResult($wheres = [], $selectField = '*', $options = NULL);
 
     /**
      * Hàm thêm mới bản ghi vào bảng
