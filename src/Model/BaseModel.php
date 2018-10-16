@@ -31,7 +31,7 @@ use nguyenanhung\MyDatabase\Interfaces\BaseModelInterface;
  * @package   nguyenanhung\MyDatabase\Model
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
- * @since     2018-10-16
+ * @since     2018-10-17
  * @version   0.1.2
  */
 class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
@@ -88,13 +88,12 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     }
 
     /**
-     * Function getVersion
+     * Hàm lấy thông tin phiên bản Package
      *
      * @author  : 713uk13m <dev@nguyenanhung.com>
-     * @time    : 10/16/18 11:42
+     * @time    : 10/13/18 15:12
      *
-     * @return mixed|string Current Project Version
-     * @example 0.1.0
+     * @return mixed|string Current Project Version, VD: 0.1.0
      */
     public function getVersion()
     {
