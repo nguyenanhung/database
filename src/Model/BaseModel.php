@@ -19,6 +19,7 @@ class BaseModel implements ProjectInterface
     protected $db;
     protected $table;
     protected $capsule;
+    public    $primaryKey = 'id';
 
     /**
      * BaseModel constructor.
@@ -85,6 +86,18 @@ class BaseModel implements ProjectInterface
     }
 
     /**
+     * Hàm truncate bảng dữ liệu
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:15
+     *
+     */
+    public function truncate()
+    {
+        Capsule::table($this->table)->truncate();
+    }
+
+    /**
      * Hàm đếm toàn bộ bản ghi tồn tại trong bảng
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -108,7 +121,7 @@ class BaseModel implements ProjectInterface
      * @param string $value Giá trị cần kiểm tra
      * @param string $field Field tương ứng, ví dụ: ID
      *
-     * @return int
+     * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      */
     public function checkExists($value = '', $field = 'id')
     {
@@ -133,13 +146,24 @@ class BaseModel implements ProjectInterface
      * @param string      $field  Field tương ứng, ví dụ: ID
      * @param null|string $format Format dữ liệu đầu ra: null, json, array, base, result
      *
-     * @return array|\Illuminate\Support\Collection|string
+     * @return array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
+     *                                                     map theo biến format truyền vào
      */
     public function getInfo($value = '', $field = 'id', $format = NULL)
     {
         $format = strtolower($format);
         $db     = Capsule::table($this->table);
-        $db->where($field, '=', $value);
+        if (is_array($value) && count($value) > 0) {
+            foreach ($value as $f => $v) {
+                if (is_array($v)) {
+                    $db->whereIn($f, $v);
+                } else {
+                    $db->where($f, '=', $v);
+                }
+            }
+        } else {
+            $db->where($field, '=', $value);
+        }
         if ($format == 'result') {
             $result = $db->get();
         } else {
@@ -154,5 +178,144 @@ class BaseModel implements ProjectInterface
         } else {
             return $result;
         }
+    }
+
+    /**
+     * Hàm lấy giá trị 1 field của bản ghi dựa trên điều kiện 1 bản ghi đầu vào
+     *
+     * Đây là hàm cơ bản, chỉ áp dụng check theo 1 field
+     *
+     * Lấy bản ghi đầu tiên phù hợp với điều kiện
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:51
+     *
+     * @param string $value       Giá trị cần kiểm tra
+     * @param string $field       Field tương ứng với giá tri kiểm tra, ví dụ: ID
+     * @param string $fieldOutput field kết quả đầu ra
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
+     */
+    public function getValue($value = '', $field = 'id', $fieldOutput = '')
+    {
+        $db = Capsule::table($this->table);
+        if (is_array($value) && count($value) > 0) {
+            foreach ($value as $f => $v) {
+                if (is_array($v)) {
+                    $db->whereIn($f, $v);
+                } else {
+                    $db->where($f, '=', $v);
+                }
+            }
+        } else {
+            $db->where($field, '=', $value);
+        }
+        $result = $db->first();
+        if (!empty($fieldOutput) && isset($result->$fieldOutput)) {
+            return $result->$fieldOutput;
+        } else {
+            return $result;
+        }
+    }
+
+    /**
+     * Hàm lấy danh sách Distinct toàn bộ bản ghi trong 1 bảng
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 13:59
+     *
+     * @param string $field Mảng dữ liệu danh sách các field cần so sánh
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getDistinctResult($field = '')
+    {
+        if (!is_array($field)) {
+            $field = [$field];
+        }
+        $db     = Capsule::table($this->table);
+        $result = $db->distinct()->get($field);
+
+        return $result;
+    }
+
+    /**
+     * Hàm thêm mới bản ghi vào bảng
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:04
+     *
+     * @param array $data Mảng chứa dữ liệu cần insert
+     *
+     * @return int Insert ID của bản ghi
+     */
+    public function add($data = [])
+    {
+        $id = Capsule::table($this->table)->insertGetId($data);
+
+        return $id;
+    }
+
+    /**
+     * Hàm update dữ liệu
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:10
+     *
+     * @param array        $data   Mảng dữ liệu cần Update
+     * @param array|string $wheres Mãng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     *
+     * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
+     */
+    public function update($data = [], $wheres = [])
+    {
+        $db = Capsule::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $db->whereIn($field, $value);
+                } else {
+                    $db->where($field, '=', $value);
+                }
+            }
+        } else {
+            $db->where($this->primaryKey, '=', $wheres);
+        }
+        $result = $db->update($data);
+
+        return $result;
+    }
+
+    /**
+     * Hàm xóa dữ liệu
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:13
+     *
+     * @param array|string $wheres Mãng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     *
+     * @return int Số bản ghi đã xóa
+     */
+    public function delete($wheres = [])
+    {
+        $db = Capsule::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $db->whereIn($field, $value);
+                } else {
+                    $db->where($field, '=', $value);
+                }
+            }
+        } else {
+            $db->where($this->primaryKey, '=', $wheres);
+        }
+        $result = $db->delete();
+
+        return $result;
+    }
+
+    public function __destruct()
+    {
     }
 }
