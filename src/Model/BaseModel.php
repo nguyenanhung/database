@@ -14,6 +14,7 @@ use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use nguyenanhung\MyDebug\Debug;
 use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
+use nguyenanhung\MyDatabase\Interfaces\ModelInterface;
 use nguyenanhung\MyDatabase\Interfaces\BaseModelInterface;
 
 /**
@@ -23,7 +24,7 @@ use nguyenanhung\MyDatabase\Interfaces\BaseModelInterface;
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
  */
-class BaseModel implements ProjectInterface, BaseModelInterface
+class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
 {
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
