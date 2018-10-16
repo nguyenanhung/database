@@ -23,7 +23,7 @@
         "ext-curl": "*",
         "ext-json": "*",
         "ext-pdo": "*",
-        "nguyenanhung/my-debug": "v0.1",
+        "nguyenanhung/my-debug": "^0.1",
         "illuminate/console": "^5.4.36",
         "illuminate/events": "^5.4.36",
         "illuminate/database": "^5.4.36",
