@@ -188,3 +188,4 @@ interface BaseModelInterface
      */
     public function delete($wheres = []);
 }
+
