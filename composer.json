@@ -1,12 +1,12 @@
 {
     "name": "nguyenanhung/database",
     "type": "library",
-    "description": "My Wrapper Database",
+    "description": "A wrapper database and backup database",
     "keywords": [
-        "telco",
-        "vas",
-        "detect",
-        "lottery"
+        "database",
+        "backup",
+        "sql",
+        "mysql"
     ],
     "homepage": "https://github.com/nguyenanhung/database",
     "license": "GPL-3.0",
