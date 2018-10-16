@@ -26,6 +26,7 @@ use nguyenanhung\MyDatabase\Interfaces\BaseModelInterface;
  * các cú pháp, function khác đều có thể sử dụng theo tài liệu chính thức của Illuminate Database
  *
  * @see       https://laravel.com/docs/5.4/database
+ * @see       https://packagist.org/packages/illuminate/database#v5.4.36
  *
  * @package   nguyenanhung\MyDatabase\Model
  * @author    713uk13m <dev@nguyenanhung.com>
@@ -125,6 +126,9 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 11:43
      *
      * @param array $db Mảng dữ liệu thông tin DB cần kết nối
+     *
+     * @see   https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php
+     * @see   https://packagist.org/packages/illuminate/database#v5.4.36
      */
     public function setDatabase($db = [])
     {
@@ -149,6 +153,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:15
+     *
+     * @see   https://laravel.com/docs/5.4/queries#deletes
      *
      */
     public function truncate()
@@ -206,6 +212,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param string      $value  Giá trị cần kiểm tra
      * @param string      $field  Field tương ứng, ví dụ: ID
      * @param null|string $format Format dữ liệu đầu ra: null, json, array, base, result
+     *
+     * @see   https://laravel.com/docs/5.4/queries#selects
      *
      * @return array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
@@ -265,6 +273,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param string $field       Field tương ứng với giá tri kiểm tra, ví dụ: ID
      * @param string $fieldOutput field kết quả đầu ra
      *
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
      */
     public function getValue($value = '', $field = 'id', $fieldOutput = '')
@@ -303,6 +313,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 13:59
      *
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
+     *
+     * @see   https://laravel.com/docs/5.4/queries#selects
      *
      * @return \Illuminate\Support\Collection
      */
@@ -353,6 +365,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *                                          'id' => 'desc'
      *                                          ]
      *                                          ];
+     *
+     * @see   https://laravel.com/docs/5.4/queries#selects
      *
      * @return array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
@@ -416,6 +430,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @param array $data Mảng chứa dữ liệu cần insert
      *
+     * @see   https://laravel.com/docs/5.4/queries#inserts
+     *
      * @return int Insert ID của bản ghi
      */
     public function add($data = [])
@@ -437,6 +453,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @param array        $data   Mảng dữ liệu cần Update
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     *
+     * @see   https://laravel.com/docs/5.4/queries#updates
      *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
      */
@@ -469,6 +487,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 14:13
      *
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     *
+     * @see   https://laravel.com/docs/5.4/queries#deletes
      *
      * @return int Số bản ghi đã xóa
      */
