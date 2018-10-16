@@ -35,9 +35,12 @@ interface BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:43
      *
-     * @param array $db Mảng dữ liệu thông tin DB cần kết nối
+     * @param array $database Mảng dữ liệu thông tin DB cần kết nối
+     *
+     * @see   https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php
+     * @see   https://packagist.org/packages/illuminate/database#v5.4.36
      */
-    public function setDatabase($db = []);
+    public function setDatabase($database = []);
 
     /**
      * Hàm set và kết nối đến bảng dữ liệu
@@ -80,6 +83,42 @@ interface BaseModelInterface
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      */
     public function checkExists($value = '', $field = 'id');
+
+    /**
+     * Hàm lấy bản ghi mới nhất theo điều kiện
+     *
+     * Mặc định giá trị so sánh dựa trên column created_at
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/17/18 01:06
+     *
+     * @param array  $selectField Danh sách các column cần lấy
+     * @param string $byColumn    Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+     *
+     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
+     *                                                                                            của bản ghi
+     */
+    public function getLatest($selectField = ['*'], $byColumn = 'created_at');
+
+    /**
+     * Hàm lấy bản ghi cũ nhất nhất theo điều kiện
+     *
+     * Mặc định giá trị so sánh dựa trên column created_at
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/17/18 01:06
+     *
+     * @param array  $selectField Danh sách các column cần lấy
+     * @param string $byColumn    Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+     *
+     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
+     *                                                                                            của bản ghi
+     */
+    public function getOldest($selectField = ['*'], $byColumn = 'created_at');
 
     /**
      * Hàm lấy thông tin bản ghi theo tham số đầu vào
