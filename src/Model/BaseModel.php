@@ -318,7 +318,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 16:14
      *
-     * @param array|string $wheres              Mãng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param array|string $wheres              Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      * @param string       $selectField         Mảng dữ liệu danh sách các field cần so sánh
      * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
      *                                          example $options = [
@@ -410,7 +410,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 14:10
      *
      * @param array        $data   Mảng dữ liệu cần Update
-     * @param array|string $wheres Mãng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
      */
@@ -442,7 +442,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:13
      *
-     * @param array|string $wheres Mãng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi đã xóa
      */
