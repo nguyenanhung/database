@@ -19,3 +19,29 @@ function dump($str = '')
     var_dump($str);
     echo "</pre>";
 }
+
+/**
+ * Function testLogPath
+ *
+ * @author: 713uk13m <dev@nguyenanhung.com>
+ * @time  : 10/16/18 15:57
+ *
+ * @return string
+ */
+function testLogPath()
+{
+    return __DIR__ . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR;
+}
+
+/**
+ * Function testCachePath
+ *
+ * @author: 713uk13m <dev@nguyenanhung.com>
+ * @time  : 10/16/18 15:57
+ *
+ * @return string
+ */
+function testCachePath()
+{
+    return __DIR__ . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR;
+}

@@ -122,5 +122,12 @@ GitHub.sublime-settings
 composer.lock
 /tests/*
 
-/logs/*
-!/logs/index.html
+storage/*
+storage/logs/*
+storage/cache/*
+!storage/.htaccess
+!storage/index.html
+!storage/logs/.htaccess
+!storage/logs/index.html
+!storage/cache/.htaccess
+!storage/cache/index.html
