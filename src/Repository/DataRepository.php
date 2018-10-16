@@ -7,7 +7,7 @@
  * Time: 14:47
  */
 
-namespace nguyenanhung\ThuDoMultimediaLottery\Repository;
+namespace nguyenanhung\MyDatabase\Repository;
 
 if (!interface_exists('nguyenanhung\MyDatabase\Interfaces\ProjectInterface')) {
     include __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Interfaces' . DIRECTORY_SEPARATOR . 'ProjectInterface.php';
@@ -54,7 +54,7 @@ class DataRepository implements ProjectInterface
     {
         $path = __DIR__ . DIRECTORY_SEPARATOR . self::CONFIG_PATH . DIRECTORY_SEPARATOR . $configName . self::CONFIG_EXT;
         if (is_file($path) && file_exists($path)) {
-            return require($path);
+            return require_once $path;
         }
 
         return [];
