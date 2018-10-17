@@ -9,6 +9,17 @@
 
 namespace nguyenanhung\MyDatabase\Manager;
 
+use BackupManager\Config\Config;
+use BackupManager\Filesystems;
+use BackupManager\Databases;
+use BackupManager\Compressors;
+use BackupManager\Manager;
+use BackupManager\Filesystems\Destination;
+use nguyenanhung\MyDebug\Debug;
+use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
+use nguyenanhung\MyDatabase\Interfaces\BackupInterface;
+use nguyenanhung\MyDatabase\Repository\DataRepository;
+
 /**
  * Class Backup
  *
@@ -22,17 +33,6 @@ namespace nguyenanhung\MyDatabase\Manager;
  * @since     2018-10-17
  * @version   0.1.2
  */
-
-use BackupManager\Config\Config;
-use BackupManager\Filesystems;
-use BackupManager\Databases;
-use BackupManager\Compressors;
-use BackupManager\Manager;
-use BackupManager\Filesystems\Destination;
-use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
-use nguyenanhung\MyDatabase\Interfaces\BackupInterface;
-use nguyenanhung\MyDatabase\Repository\DataRepository;
-
 class Backup implements ProjectInterface, BackupInterface
 {
     /** @var null|array Mảng dữ liệu cấu hình Storage */
@@ -45,12 +45,23 @@ class Backup implements ProjectInterface, BackupInterface
     protected $databaseFile = NULL;
     /** @var null|string Folder lưu trữ file Backup, VD: /your/to/path */
     protected $folderBackup = NULL;
+    /** @var object Đối tượng khởi tạo đến class \nguyenanhung\MyDebug\Debug */
+    private $debug;
 
     /**
      * Backup constructor.
      */
     public function __construct()
     {
+        $this->debug = new Debug();
+    }
+
+    /**
+     * Backup destructor.
+     */
+    public function __destruct()
+    {
+        // TODO: Implement __destruct() method.
     }
 
     /**
