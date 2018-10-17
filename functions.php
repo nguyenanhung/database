@@ -45,3 +45,16 @@ function testCachePath()
 {
     return __DIR__ . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR;
 }
+
+/**
+ * Function testBackupPath
+ *
+ * @author: 713uk13m <dev@nguyenanhung.com>
+ * @time  : 10/17/18 09:09
+ *
+ * @return string
+ */
+function testBackupPath()
+{
+    return __DIR__ . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'backup' . DIRECTORY_SEPARATOR;
+}

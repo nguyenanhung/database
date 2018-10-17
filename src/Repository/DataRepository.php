@@ -41,12 +41,12 @@ class DataRepository implements ProjectInterface
     }
 
     /**
-     * Function getData
+     * Hàm lấy nội dung config được quy định trong thư mục config
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 9/28/18 14:47
      *
-     * @param $configName
+     * @param string $configName Tên file config
      *
      * @return array|mixed
      */
@@ -55,6 +55,25 @@ class DataRepository implements ProjectInterface
         $path = __DIR__ . DIRECTORY_SEPARATOR . self::CONFIG_PATH . DIRECTORY_SEPARATOR . $configName . self::CONFIG_EXT;
         if (is_file($path) && file_exists($path)) {
             return require_once $path;
+        }
+
+        return [];
+    }
+
+    /**
+     * Hàm lấy nội dung Data từ 1 file bất kỳ trong hệ thống
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/17/18 09:25
+     *
+     * @param string $filename Đường dẫn file config
+     *
+     * @return array|mixed
+     */
+    public static function getDataContent($filename)
+    {
+        if (is_file($filename) && file_exists($filename)) {
+            return require_once $filename;
         }
 
         return [];

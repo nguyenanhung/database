@@ -31,6 +31,7 @@ use BackupManager\Manager;
 use BackupManager\Filesystems\Destination;
 use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
 use nguyenanhung\MyDatabase\Interfaces\BackupInterface;
+use nguyenanhung\MyDatabase\Repository\DataRepository;
 
 class Backup implements ProjectInterface, BackupInterface
 {
@@ -42,6 +43,8 @@ class Backup implements ProjectInterface, BackupInterface
     protected $database = NULL;
     /** @var null|string File dữ liệu cấu hình Database */
     protected $databaseFile = NULL;
+    /** @var null|string Folder lưu trữ file Backup, VD: /your/to/path */
+    protected $folderBackup = NULL;
 
     /**
      * Backup constructor.
@@ -91,6 +94,8 @@ class Backup implements ProjectInterface, BackupInterface
     public function setStorageFile($storageFile = '')
     {
         $this->storageFile = $storageFile;
+        $fileContent       = DataRepository::getDataContent($this->storageFile);
+        d($fileContent);
     }
 
     /**
@@ -121,6 +126,21 @@ class Backup implements ProjectInterface, BackupInterface
     public function setDatabaseFile($databaseFile = '')
     {
         $this->databaseFile = $databaseFile;
+        $fileContent        = DataRepository::getDataContent($this->databaseFile);
+        d($fileContent);
+    }
+
+    /**
+     * Hàm set Folder lưu trữ file Backup
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/17/18 09:07
+     *
+     * @param string $folderBackup Folder lưu trữ file Backup, VD: /your/to/path
+     */
+    public function setFolderBackup($folderBackup = '')
+    {
+        $this->folderBackup = $folderBackup;
     }
 
     /**
@@ -155,52 +175,69 @@ class Backup implements ProjectInterface, BackupInterface
     }
 
     /**
-     * Function backup
+     * Hàm backup Database
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/17/18 02:09
+     * @time  : 10/17/18 09:28
      *
-     * @throws \BackupManager\Compressors\CompressorTypeNotSupported
-     * @throws \BackupManager\Config\ConfigFieldNotFound
-     * @throws \BackupManager\Config\ConfigFileNotFound
-     * @throws \BackupManager\Config\ConfigNotFoundForConnection
-     * @throws \BackupManager\Databases\DatabaseTypeNotSupported
-     * @throws \BackupManager\Filesystems\FilesystemTypeNotSupported
+     * @param string $database Tên cấu hình Database
+     *
+     * @return bool|string TRUE nếu thành công, Message Error nếu có lỗi xảy ra
      */
-    public function backup()
+    public function backup($database = '')
     {
-        $manager = $this->boot();
-        $manager
-            ->makeBackup()
-            ->run('development', [
-                new Destination('local', 'test/backup.sql'),
-                new Destination('s3', 'test/dump.sql')
-            ], 'gzip');
+        d($database);
+        d($this->storageFile);
+        d($this->databaseFile);
+        d($this->folderBackup);
+        try {
+            $manager = $this->boot();
+            $manager
+                ->makeBackup()
+                ->run($database, [
+                    new Destination('local', $this->folderBackup . '/backup-' . $database . '-' . date('Y-m-d') . '.sql')
+                ], 'gzip');
+
+            return TRUE;
+        }
+        catch (\Exception $e) {
+            $message = 'Error File: ' . $e->getFile() . ' - Line: ' . $e->getLine() . ' - Code: ' . $e->getCode() . ' - Message: ' . $e->getMessage();
+
+            return $message;
+        }
+
     }
 
     /**
-     * Function restore
+     * Hàm phục hồi CSDL
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/17/18 02:10
+     * @time  : 10/17/18 09:29
      *
-     * @throws \BackupManager\Compressors\CompressorTypeNotSupported
-     * @throws \BackupManager\Config\ConfigFieldNotFound
-     * @throws \BackupManager\Config\ConfigFileNotFound
-     * @throws \BackupManager\Config\ConfigNotFoundForConnection
-     * @throws \BackupManager\Databases\DatabaseTypeNotSupported
-     * @throws \BackupManager\Filesystems\FilesystemTypeNotSupported
+     * @param string $database Tên cấu hình Database cần phục hồi
+     * @param string $filename Đường dẫn đến file sao lưu
+     *
+     * @return bool|string TRUE nếu thành công, Message Error nếu có lỗi xảy ra
      */
-    public function restore()
+    public function restore($database = '', $filename = '')
     {
-        $manager = $this->boot();
-        $manager
-            ->makeRestore()
-            ->run(
-                's3',
-                'test/backup.sql.gz',
-                'production',
-                'gzip'
-            );
+        try {
+            $manager = $this->boot();
+            $manager
+                ->makeRestore()
+                ->run(
+                    'local',
+                    $filename,
+                    $database,
+                    'gzip'
+                );
+
+            return TRUE;
+        }
+        catch (\Exception $e) {
+            $message = 'Error File: ' . $e->getFile() . ' - Line: ' . $e->getLine() . ' - Code: ' . $e->getCode() . ' - Message: ' . $e->getMessage();
+
+            return $message;
+        }
     }
 }
