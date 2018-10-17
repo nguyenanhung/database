@@ -21,6 +21,8 @@ spl_autoload_register(function ($className) {
         $fileName = str_replace('nguyenanhung\MyDatabase\Repository', 'src\Repository', $fileName);
     } elseif (strpos($fileName, 'nguyenanhung\MyDatabase\Model') !== FALSE) {
         $fileName = str_replace('nguyenanhung\MyDatabase\Model', 'src\Model', $fileName);
+    } elseif (strpos($fileName, 'nguyenanhung\MyDatabase\Manager') !== FALSE) {
+        $fileName = str_replace('nguyenanhung\MyDatabase\Manager', 'src\Manager', $fileName);
     } else {
         $fileName = str_replace('nguyenanhung\MyDatabase', 'src', $fileName);
     }

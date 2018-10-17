@@ -18,8 +18,8 @@ namespace nguyenanhung\MyDatabase\Interfaces;
  */
 interface ProjectInterface
 {
-    const VERSION                = '0.1.2';
-    const LAST_MODIFIED          = '2018-10-16';
+    const VERSION                = '0.1.3';
+    const LAST_MODIFIED          = '2018-10-17';
     const AUTHOR_NAME            = 'Hung Nguyen';
     const AUTHOR_EMAIL           = 'dev@nguyenanhung.com';
     const PROJECT_NAME           = 'My Database';
@@ -39,13 +39,12 @@ interface ProjectInterface
     const USE_BENCHMARK          = TRUE;
 
     /**
-     * Function getVersion
+     * Hàm lấy thông tin phiên bản Package
      *
      * @author  : 713uk13m <dev@nguyenanhung.com>
      * @time    : 10/13/18 15:12
      *
-     * @return mixed|string Current Project Version
-     * @example 0.1.0
+     * @return mixed|string Current Project Version, VD: 0.1.0
      */
     public function getVersion();
 }

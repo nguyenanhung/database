@@ -9,7 +9,7 @@
 
 namespace nguyenanhung\MyDatabase\Model;
 
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use nguyenanhung\MyDebug\Debug;
@@ -20,20 +20,30 @@ use nguyenanhung\MyDatabase\Interfaces\BaseModelInterface;
 /**
  * Class BaseModel
  *
+ * Class Base Model sử dụng Query Builder của Illuminate Database
+ *
+ * Class này chỉ khai báo các hàm cơ bản và thông dụng trong quá trính sử dụng
+ * các cú pháp, function khác đều có thể sử dụng theo tài liệu chính thức của Illuminate Database
+ *
+ * @see       https://laravel.com/docs/5.4/database
+ * @see       https://packagist.org/packages/illuminate/database#v5.4.36
+ *
  * @package   nguyenanhung\MyDatabase\Model
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
+ * @since     2018-10-17
+ * @version   0.1.2
  */
 class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
 {
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
-    protected $db;
+    protected $database;
     /** @var string|null Bảng cần lấy dữ liệu */
     protected $table;
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Capsule Manager \Illuminate\Database\Capsule\Manager */
-    protected $capsule;
+    protected $db;
     /** @var bool Cấu hình trạng thái Debug, TRUE nếu bật, FALSE nếu tắt */
     public $debugStatus = FALSE;
     /**
@@ -78,13 +88,12 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     }
 
     /**
-     * Function getVersion
+     * Hàm lấy thông tin phiên bản Package
      *
      * @author  : 713uk13m <dev@nguyenanhung.com>
-     * @time    : 10/16/18 11:42
+     * @time    : 10/13/18 15:12
      *
-     * @return mixed|string Current Project Version
-     * @example 0.1.0
+     * @return mixed|string Current Project Version, VD: 0.1.0
      */
     public function getVersion()
     {
@@ -102,11 +111,11 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function connection()
     {
-        $this->capsule = new Capsule;
-        $this->capsule->addConnection($this->db);
-        $this->capsule->setEventDispatcher(new Dispatcher(new Container));
-        $this->capsule->setAsGlobal();
-        $this->capsule->bootEloquent();
+        $this->db = new DB;
+        $this->db->addConnection($this->database);
+        $this->db->setEventDispatcher(new Dispatcher(new Container));
+        $this->db->setAsGlobal();
+        $this->db->bootEloquent();
     }
 
     /**
@@ -115,11 +124,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:43
      *
-     * @param array $db Mảng dữ liệu thông tin DB cần kết nối
+     * @param array $database Mảng dữ liệu thông tin DB cần kết nối
+     *
+     * @see   https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php
+     * @see   https://packagist.org/packages/illuminate/database#v5.4.36
      */
-    public function setDatabase($db = [])
+    public function setDatabase($database = [])
     {
-        $this->db = $db;
+        $this->database = $database;
     }
 
     /**
@@ -141,10 +153,12 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:15
      *
+     * @see   https://laravel.com/docs/5.4/queries#deletes
+     *
      */
     public function truncate()
     {
-        Capsule::table($this->table)->truncate();
+        DB::table($this->table)->truncate();
     }
 
     /**
@@ -158,7 +172,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     public function countAll()
     {
         $this->connection();
-        $db = Capsule::table($this->table);
+        $db = DB::table($this->table);
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->count();
@@ -178,10 +192,66 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     public function checkExists($value = '', $field = 'id')
     {
         $this->connection();
-        $db = Capsule::table($this->table)->where($field, '=', $value);
+        $db = DB::table($this->table)->where($field, '=', $value);
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->count();
+    }
+
+    /**
+     * Hàm lấy bản ghi mới nhất theo điều kiện
+     *
+     * Mặc định giá trị so sánh dựa trên column created_at
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/17/18 01:06
+     *
+     * @param array  $selectField Danh sách các column cần lấy
+     * @param string $byColumn    Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+     *
+     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
+     *                                                                                            của bản ghi
+     */
+    public function getLatest($selectField = ['*'], $byColumn = 'created_at')
+    {
+        if (!is_array($selectField)) {
+            $selectField = [$selectField];
+        }
+        $this->connection();
+        $db = DB::table($this->table)->latest($byColumn);
+        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+
+        return $db->first($selectField);
+    }
+
+    /**
+     * Hàm lấy bản ghi cũ nhất nhất theo điều kiện
+     *
+     * Mặc định giá trị so sánh dựa trên column created_at
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/17/18 01:06
+     *
+     * @param array  $selectField Danh sách các column cần lấy
+     * @param string $byColumn    Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+     *
+     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
+     *                                                                                            của bản ghi
+     */
+    public function getOldest($selectField = ['*'], $byColumn = 'created_at')
+    {
+        if (!is_array($selectField)) {
+            $selectField = [$selectField];
+        }
+        $this->connection();
+        $db = DB::table($this->table)->oldest($byColumn);
+        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+
+        return $db->first($selectField);
     }
 
     /**
@@ -198,6 +268,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param string      $field  Field tương ứng, ví dụ: ID
      * @param null|string $format Format dữ liệu đầu ra: null, json, array, base, result
      *
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
      * @return array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
      */
@@ -205,7 +277,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     {
         $this->connection();
         $format = strtolower($format);
-        $db     = Capsule::table($this->table);
+        $db     = DB::table($this->table);
         if (is_array($value) && count($value) > 0) {
             foreach ($value as $f => $v) {
                 if (is_array($v)) {
@@ -256,22 +328,24 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param string $field       Field tương ứng với giá tri kiểm tra, ví dụ: ID
      * @param string $fieldOutput field kết quả đầu ra
      *
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
      */
     public function getValue($value = '', $field = 'id', $fieldOutput = '')
     {
         $this->connection();
-        $db = Capsule::table($this->table);
+        $db = DB::table($this->table);
         if (is_array($value) && count($value) > 0) {
-            foreach ($value as $f => $v) {
-                if (is_array($v)) {
-                    $db->whereIn($f, $v);
+            foreach ($value as $column => $column_value) {
+                if (is_array($column_value)) {
+                    $db->whereIn($column, $column_value);
                 } else {
-                    $db->where($f, '=', $v);
+                    $db->where($column, self::OPERATOR_EQUAL_TO, $column_value);
                 }
             }
         } else {
-            $db->where($field, '=', $value);
+            $db->where($field, self::OPERATOR_EQUAL_TO, $value);
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->first();
@@ -295,6 +369,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
      * @return \Illuminate\Support\Collection
      */
     public function getDistinctResult($selectField = '')
@@ -303,13 +379,30 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             $selectField = [$selectField];
         }
         $this->connection();
-        $db = Capsule::table($this->table);
+        $db = DB::table($this->table);
         $db->distinct();
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
         $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
         return $result;
+    }
+
+    /**
+     * Hàm getResultDistinct là alias của hàm getDistinctResult
+     *
+     * Các tham số đầu ra và đầu vào theo quy chuẩn của hàm getDistinctResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 23:49
+     *
+     * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getResultDistinct($selectField = '')
+    {
+        return $this->getDistinctResult($selectField);
     }
 
     /**
@@ -328,6 +421,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *                                          ]
      *                                          ];
      *
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
      * @return array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
      */
@@ -342,17 +437,17 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             $format = NULL;
         }
         $this->connection();
-        $db = Capsule::table($this->table);
+        $db = DB::table($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
                 if (is_array($value)) {
                     $db->whereIn($field, $value);
                 } else {
-                    $db->where($field, '=', $value);
+                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
                 }
             }
         } else {
-            $db->where($this->primaryKey, '=', $wheres);
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
         if (isset($options['orderBy']) && is_array($options['orderBy'])) {
             foreach ($options['orderBy'] as $column => $direction) {
@@ -390,12 +485,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @param array $data Mảng chứa dữ liệu cần insert
      *
+     * @see   https://laravel.com/docs/5.4/queries#inserts
+     *
      * @return int Insert ID của bản ghi
      */
     public function add($data = [])
     {
         $this->connection();
-        $db = Capsule::table($this->table);
+        $db = DB::table($this->table);
         $id = $db->insertGetId($data);
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $id);
@@ -412,22 +509,24 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param array        $data   Mảng dữ liệu cần Update
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
+     * @see   https://laravel.com/docs/5.4/queries#updates
+     *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
      */
     public function update($data = [], $wheres = [])
     {
         $this->connection();
-        $db = Capsule::table($this->table);
+        $db = DB::table($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
                 if (is_array($value)) {
                     $db->whereIn($field, $value);
                 } else {
-                    $db->where($field, '=', $value);
+                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
                 }
             }
         } else {
-            $db->where($this->primaryKey, '=', $wheres);
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $resultId = $db->update($data);
@@ -444,22 +543,24 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
+     * @see   https://laravel.com/docs/5.4/queries#deletes
+     *
      * @return int Số bản ghi đã xóa
      */
     public function delete($wheres = [])
     {
         $this->connection();
-        $db = Capsule::table($this->table);
+        $db = DB::table($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
                 if (is_array($value)) {
                     $db->whereIn($field, $value);
                 } else {
-                    $db->where($field, '=', $value);
+                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
                 }
             }
         } else {
-            $db->where($this->primaryKey, '=', $wheres);
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $resultId = $db->delete();

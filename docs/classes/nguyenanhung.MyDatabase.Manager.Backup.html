@@ -21,54 +21,54 @@
     <script src="../js/jquery.smooth-scroll.js"></script>
     <script src="../js/prism.min.js"></script>
     <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
-        <script type="text/javascript">
-        function loadExternalCodeSnippets() {
-            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
-                var src = pre.getAttribute('data-src');
-                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
-                var language = 'php';
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
 
-                var code = document.createElement('code');
-                code.className = 'language-' + language;
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
 
-                pre.textContent = '';
+            pre.textContent = '';
 
-                code.textContent = 'Loading…';
+            code.textContent = 'Loading…';
 
-                pre.appendChild(code);
+            pre.appendChild(code);
 
-                var xhr = new XMLHttpRequest();
+            var xhr = new XMLHttpRequest();
 
-                xhr.open('GET', src, true);
+            xhr.open('GET', src, true);
 
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4) {
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
 
-                        if (xhr.status < 400 && xhr.responseText) {
-                            code.textContent = xhr.responseText;
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
 
-                            Prism.highlightElement(code);
-                        }
-                        else if (xhr.status >= 400) {
-                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
-                        }
-                        else {
-                            code.textContent = '✖ Error: File does not exist or is empty';
-                        }
+                        Prism.highlightElement(code);
                     }
-                };
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
 
-                xhr.send(null);
-            });
-        }
-
-        $(document).ready(function(){
-            loadExternalCodeSnippets();
+            xhr.send(null);
         });
-        $('#source-view').on('shown', function () {
-            loadExternalCodeSnippets();
-        })
-    </script>
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
 
     <link rel="shortcut icon" href="../images/favicon.ico"/>
     <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
@@ -144,37 +144,37 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1398739430"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1954669691"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1398739430" class="accordion-body collapse in">
+            <div id="namespace-1954669691" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1601171513"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-6112176"></a>
                                 <a href="../namespaces/nguyenanhung.html" style="margin-left: 30px; padding-left: 0">nguyenanhung</a>
             </div>
-            <div id="namespace-1601171513" class="accordion-body collapse ">
+            <div id="namespace-6112176" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-908770616"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1666999320"></a>
                                 <a href="../namespaces/nguyenanhung.MyDatabase.html" style="margin-left: 30px; padding-left: 0">MyDatabase</a>
             </div>
-            <div id="namespace-908770616" class="accordion-body collapse ">
+            <div id="namespace-1666999320" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1592449792"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-125453813"></a>
                                 <a href="../namespaces/nguyenanhung.MyDatabase.Interfaces.html" style="margin-left: 30px; padding-left: 0">Interfaces</a>
             </div>
-            <div id="namespace-1592449792" class="accordion-body collapse ">
+            <div id="namespace-125453813" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -192,10 +192,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1807007539"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1408765620"></a>
                                 <a href="../namespaces/nguyenanhung.MyDatabase.Manager.html" style="margin-left: 30px; padding-left: 0">Manager</a>
             </div>
-            <div id="namespace-1807007539" class="accordion-body collapse ">
+            <div id="namespace-1408765620" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -210,10 +210,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1405604417"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1972990531"></a>
                                 <a href="../namespaces/nguyenanhung.MyDatabase.Model.html" style="margin-left: 30px; padding-left: 0">Model</a>
             </div>
-            <div id="namespace-1405604417" class="accordion-body collapse ">
+            <div id="namespace-1972990531" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -228,10 +228,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1942307767"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-748823554"></a>
                                 <a href="../namespaces/nguyenanhung.MyDatabase.Repository.html" style="margin-left: 30px; padding-left: 0">Repository</a>
             </div>
-            <div id="namespace-1942307767" class="accordion-body collapse ">
+            <div id="namespace-748823554" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -274,114 +274,366 @@
             <div class="row-fluid">
                 <div class="span8 content class">
                     <nav>
-                                                <a href="../namespaces/nguyenanhung.MyDatabase.Interfaces.html">\nguyenanhung\MyDatabase\Interfaces</a>
+                                                <a href="../namespaces/nguyenanhung.MyDatabase.Manager.html">\nguyenanhung\MyDatabase\Manager</a> <i class="icon-level-up"></i>
                                             </nav>
                     <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
 
-                    <h1><small>\nguyenanhung\MyDatabase\Interfaces</small>BaseModelInterface</h1>
-                    <p><em>Interface BaseModelInterface</em></p>
+                    <h1><small>\nguyenanhung\MyDatabase\Manager</small>Backup</h1>
+                    <p><em>Class Backup</em></p>
+                    <p>Class Backup Database, sử dụng Backup Manager</p>
                     
-
+                                        
                     <section id="summary">
                         <h2>Summary</h2>
                         <section class="row-fluid heading">
-                            <section class="span6">
+                            <section class="span4">
                                 <a href="#methods">Methods</a>
                             </section>
-                            <section class="span6">
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
                                 <a href="#constants">Constants</a>
                             </section>
                         </section>
                         <section class="row-fluid public">
-                            <section class="span6">
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_connection">connection()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_setDatabase">setDatabase()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_setTable">setTable()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_truncate">truncate()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_countAll">countAll()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_checkExists">checkExists()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_getLatest">getLatest()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_getOldest">getOldest()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_getInfo">getInfo()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_getValue">getValue()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_getDistinctResult">getDistinctResult()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_getResultDistinct">getResultDistinct()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_getResult">getResult()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_add">add()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_update">update()</a><br />
-                                                                    <a href="../classes/nguyenanhung.MyDatabase.Interfaces.BaseModelInterface.html#method_delete">delete()</a><br />
+                            <section class="span4">
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#method___destruct" class="">__destruct()</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#method_getVersion" class="">getVersion()</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#method_setStorage" class="">setStorage()</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#method_setStorageFile" class="">setStorageFile()</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#method_setDatabase" class="">setDatabase()</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#method_setDatabaseFile" class="">setDatabaseFile()</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#method_setFolderBackup" class="">setFolderBackup()</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#method_boot" class="">boot()</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#method_backup" class="">backup()</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#method_restore" class="">restore()</a><br />
                                                             </section>
-                            <section class="span6">
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
                                                                     <em>No constants found</em>
                                                             </section>
                         </section>
                         <section class="row-fluid protected">
-                            <section class="span6">
+                            <section class="span4">
                                                                     <em>No protected methods found</em>
                                                             </section>
-                            <section class="span6">
+                            <section class="span4">
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#property_storage" class="">$storage</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#property_storageFile" class="">$storageFile</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#property_database" class="">$database</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#property_databaseFile" class="">$databaseFile</a><br />
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#property_folderBackup" class="">$folderBackup</a><br />
+                                                            </section>
+                            <section class="span4">
                                 <em>N/A</em>
                             </section>
                         </section>
                         <section class="row-fluid private">
-                            <section class="span6">
+                            <section class="span4">
                                                                     <em>No private methods found</em>
                                                             </section>
-                            <section class="span6">
+                            <section class="span4">
+                                                                    <a href="../classes/nguyenanhung.MyDatabase.Manager.Backup.html#property_debug" class="">$debug</a><br />
+                                                            </section>
+                            <section class="span4">
                                 <em>N/A</em>
                             </section>
                         </section>
                     </section>
                 </div>
                 <aside class="span4 detailsbar">
-                                        <dl>
+                                        
+                    
+                    <dl>
                         <dt>File</dt>
-                            <dd>
-                                <a href="../files/Interfaces.BaseModelInterface.html"><div class="path-wrapper">Interfaces/BaseModelInterface.php</div></a>
-                            </dd>
+                            <dd><a href="../files/Manager.Backup.html"><div class="path-wrapper">Manager/Backup.php</div></a></dd>
                                                 <dt>Package</dt>
-                            <dd><div class="namespace-wrapper">\nguyenanhung\MyDatabase\Interfaces</div></dd>
-                                                
-                                            </dl>
+                            <dd><div class="namespace-wrapper">MyDatabase\Manager</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\nguyenanhung\MyDatabase\Manager\Backup</div>
+                            </dd>
+
+                                                                            <dt>Implements</dt>
+                                                        <dd><a href="../classes/nguyenanhung.MyDatabase.Interfaces.ProjectInterface.html"><div class="namespace-wrapper">\nguyenanhung\MyDatabase\Interfaces\ProjectInterface</div></a></dd>
+                                                                                <dd><a href="../classes/nguyenanhung.MyDatabase.Interfaces.BackupInterface.html"><div class="namespace-wrapper">\nguyenanhung\MyDatabase\Interfaces\BackupInterface</div></a></dd>
+                        
+                        
+                        
+                                                                            <dt>See also</dt>
+                                                                                        <dd><a href=""><span class="namespace-wrapper">https://packagist.org/packages/backup-manager/backup-manager</span></a></dd>
+                                                    
+                                                                        </dl>
                     <h2>Tags</h2>
                     <table class="table table-condensed">
                                             <tr>
-                            <th>author</th>
+                            <th>
+                                author
+                            </th>
                             <td>
                                                                     <p>713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
                                                             </td>
                         </tr>
                                             <tr>
-                            <th>copyright</th>
+                            <th>
+                                copyright
+                            </th>
                             <td>
                                                                     <p>713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                since
+                            </th>
+                            <td>
+                                                                    
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                version
+                            </th>
+                            <td>
+                                                                    
                                                             </td>
                         </tr>
                                         </table>
                 </aside>
             </div>
 
-            
-                        <div class="row-fluid">
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
                 <div class="span8 content class">
-                    <h2>Methods</h2>
+                    <h2>Properties</h2>
                 </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_storage" name="property_storage" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$storage</h3>
+                <pre class="signature">$storage : null|array</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                null|array
+                &mdash; Mảng dữ liệu cấu hình Storage                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_storageFile" name="property_storageFile" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$storageFile</h3>
+                <pre class="signature">$storageFile : null|string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                null|string
+                &mdash; File dữ liệu cấu hình Storage                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_database" name="property_database" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$database</h3>
+                <pre class="signature">$database : null|array</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                null|array
+                &mdash; Mảng dữ liệu cấu hình Database                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_databaseFile" name="property_databaseFile" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$databaseFile</h3>
+                <pre class="signature">$databaseFile : null|string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                null|string
+                &mdash; File dữ liệu cấu hình Database                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_folderBackup" name="property_folderBackup" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$folderBackup</h3>
+                <pre class="signature">$folderBackup : null|string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                null|string
+                &mdash; Folder lưu trữ file Backup, VD: /your/to/path                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_debug" name="property_debug" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$debug</h3>
+                <pre class="signature">$debug : object</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                object
+                &mdash; Đối tượng khởi tạo đến class \nguyenanhung\MyDebug\Debug                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
                 <aside class="span4 detailsbar"></aside>
             </div>
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_connection" name="method_connection" class="anchor"></a>
+            <a id="method___construct" name="method___construct" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">connection()</h3>
+                <h3 class="public ">__construct()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">connection() </pre>
-                <p><em>Hàm khởi tạo kết nối đến Cơ sở dữ liệu</em></p>
-                <p>Sử dụng đối tượng DB được truyền từ bên ngoài vào</p>
+                <pre class="signature" style="margin-right: 54px;">__construct() </pre>
+                <p><em>Backup constructor.</em></p>
+                
 
                 
                 
                 				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___destruct" name="method___destruct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__destruct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__destruct() </pre>
+                <p><em>Backup destructor.</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getVersion" name="method_getVersion" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getVersion()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getVersion() : mixed|string</pre>
+                <p><em>Hàm lấy thông tin phiên bản Package</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    mixed|string
+                                            &mdash; <p>Current Project Version, VD: 0.1.0</p>
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -403,7 +655,109 @@
                             time
                         </th>
                         <td>
-                                                                                            <p>: 10/16/18 15:47</p>
+                                                                                            <p>: 10/13/18 15:12</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setStorage" name="method_setStorage" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setStorage()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setStorage(array  <span class="argument">$storage = array()</span>) </pre>
+                <p><em>Hàm set mảng dữ liệu Storage</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$storage </td>
+                                <td><p>Mảng dữ liệu storage</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href=""><span class="namespace-wrapper">https://github.com/backup-manager/backup-manager/blob/master/examples/standalone/config/storage.php</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>: 713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            time
+                        </th>
+                        <td>
+                                                                                            <p>: 10/17/18 02:00</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setStorageFile" name="method_setStorageFile" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setStorageFile()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setStorageFile(string  <span class="argument">$storageFile = &#039;&#039;</span>) </pre>
+                <p><em>Hàm set File dữ liệu Storage</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$storageFile </td>
+                                <td><p>File dữ liệu storage</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href=""><span class="namespace-wrapper">https://github.com/backup-manager/backup-manager/blob/master/examples/standalone/config/storage.php</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>: 713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            time
+                        </th>
+                        <td>
+                                                                                            <p>: 10/17/18 02:00</p>
                                                     </td>
                     </tr>
                             </table>
@@ -417,7 +771,7 @@
                 <h3 class="public ">setDatabase()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">setDatabase(array  <span class="argument">$database = array()</span>) </pre>
-                <p><em>Hàm set và kết nối cơ sở dữ liệu</em></p>
+                <p><em>Hàm set mảng dữ liệu Database</em></p>
                 
 
                                     <h4>Parameters</h4>
@@ -425,7 +779,7 @@
                                                     <tr>
                                 <td>array</td>
                                 <td>$database </td>
-                                <td><p>Mảng dữ liệu thông tin DB cần kết nối</p></td>
+                                <td><p>Mảng dữ liệu database</p></td>
                             </tr>
                                             </table>
                 
@@ -437,8 +791,7 @@
             <h1><i class="icon-arrow-down"></i></h1>
                                                             <dl>
                                                                                             <dt>See also</dt>
-                                                                <dd><a href=""><span class="namespace-wrapper">https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php</span></a></dd>
-                                            <dd><a href=""><span class="namespace-wrapper">https://packagist.org/packages/illuminate/database#v5.4.36</span></a></dd>
+                                                                <dd><a href=""><span class="namespace-wrapper">https://github.com/backup-manager/backup-manager/blob/master/examples/standalone/config/database.php</span></a></dd>
                                                                 </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
@@ -455,7 +808,7 @@
                             time
                         </th>
                         <td>
-                                                                                            <p>: 10/16/18 11:43</p>
+                                                                                            <p>: 10/17/18 02:00</p>
                                                     </td>
                     </tr>
                             </table>
@@ -464,20 +817,71 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_setTable" name="method_setTable" class="anchor"></a>
+            <a id="method_setDatabaseFile" name="method_setDatabaseFile" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">setTable()</h3>
+                <h3 class="public ">setDatabaseFile()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">setTable(string  <span class="argument">$table = &#039;&#039;</span>) </pre>
-                <p><em>Hàm set và kết nối đến bảng dữ liệu</em></p>
+                <pre class="signature" style="margin-right: 54px;">setDatabaseFile(string  <span class="argument">$databaseFile = &#039;&#039;</span>) </pre>
+                <p><em>Hàm set File dữ liệu Database</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td>string</td>
-                                <td>$table </td>
-                                <td><p>Bảng cần lấy dữ liệu</p></td>
+                                <td>$databaseFile </td>
+                                <td><p>File dữ liệu database</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href=""><span class="namespace-wrapper">https://github.com/backup-manager/backup-manager/blob/master/examples/standalone/config/database.php</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            author
+                        </th>
+                        <td>
+                                                                                            <p>: 713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            time
+                        </th>
+                        <td>
+                                                                                            <p>: 10/17/18 02:00</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setFolderBackup" name="method_setFolderBackup" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setFolderBackup()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setFolderBackup(string  <span class="argument">$folderBackup = &#039;&#039;</span>) </pre>
+                <p><em>Hàm set Folder lưu trữ file Backup</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$folderBackup </td>
+                                <td><p>Folder lưu trữ file Backup, VD: /your/to/path</p></td>
                             </tr>
                                             </table>
                 
@@ -504,7 +908,7 @@
                             time
                         </th>
                         <td>
-                                                                                            <p>: 10/16/18 11:43</p>
+                                                                                            <p>: 10/17/18 09:07</p>
                                                     </td>
                     </tr>
                             </table>
@@ -513,59 +917,23 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_truncate" name="method_truncate" class="anchor"></a>
+            <a id="method_boot" name="method_boot" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">truncate()</h3>
+                <h3 class="public ">boot()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">truncate() </pre>
-                <p><em>Hàm truncate bảng dữ liệu</em></p>
+                <pre class="signature" style="margin-right: 54px;">boot() : \BackupManager\Manager</pre>
+                <p><em>Hàm bootstrap cho tiến trình Backup và Restore Database</em></p>
                 
 
                 
-                
-                				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            author
-                        </th>
-                        <td>
-                                                                                            <p>: 713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
-                                                    </td>
-                    </tr>
-                                    <tr>
-                        <th>
-                            time
-                        </th>
-                        <td>
-                                                                                            <p>: 10/16/18 14:15</p>
-                                                    </td>
-                    </tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_countAll" name="method_countAll" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">countAll()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">countAll() : integer</pre>
-                <p><em>Hàm đếm toàn bộ bản ghi tồn tại trong bảng</em></p>
-                
-
-                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\BackupManager\Config\ConfigFileNotFound</dt>
+                            <dd></dd>
+                                                                    </dl>
                 
                                     <h4>Returns</h4>
-                    integer
+                    \BackupManager\Manager
                                     				
                             </article>
         </div>
@@ -588,7 +956,7 @@
                             time
                         </th>
                         <td>
-                                                                                            <p>: 10/16/18 11:43</p>
+                                                                                            <p>: 10/17/18 02:07</p>
                                                     </td>
                     </tr>
                             </table>
@@ -597,32 +965,27 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_checkExists" name="method_checkExists" class="anchor"></a>
+            <a id="method_backup" name="method_backup" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">checkExists()</h3>
+                <h3 class="public ">backup()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">checkExists(string  <span class="argument">$value = &#039;&#039;</span>, string  <span class="argument">$field = &#039;id&#039;</span>) : integer</pre>
-                <p><em>Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào</em></p>
+                <pre class="signature" style="margin-right: 54px;">backup(string  <span class="argument">$database = &#039;&#039;</span>) : boolean|string</pre>
+                <p><em>Hàm backup Database</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td>string</td>
-                                <td>$value </td>
-                                <td><p>Giá trị cần kiểm tra</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>string</td>
-                                <td>$field </td>
-                                <td><p>Field tương ứng, ví dụ: ID</p></td>
+                                <td>$database </td>
+                                <td><p>Tên cấu hình Database</p></td>
                             </tr>
                                             </table>
                 
                 
                                     <h4>Returns</h4>
-                    integer
-                                            &mdash; <p>Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra</p>
+                    boolean|string
+                                            &mdash; <p>TRUE nếu thành công, Message Error nếu có lỗi xảy ra</p>
                                     				
                             </article>
         </div>
@@ -645,7 +1008,7 @@
                             time
                         </th>
                         <td>
-                                                                                            <p>: 10/16/18 11:45</p>
+                                                                                            <p>: 10/17/18 09:28</p>
                                                     </td>
                     </tr>
                             </table>
@@ -654,159 +1017,32 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_getLatest" name="method_getLatest" class="anchor"></a>
+            <a id="method_restore" name="method_restore" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">getLatest()</h3>
+                <h3 class="public ">restore()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getLatest(array  <span class="argument">$selectField = array(&#039;*&#039;)</span>, string  <span class="argument">$byColumn = &#039;created_at&#039;</span>) : \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object</pre>
-                <p><em>Hàm lấy bản ghi mới nhất theo điều kiện</em></p>
-                <p>Mặc định giá trị so sánh dựa trên column created_at</p>
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>array</td>
-                                <td>$selectField </td>
-                                <td><p>Danh sách các column cần lấy</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>string</td>
-                                <td>$byColumn </td>
-                                <td><p>Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at</p></td>
-                            </tr>
-                                            </table>
+                <pre class="signature" style="margin-right: 54px;">restore(string  <span class="argument">$database = &#039;&#039;</span>, string  <span class="argument">$filename = &#039;&#039;</span>) : boolean|string</pre>
+                <p><em>Hàm phục hồi CSDL</em></p>
                 
-                
-                                    <h4>Returns</h4>
-                    \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object
-                                            &mdash; <p>Object dữ liệu đầu ra
-của bản ghi</p>
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                                            <dt>See also</dt>
-                                                                <dd><a href=""><span class="namespace-wrapper">https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset</span></a></dd>
-                                                                </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            author
-                        </th>
-                        <td>
-                                                                                            <p>: 713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
-                                                    </td>
-                    </tr>
-                                    <tr>
-                        <th>
-                            time
-                        </th>
-                        <td>
-                                                                                            <p>: 10/17/18 01:06</p>
-                                                    </td>
-                    </tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_getOldest" name="method_getOldest" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">getOldest()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getOldest(array  <span class="argument">$selectField = array(&#039;*&#039;)</span>, string  <span class="argument">$byColumn = &#039;created_at&#039;</span>) : \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object</pre>
-                <p><em>Hàm lấy bản ghi cũ nhất nhất theo điều kiện</em></p>
-                <p>Mặc định giá trị so sánh dựa trên column created_at</p>
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>array</td>
-                                <td>$selectField </td>
-                                <td><p>Danh sách các column cần lấy</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>string</td>
-                                <td>$byColumn </td>
-                                <td><p>Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at</p></td>
-                            </tr>
-                                            </table>
-                
-                
-                                    <h4>Returns</h4>
-                    \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object
-                                            &mdash; <p>Object dữ liệu đầu ra
-của bản ghi</p>
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                                            <dt>See also</dt>
-                                                                <dd><a href=""><span class="namespace-wrapper">https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset</span></a></dd>
-                                                                </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            author
-                        </th>
-                        <td>
-                                                                                            <p>: 713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
-                                                    </td>
-                    </tr>
-                                    <tr>
-                        <th>
-                            time
-                        </th>
-                        <td>
-                                                                                            <p>: 10/17/18 01:06</p>
-                                                    </td>
-                    </tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_getInfo" name="method_getInfo" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">getInfo()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getInfo(string  <span class="argument">$value = &#039;&#039;</span>, string  <span class="argument">$field = &#039;id&#039;</span>, null|string  <span class="argument">$format = NULL</span>) : array|\Illuminate\Support\Collection|string</pre>
-                <p><em>Hàm lấy thông tin bản ghi theo tham số đầu vào</em></p>
-                <p>Đây là hàm cơ bản, chỉ áp dụng check theo 1 field</p>
-<p>Lấy bản ghi đầu tiên phù hợp với điều kiện</p>
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td>string</td>
-                                <td>$value </td>
-                                <td><p>Giá trị cần kiểm tra</p></td>
+                                <td>$database </td>
+                                <td><p>Tên cấu hình Database cần phục hồi</p></td>
                             </tr>
                                                     <tr>
                                 <td>string</td>
-                                <td>$field </td>
-                                <td><p>Field tương ứng, ví dụ: ID</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>null|string</td>
-                                <td>$format </td>
-                                <td><p>Format dữ liệu đầu ra: null, json, array, base, result</p></td>
+                                <td>$filename </td>
+                                <td><p>Đường dẫn đến file sao lưu</p></td>
                             </tr>
                                             </table>
                 
                 
                                     <h4>Returns</h4>
-                    array|\Illuminate\Support\Collection|string
-                                            &mdash; <p>Mảng|String|Object dữ liều phụ hợp với yêu cầu
-map theo biến format truyền vào</p>
+                    boolean|string
+                                            &mdash; <p>TRUE nếu thành công, Message Error nếu có lỗi xảy ra</p>
                                     				
                             </article>
         </div>
@@ -829,401 +1065,7 @@ map theo biến format truyền vào</p>
                             time
                         </th>
                         <td>
-                                                                                            <p>: 10/16/18 11:51</p>
-                                                    </td>
-                    </tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_getValue" name="method_getValue" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">getValue()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getValue(string  <span class="argument">$value = &#039;&#039;</span>, string  <span class="argument">$field = &#039;id&#039;</span>, string  <span class="argument">$fieldOutput = &#039;&#039;</span>) : \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object</pre>
-                <p><em>Hàm lấy giá trị 1 field của bản ghi dựa trên điều kiện 1 bản ghi đầu vào</em></p>
-                <p>Đây là hàm cơ bản, chỉ áp dụng check theo 1 field</p>
-<p>Lấy bản ghi đầu tiên phù hợp với điều kiện</p>
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>string</td>
-                                <td>$value </td>
-                                <td><p>Giá trị cần kiểm tra</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>string</td>
-                                <td>$field </td>
-                                <td><p>Field tương ứng với giá tri kiểm tra, ví dụ: ID</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>string</td>
-                                <td>$fieldOutput </td>
-                                <td><p>field kết quả đầu ra</p></td>
-                            </tr>
-                                            </table>
-                
-                
-                                    <h4>Returns</h4>
-                    \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            author
-                        </th>
-                        <td>
-                                                                                            <p>: 713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
-                                                    </td>
-                    </tr>
-                                    <tr>
-                        <th>
-                            time
-                        </th>
-                        <td>
-                                                                                            <p>: 10/16/18 11:51</p>
-                                                    </td>
-                    </tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_getDistinctResult" name="method_getDistinctResult" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">getDistinctResult()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getDistinctResult(string  <span class="argument">$selectField = &#039;&#039;</span>) : \Illuminate\Support\Collection</pre>
-                <p><em>Hàm lấy danh sách Distinct toàn bộ bản ghi trong 1 bảng</em></p>
-                
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>string</td>
-                                <td>$selectField </td>
-                                <td><p>Mảng dữ liệu danh sách các field cần so sánh</p></td>
-                            </tr>
-                                            </table>
-                
-                
-                                    <h4>Returns</h4>
-                    \Illuminate\Support\Collection
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            author
-                        </th>
-                        <td>
-                                                                                            <p>: 713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
-                                                    </td>
-                    </tr>
-                                    <tr>
-                        <th>
-                            time
-                        </th>
-                        <td>
-                                                                                            <p>: 10/16/18 13:59</p>
-                                                    </td>
-                    </tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_getResultDistinct" name="method_getResultDistinct" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">getResultDistinct()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getResultDistinct(string  <span class="argument">$selectField = &#039;&#039;</span>) : \Illuminate\Support\Collection</pre>
-                <p><em>Hàm getResultDistinct là alias của hàm getDistinctResult</em></p>
-                <p>Các tham số đầu ra và đầu vào theo quy chuẩn của hàm getDistinctResult</p>
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>string</td>
-                                <td>$selectField </td>
-                                <td><p>Mảng dữ liệu danh sách các field cần so sánh</p></td>
-                            </tr>
-                                            </table>
-                
-                
-                                    <h4>Returns</h4>
-                    \Illuminate\Support\Collection
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            author
-                        </th>
-                        <td>
-                                                                                            <p>: 713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
-                                                    </td>
-                    </tr>
-                                    <tr>
-                        <th>
-                            time
-                        </th>
-                        <td>
-                                                                                            <p>: 10/16/18 23:49</p>
-                                                    </td>
-                    </tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_getResult" name="method_getResult" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">getResult()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getResult(array|string  <span class="argument">$wheres = array()</span>, string  <span class="argument">$selectField = &#039;*&#039;</span>, null|string  <span class="argument">$options = NULL</span>) : array|\Illuminate\Support\Collection|string</pre>
-                <p><em>Function getResult</em></p>
-                
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>array|string</td>
-                                <td>$wheres </td>
-                                <td><p>Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>string</td>
-                                <td>$selectField </td>
-                                <td><p>Mảng dữ liệu danh sách các field cần so sánh</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>null|string</td>
-                                <td>$options </td>
-                                <td><p>Mảng dữ liệu các cấu hình tùy chọn
-example $options = [
-'format' =&gt; null,
-'orderBy =&gt; [
-'id' =&gt; 'desc'
-]
-];</p></td>
-                            </tr>
-                                            </table>
-                
-                
-                                    <h4>Returns</h4>
-                    array|\Illuminate\Support\Collection|string
-                                            &mdash; <p>Mảng|String|Object dữ liều phụ hợp với yêu cầu
-map theo biến format truyền vào</p>
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            author
-                        </th>
-                        <td>
-                                                                                            <p>: 713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
-                                                    </td>
-                    </tr>
-                                    <tr>
-                        <th>
-                            time
-                        </th>
-                        <td>
-                                                                                            <p>: 10/16/18 16:14</p>
-                                                    </td>
-                    </tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_add" name="method_add" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">add()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">add(array  <span class="argument">$data = array()</span>) : integer</pre>
-                <p><em>Hàm thêm mới bản ghi vào bảng</em></p>
-                
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>array</td>
-                                <td>$data </td>
-                                <td><p>Mảng chứa dữ liệu cần insert</p></td>
-                            </tr>
-                                            </table>
-                
-                
-                                    <h4>Returns</h4>
-                    integer
-                                            &mdash; <p>Insert ID của bản ghi</p>
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            author
-                        </th>
-                        <td>
-                                                                                            <p>: 713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
-                                                    </td>
-                    </tr>
-                                    <tr>
-                        <th>
-                            time
-                        </th>
-                        <td>
-                                                                                            <p>: 10/16/18 14:04</p>
-                                                    </td>
-                    </tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_update" name="method_update" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">update()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">update(array  <span class="argument">$data = array()</span>, array|string  <span class="argument">$wheres = array()</span>) : integer</pre>
-                <p><em>Hàm update dữ liệu</em></p>
-                
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>array</td>
-                                <td>$data </td>
-                                <td><p>Mảng dữ liệu cần Update</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>array|string</td>
-                                <td>$wheres </td>
-                                <td><p>Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update</p></td>
-                            </tr>
-                                            </table>
-                
-                
-                                    <h4>Returns</h4>
-                    integer
-                                            &mdash; <p>Số bản ghi được update thỏa mãn với điều kiện đầu vào</p>
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            author
-                        </th>
-                        <td>
-                                                                                            <p>: 713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
-                                                    </td>
-                    </tr>
-                                    <tr>
-                        <th>
-                            time
-                        </th>
-                        <td>
-                                                                                            <p>: 10/16/18 14:10</p>
-                                                    </td>
-                    </tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_delete" name="method_delete" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">delete()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">delete(array|string  <span class="argument">$wheres = array()</span>) : integer</pre>
-                <p><em>Hàm xóa dữ liệu</em></p>
-                
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>array|string</td>
-                                <td>$wheres </td>
-                                <td><p>Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update</p></td>
-                            </tr>
-                                            </table>
-                
-                
-                                    <h4>Returns</h4>
-                    integer
-                                            &mdash; <p>Số bản ghi đã xóa</p>
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            author
-                        </th>
-                        <td>
-                                                                                            <p>: 713uk13m <a href="mailto:dev@nguyenanhung.com">dev@nguyenanhung.com</a></p>
-                                                    </td>
-                    </tr>
-                                    <tr>
-                        <th>
-                            time
-                        </th>
-                        <td>
-                                                                                            <p>: 10/16/18 14:13</p>
+                                                                                            <p>: 10/17/18 09:29</p>
                                                     </td>
                     </tr>
                             </table>
@@ -1236,10 +1078,10 @@ map theo biến format truyền vào</p>
     <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="source-view-label">BaseModelInterface.php</h3>
+            <h3 id="source-view-label">Backup.php</h3>
         </div>
         <div class="modal-body">
-            <pre data-src="../files/Interfaces/BaseModelInterface.php.txt" class="language-php"></pre>
+            <pre data-src="../files/Manager/Backup.php.txt" class="language-php line-numbers"></pre>
         </div>
     </div>
 
