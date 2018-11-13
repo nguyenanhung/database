@@ -116,6 +116,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $this->db->setEventDispatcher(new Dispatcher(new Container));
         $this->db->setAsGlobal();
         $this->db->bootEloquent();
+
+        return $this;
     }
 
     /**
@@ -126,12 +128,16 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @param array $database Mảng dữ liệu thông tin DB cần kết nối
      *
+     * @return  $this;
+     *
      * @see   https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php
      * @see   https://packagist.org/packages/illuminate/database#v5.4.36
      */
     public function setDatabase($database = [])
     {
         $this->database = $database;
+
+        return $this;
     }
 
     /**
@@ -141,10 +147,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 11:43
      *
      * @param string $table Bảng cần lấy dữ liệu
+     *
+     * @return  $this;
      */
     public function setTable($table = '')
     {
         $this->table = $table;
+
+        return $this;
     }
 
     /**

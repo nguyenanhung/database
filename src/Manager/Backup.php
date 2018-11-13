@@ -85,11 +85,15 @@ class Backup implements ProjectInterface, BackupInterface
      *
      * @param array $storage Mảng dữ liệu storage
      *
+     * @return  $this;
+     *
      * @see   https://github.com/backup-manager/backup-manager/blob/master/examples/standalone/config/storage.php
      */
     public function setStorage($storage = [])
     {
         $this->storage = $storage;
+
+        return $this;
     }
 
     /**
@@ -100,6 +104,8 @@ class Backup implements ProjectInterface, BackupInterface
      *
      * @param string $storageFile File dữ liệu storage
      *
+     * @return  $this;
+     *
      * @see   https://github.com/backup-manager/backup-manager/blob/master/examples/standalone/config/storage.php
      */
     public function setStorageFile($storageFile = '')
@@ -107,6 +113,8 @@ class Backup implements ProjectInterface, BackupInterface
         $this->storageFile = $storageFile;
         $fileContent       = DataRepository::getDataContent($this->storageFile);
         d($fileContent);
+
+        return $this;
     }
 
     /**
@@ -117,11 +125,15 @@ class Backup implements ProjectInterface, BackupInterface
      *
      * @param array $database Mảng dữ liệu database
      *
+     * @return  $this;
+     *
      * @see   https://github.com/backup-manager/backup-manager/blob/master/examples/standalone/config/database.php
      */
     public function setDatabase($database = [])
     {
         $this->database = $database;
+
+        return $this;
     }
 
     /**
@@ -132,6 +144,8 @@ class Backup implements ProjectInterface, BackupInterface
      *
      * @param string $databaseFile File dữ liệu database
      *
+     * @return  $this;
+     *
      * @see   https://github.com/backup-manager/backup-manager/blob/master/examples/standalone/config/database.php
      */
     public function setDatabaseFile($databaseFile = '')
@@ -139,6 +153,8 @@ class Backup implements ProjectInterface, BackupInterface
         $this->databaseFile = $databaseFile;
         $fileContent        = DataRepository::getDataContent($this->databaseFile);
         d($fileContent);
+
+        return $this;
     }
 
     /**
