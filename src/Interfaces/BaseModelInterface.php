@@ -77,12 +77,12 @@ interface BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:45
      *
-     * @param string $value Giá trị cần kiểm tra
-     * @param string $field Field tương ứng, ví dụ: ID
+     * @param string|array $whereValue Giá trị cần kiểm tra
+     * @param string|null  $whereField Field tương ứng, ví dụ: ID
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      */
-    public function checkExists($value = '', $field = 'id');
+    public function checkExists($whereValue = '', $whereField = 'id');
 
     /**
      * Hàm lấy bản ghi mới nhất theo điều kiện
@@ -130,14 +130,15 @@ interface BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:51
      *
-     * @param string      $value  Giá trị cần kiểm tra
-     * @param string      $field  Field tương ứng, ví dụ: ID
-     * @param null|string $format Format dữ liệu đầu ra: null, json, array, base, result
+     * @param array|string      $value       Giá trị cần kiểm tra
+     * @param null|string       $field       Field tương ứng, ví dụ: ID
+     * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
+     * @param null|string|array $selectField Các field cần lấy
      *
      * @return array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
      */
-    public function getInfo($value = '', $field = 'id', $format = NULL);
+    public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL);
 
     /**
      * Hàm lấy giá trị 1 field của bản ghi dựa trên điều kiện 1 bản ghi đầu vào
