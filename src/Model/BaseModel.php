@@ -274,20 +274,28 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:51
      *
-     * @param string      $value  Giá trị cần kiểm tra
-     * @param string      $field  Field tương ứng, ví dụ: ID
-     * @param null|string $format Format dữ liệu đầu ra: null, json, array, base, result
+     * @param array|string      $value       Giá trị cần kiểm tra
+     * @param null|string       $field       Field tương ứng, ví dụ: ID
+     * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
+     * @param null|string|array $selectField Các field cần lấy
      *
      * @see   https://laravel.com/docs/5.4/queries#selects
      *
      * @return array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
      */
-    public function getInfo($value = '', $field = 'id', $format = NULL)
+    public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL)
     {
         $this->connection();
         $format = strtolower($format);
-        $db     = DB::table($this->table);
+        if (!empty($selectField)) {
+            if (!is_array($selectField)) {
+                $selectField = [$selectField];
+            }
+            $db = DB::table($this->table)->select($selectField);
+        } else {
+            $db = DB::table($this->table)->select();
+        }
         if (is_array($value) && count($value) > 0) {
             foreach ($value as $f => $v) {
                 if (is_array($v)) {
