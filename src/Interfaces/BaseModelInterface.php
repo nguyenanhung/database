@@ -77,12 +77,12 @@ interface BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:45
      *
-     * @param string $value Giá trị cần kiểm tra
-     * @param string $field Field tương ứng, ví dụ: ID
+     * @param string|array $whereValue Giá trị cần kiểm tra
+     * @param string|null  $whereField Field tương ứng, ví dụ: ID
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      */
-    public function checkExists($value = '', $field = 'id');
+    public function checkExists($whereValue = '', $whereField = 'id');
 
     /**
      * Hàm lấy bản ghi mới nhất theo điều kiện

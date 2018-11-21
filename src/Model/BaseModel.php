@@ -194,15 +194,26 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:45
      *
-     * @param string $value Giá trị cần kiểm tra
-     * @param string $field Field tương ứng, ví dụ: ID
+     * @param string|array $whereValue Giá trị cần kiểm tra
+     * @param string|null  $whereField Field tương ứng, ví dụ: ID
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      */
-    public function checkExists($value = '', $field = 'id')
+    public function checkExists($whereValue = '', $whereField = 'id')
     {
         $this->connection();
-        $db = DB::table($this->table)->where($field, '=', $value);
+        $db = DB::table($this->table);
+        if (is_array($whereValue) && count($whereValue) > 0) {
+            foreach ($whereValue as $f => $v) {
+                if (is_array($v)) {
+                    $db->whereIn($f, $v);
+                } else {
+                    $db->where($f, '=', $v);
+                }
+            }
+        } else {
+            $db->where($whereField, '=', $whereValue);
+        }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->count();
