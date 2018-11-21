@@ -135,7 +135,7 @@ interface BaseModelInterface
      * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
      * @param null|string|array $selectField Các field cần lấy
      *
-     * @return array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
+     * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
      */
     public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL);
@@ -166,7 +166,7 @@ interface BaseModelInterface
      *
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection|object|array
      */
     public function getDistinctResult($selectField = '');
 
@@ -180,7 +180,7 @@ interface BaseModelInterface
      *
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection|object|array
      */
     public function getResultDistinct($selectField = '');
 
@@ -200,7 +200,7 @@ interface BaseModelInterface
      *                                          ]
      *                                          ];
      *
-     * @return array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
+     * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
      */
     public function getResult($wheres = [], $selectField = '*', $options = NULL);
