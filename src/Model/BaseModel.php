@@ -339,6 +339,12 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
 
             return $result->toBase();
         } else {
+            if ($format == 'result') {
+                if ($result->count() <= 0) {
+                    return NULL;
+                }
+            }
+
             return $result;
         }
     }
