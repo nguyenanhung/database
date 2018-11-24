@@ -54,7 +54,7 @@ class DataRepository implements ProjectInterface
     {
         $path = __DIR__ . DIRECTORY_SEPARATOR . self::CONFIG_PATH . DIRECTORY_SEPARATOR . $configName . self::CONFIG_EXT;
         if (is_file($path) && file_exists($path)) {
-            return require_once $path;
+            return require $path;
         }
 
         return [];
@@ -73,7 +73,7 @@ class DataRepository implements ProjectInterface
     public static function getDataContent($filename)
     {
         if (is_file($filename) && file_exists($filename)) {
-            return require_once $filename;
+            return require $filename;
         }
 
         return [];
