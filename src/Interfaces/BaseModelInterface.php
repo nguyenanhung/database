@@ -206,6 +206,19 @@ interface BaseModelInterface
     public function getResult($wheres = [], $selectField = '*', $options = NULL);
 
     /**
+     * Function countResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/25/18 14:10
+     *
+     * @param array  $wheres
+     * @param string $selectField
+     *
+     * @return int
+     */
+    public function countResult($wheres = [], $selectField = '*');
+
+    /**
      * Hàm thêm mới bản ghi vào bảng
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
