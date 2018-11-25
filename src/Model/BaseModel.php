@@ -513,6 +513,44 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     }
 
     /**
+     * Function countResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/25/18 14:10
+     *
+     * @param array  $wheres
+     * @param string $selectField
+     *
+     * @return int
+     */
+    public function countResult($wheres = [], $selectField = '*')
+    {
+        if (!is_array($selectField)) {
+            $selectField = [$selectField];
+        }
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $db->whereIn($field, $value);
+                } else {
+                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                }
+            }
+        } else {
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $result = $db->get($selectField);
+        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        $totalItem = $result->count();
+        $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
+
+        return $totalItem;
+    }
+
+    /**
      * Hàm thêm mới bản ghi vào bảng
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
