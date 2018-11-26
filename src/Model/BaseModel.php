@@ -204,15 +204,46 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $this->connection();
         $db = DB::table($this->table);
         if (is_array($whereValue) && count($whereValue) > 0) {
-            foreach ($whereValue as $f => $v) {
-                if (is_array($v)) {
-                    $db->whereIn($f, $v);
+            foreach ($whereValue as $column => $column_value) {
+                if (is_array($column_value)) {
+                    $db->whereIn($column, $column_value);
                 } else {
-                    $db->where($f, '=', $v);
+                    $db->where($column, self::OPERATOR_EQUAL_TO, $column_value);
                 }
             }
         } else {
-            $db->where($whereField, '=', $whereValue);
+            $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
+        }
+        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+
+        return $db->count();
+    }
+
+    /**
+     * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào - Đa điều kiện
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:45
+     *
+     * @param string|array $whereValue Giá trị cần kiểm tra
+     * @param string|null  $whereField Field tương ứng, ví dụ: ID
+     *
+     * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
+     */
+    public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id')
+    {
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($whereValue) && count($whereValue) > 0) {
+            foreach ($whereValue as $key => $value) {
+                if (is_array($value['value'])) {
+                    $db->whereIn($value['field'], $value['value']);
+                } else {
+                    $db->where($value['field'], $value['operator'], $value['value']);
+                }
+            }
+        } else {
+            $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
@@ -312,11 +343,78 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 if (is_array($v)) {
                     $db->whereIn($f, $v);
                 } else {
-                    $db->where($f, '=', $v);
+                    $db->where($f, self::OPERATOR_EQUAL_TO, $v);
                 }
             }
         } else {
-            $db->where($field, '=', $value);
+            $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+        }
+        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        if ($format == 'result') {
+            $result = $db->get();
+            $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        } else {
+            $result = $db->first();
+            $this->debug->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
+        }
+        if ($format == 'json') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
+
+            return $result->toJson();
+        } elseif ($format == 'array') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
+
+            return $result->toArray();
+        } elseif ($format == 'base') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
+
+            return $result->toBase();
+        } else {
+            if ($format == 'result') {
+                if ($result->count() <= 0) {
+                    return NULL;
+                }
+            }
+
+            return $result;
+        }
+    }
+
+    /**
+     * Hàm lấy thông tin bản ghi theo tham số đầu vào - Đa điều kiện
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/26/18 16:40
+     *
+     * @param array|string      $wheres      Giá trị cần kiểm tra
+     * @param null|string       $field       Field tương ứng, ví dụ: ID
+     * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
+     * @param null|string|array $selectField Các field cần lấy
+     *
+     * @return array|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|\Illuminate\Support\Collection|null|object|string
+     */
+    public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = NULL, $selectField = NULL)
+    {
+        $this->connection();
+        $format = strtolower($format);
+        if (!empty($selectField)) {
+            if (!is_array($selectField)) {
+                $selectField = [$selectField];
+            }
+            $db = DB::table($this->table)->select($selectField);
+        } else {
+            $db = DB::table($this->table)->select();
+        }
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $key => $value) {
+                if (is_array($value['value'])) {
+                    $db->whereIn($value['field'], $value['value']);
+                } else {
+                    $db->where($value['field'], $value['operator'], $value['value']);
+                }
+            }
+        } else {
+            $db->where($field, self::OPERATOR_EQUAL_TO, $wheres);
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         if ($format == 'result') {
@@ -397,6 +495,51 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     }
 
     /**
+     * Hàm lấy giá trị 1 field của bản ghi dựa trên điều kiện 1 bản ghi đầu vào - Đa điều kiện
+     *
+     * Đây là hàm cơ bản, chỉ áp dụng check theo 1 field
+     *
+     * Lấy bản ghi đầu tiên phù hợp với điều kiện
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/26/18 16:41
+     *
+     * @param string $wheres      Giá trị cần kiểm tra
+     * @param string $field       Field tương ứng với giá tri kiểm tra, ví dụ: ID
+     * @param string $fieldOutput field kết quả đầu ra
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
+     */
+    public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '')
+    {
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $key => $value) {
+                if (is_array($value['value'])) {
+                    $db->whereIn($value['field'], $value['value']);
+                } else {
+                    $db->where($value['field'], $value['operator'], $value['value']);
+                }
+            }
+        } else {
+            $db->where($field, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $result = $db->first();
+        $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+        if (!empty($fieldOutput) && isset($result->$fieldOutput)) {
+            $this->debug->debug(__FUNCTION__, 'Tìm thấy thông tin cột dữ liệu ' . $fieldOutput . ' -> ' . $result->$fieldOutput);
+
+            return $result->$fieldOutput;
+        } else {
+            $this->debug->error(__FUNCTION__, 'Không tìm thấy cột dữ liệu ' . $fieldOutput);
+
+            return $result;
+        }
+    }
+
+    /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi trong 1 bảng
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -447,7 +590,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 16:14
      *
      * @param array|string $wheres              Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     * @param string       $selectField         Mảng dữ liệu danh sách các field cần so sánh
+     * @param string|array $selectField         Mảng dữ liệu danh sách các field cần so sánh
      * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
      *                                          example $options = [
      *                                          'format' => null,
@@ -483,6 +626,76 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             }
         } else {
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+        if (isset($options['orderBy']) && is_array($options['orderBy'])) {
+            foreach ($options['orderBy'] as $column => $direction) {
+                $db->orderBy($column, $direction);
+            }
+        }
+        if (isset($options['orderBy']) && $options['orderBy'] == 'random') {
+            $db->inRandomOrder();
+        }
+        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $result = $db->get($selectField);
+        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        if ($format == 'json') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
+
+            return $result->toJson();
+        } elseif ($format == 'array') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
+
+            return $result->toArray();
+        } elseif ($format == 'base') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
+
+            return $result->toBase();
+        } else {
+            return $result;
+        }
+    }
+
+    /**
+     * Function getResult - Đa điều kiện
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 16:14
+     *
+     * @param array|string $wheres              Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param string|array $selectField         Mảng dữ liệu danh sách các field cần so sánh
+     * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
+     *                                          example $options = [
+     *                                          'format' => null,
+     *                                          'orderBy => [
+     *                                          'id' => 'desc'
+     *                                          ]
+     *                                          ];
+     *
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
+     * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
+     *                                                     map theo biến format truyền vào
+     */
+    public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL)
+    {
+        if (!is_array($selectField)) {
+            $selectField = [$selectField];
+        }
+        if (isset($options['format'])) {
+            $format = strtolower($options['format']);
+        } else {
+            $format = NULL;
+        }
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value['value'])) {
+                    $db->whereIn($value['field'], $value['value']);
+                } else {
+                    $db->where($value['field'], $value['operator'], $value['value']);
+                }
+            }
         }
         if (isset($options['orderBy']) && is_array($options['orderBy'])) {
             foreach ($options['orderBy'] as $column => $direction) {
