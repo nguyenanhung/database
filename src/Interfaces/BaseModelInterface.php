@@ -141,6 +141,21 @@ interface BaseModelInterface
     public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL);
 
     /**
+     * Function getInfoWithMultipleWhere
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/26/18 16:40
+     *
+     * @param string $wheres
+     * @param string $field
+     * @param null   $format
+     * @param null   $selectField
+     *
+     * @return array|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|\Illuminate\Support\Collection|null|object|string
+     */
+    public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = NULL, $selectField = NULL);
+
+    /**
      * Hàm lấy giá trị 1 field của bản ghi dựa trên điều kiện 1 bản ghi đầu vào
      *
      * Đây là hàm cơ bản, chỉ áp dụng check theo 1 field
@@ -157,6 +172,20 @@ interface BaseModelInterface
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
      */
     public function getValue($value = '', $field = 'id', $fieldOutput = '');
+
+    /**
+     * Function getValueWithMultipleWhere
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/26/18 16:41
+     *
+     * @param string $wheres
+     * @param string $field
+     * @param string $fieldOutput
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
+     */
+    public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '');
 
     /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi trong 1 bảng
@@ -204,6 +233,20 @@ interface BaseModelInterface
      *                                                     map theo biến format truyền vào
      */
     public function getResult($wheres = [], $selectField = '*', $options = NULL);
+
+    /**
+     * Function getResultWithMultipleWhere
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/26/18 16:36
+     *
+     * @param array  $wheres
+     * @param string $selectField
+     * @param null   $options
+     *
+     * @return array|\Illuminate\Support\Collection|string|object
+     */
+    public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL);
 
     /**
      * Function countResult
