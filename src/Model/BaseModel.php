@@ -15,7 +15,6 @@ use Illuminate\Container\Container;
 use nguyenanhung\MyDebug\Debug;
 use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
 use nguyenanhung\MyDatabase\Interfaces\ModelInterface;
-use nguyenanhung\MyDatabase\Interfaces\BaseModelInterface;
 
 /**
  * Class BaseModel
