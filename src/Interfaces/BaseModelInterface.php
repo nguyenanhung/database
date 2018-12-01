@@ -30,6 +30,15 @@ interface BaseModelInterface
     public function connection();
 
     /**
+     * Đóng kết nối Cơ sở dữ liệu
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 19:28
+     *
+     */
+    public function disconnect();
+
+    /**
      * Hàm set và kết nối cơ sở dữ liệu
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
