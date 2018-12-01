@@ -18,7 +18,7 @@ namespace nguyenanhung\MyDatabase\Interfaces;
  */
 interface ProjectInterface
 {
-    const VERSION                = '0.2.0';
+    const VERSION                = '0.1.5.8';
     const LAST_MODIFIED          = '2018-12-01';
     const AUTHOR_NAME            = 'Hung Nguyen';
     const AUTHOR_EMAIL           = 'dev@nguyenanhung.com';
