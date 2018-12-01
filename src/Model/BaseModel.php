@@ -121,20 +121,6 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     }
 
     /**
-     * Đóng kết nối Cơ sở dữ liệu
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 19:28
-     *
-     */
-    public function disconnect()
-    {
-        if (isset($this->db) && is_object($this->db)) {
-            $this->db = NULL;
-        }
-    }
-
-    /**
      * Hàm set và kết nối cơ sở dữ liệu
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
