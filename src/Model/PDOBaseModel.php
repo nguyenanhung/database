@@ -64,8 +64,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
             $this->debug->setLoggerFilename($this->debugLoggerFilename);
         }
         $dsn      = $database['driver'] . ':host=' . $database['host'] . ';port=' . $database['port'] . ';dbname=' . $database['database'] . ';charset=' . $database['charset'] . ';collation=' . $database['collation'] . ';prefix=' . $database['prefix'];
-        $this->db = new \Slim\PDO\Database($dsn, $database['username'], $database['password']);
-        $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this->db = new \Slim\PDO\Database($dsn, $database['username'], $database['password'], $database['options']);
         $this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
     }
 

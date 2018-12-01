@@ -79,10 +79,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             $this->debug->setLoggerFilename($this->debugLoggerFilename);
         }
         // Cấu trúc kết nối Database qua __construct
+        if (!empty($database)) {
+            $this->database = $database;
+        }
         if (is_array($this->database) && !empty($this->database)) {
-            if (!empty($database)) {
-                $this->database = $database;
-            }
             $this->db = new DB;
             $this->db->addConnection($this->database);
             $this->db->setEventDispatcher(new Dispatcher(new Container));
