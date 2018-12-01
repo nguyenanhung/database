@@ -30,10 +30,10 @@ use nguyenanhung\MyDatabase\Interfaces\ModelInterface;
  * @package   nguyenanhung\MyDatabase\Model
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
- * @since     2018-10-17
- * @version   0.1.2
+ * @since     2018-12-01
+ * @version   1.0.0
  */
-class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
+class CapsuleBaseModel implements ProjectInterface, ModelInterface, CapsuleBaseModelInterface
 {
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;

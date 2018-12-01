@@ -4,20 +4,19 @@
  * Created by PhpStorm.
  * User: 713uk13m <dev@nguyenanhung.com>
  * Date: 2018-12-01
- * Time: 23:31
+ * Time: 23:13
  */
 
 namespace nguyenanhung\MyDatabase\Model;
 
 /**
- * Interface BaseModelInterface
+ * Interface CapsuleBaseModelInterface
  *
- * @package   nguyenanhung\MyDatabase\Model
+ * @package nguyenanhung\MyDatabase\Model
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
  */
-interface BaseModelInterface
-
+interface CapsuleBaseModelInterface
 {
     /**
      * Function connection
