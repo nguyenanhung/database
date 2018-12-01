@@ -3,37 +3,24 @@
  * Project database.
  * Created by PhpStorm.
  * User: 713uk13m <dev@nguyenanhung.com>
- * Date: 10/16/18
- * Time: 11:22
+ * Date: 2018-12-01
+ * Time: 21:50
  */
 
 namespace nguyenanhung\MyDatabase\Model;
 
-use Illuminate\Database\Capsule\Manager as DB;
-use Illuminate\Events\Dispatcher;
-use Illuminate\Container\Container;
-use nguyenanhung\MyDebug\Debug;
-use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
 use nguyenanhung\MyDatabase\Interfaces\ModelInterface;
+use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
+use nguyenanhung\MyDebug\Debug;
 
 /**
- * Class BaseModel
- *
- * Class Base Model sử dụng Query Builder của Illuminate Database
- *
- * Class này chỉ khai báo các hàm cơ bản và thông dụng trong quá trính sử dụng
- * các cú pháp, function khác đều có thể sử dụng theo tài liệu chính thức của Illuminate Database
- *
- * @see       https://laravel.com/docs/5.4/database
- * @see       https://packagist.org/packages/illuminate/database#v5.4.36
+ * Class PDOBaseModel
  *
  * @package   nguyenanhung\MyDatabase\Model
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
- * @since     2018-10-17
- * @version   0.1.2
  */
-class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
+class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInterface
 {
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
@@ -41,10 +28,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     protected $database;
     /** @var string|null Bảng cần lấy dữ liệu */
     protected $table;
-    /** @var object Đối tượng khởi tạo dùng gọi đến Class Capsule Manager \Illuminate\Database\Capsule\Manager */
+    /** @var object Database */
     protected $db;
-    /** @var string DB Name */
-    protected $dbName;
     /** @var bool Cấu hình trạng thái Debug, TRUE nếu bật, FALSE nếu tắt */
     public $debugStatus = FALSE;
     /** @var null|string Cấu hình Level Debug */
@@ -57,9 +42,11 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     public $primaryKey = 'id';
 
     /**
-     * BaseModel constructor.
+     * PDOBaseModel constructor.
+     *
+     * @param array $database
      */
-    public function __construct()
+    public function __construct($database = [])
     {
         $this->debug = new Debug();
         if ($this->debugStatus === TRUE) {
@@ -76,22 +63,26 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             $this->debug->setLoggerSubPath(__CLASS__);
             $this->debug->setLoggerFilename($this->debugLoggerFilename);
         }
+        $dsn      = $database['driver'] . ':host=' . $database['host'] . ';port=' . $database['port'] . ';dbname=' . $database['database'] . ';charset=' . $database['charset'] . ';collation=' . $database['collation'] . ';prefix=' . $database['prefix'];
+        $this->db = new \Slim\PDO\Database($dsn, $database['username'], $database['password']);
+        $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
     }
 
     /**
-     * BaseModel destructor.
+     * PDOBaseModel destructor.
      */
     public function __destruct()
     {
     }
 
     /**
-     * Hàm lấy thông tin phiên bản Package
+     * Function getVersion
      *
-     * @author  : 713uk13m <dev@nguyenanhung.com>
-     * @time    : 10/13/18 15:12
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 21:51
      *
-     * @return mixed|string Current Project Version, VD: 0.1.0
+     * @return mixed|string
      */
     public function getVersion()
     {
@@ -99,94 +90,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     }
 
     /**
-     * Hàm khởi tạo kết nối đến Cơ sở dữ liệu
-     *
-     * Sử dụng đối tượng DB được truyền từ bên ngoài vào
+     * Function setTable
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 15:47
+     * @time  : 2018-12-01 21:54
      *
-     */
-    public function connection()
-    {
-        $this->db = new DB;
-        $this->db->addConnection($this->database);
-        $this->db->setEventDispatcher(new Dispatcher(new Container));
-        $this->db->setAsGlobal();
-        $this->db->bootEloquent();
-
-        return $this;
-    }
-
-    /**
-     * Function disconnect
+     * @param string $table
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 22:27
-     *
-     */
-    public function disconnect()
-    {
-        $this->db = NULL;
-    }
-
-    /**
-     * Function getConnection
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 22:27
-     *
-     * @return object
-     */
-    public function getConnection()
-    {
-        return $this->db;
-    }
-
-    /**
-     * Function getConnectionName
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 22:28
-     *
-     * @return string
-     */
-    public function getConnectionName()
-    {
-        return $this->dbName;
-    }
-
-    /**
-     * Hàm set và kết nối cơ sở dữ liệu
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:43
-     *
-     * @param array  $database Mảng dữ liệu thông tin DB cần kết nối
-     * @param string $name     Tên DB kết nối
-     *
-     * @return  $this;
-     *
-     * @see   https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php
-     * @see   https://packagist.org/packages/illuminate/database#v5.4.36
-     */
-    public function setDatabase($database = [], $name = 'default')
-    {
-        $this->database = $database;
-        $this->dbName   = $name;
-
-        return $this;
-    }
-
-    /**
-     * Hàm set và kết nối đến bảng dữ liệu
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:43
-     *
-     * @param string $table Bảng cần lấy dữ liệu
-     *
-     * @return  $this;
+     * @return $this
      */
     public function setTable($table = '')
     {
@@ -196,34 +107,63 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     }
 
     /**
-     * Hàm truncate bảng dữ liệu
+     * Function getTable
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 14:15
+     * @time  : 2018-12-01 21:54
      *
-     * @see   https://laravel.com/docs/5.4/queries#deletes
-     *
+     * @return string|null
      */
-    public function truncate()
+    public function getTable()
     {
-        DB::table($this->table)->truncate();
+        return $this->table;
     }
 
+    /**
+     * Function disconnect
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 22:03
+     *
+     * @return $this
+     */
+    public function disconnect()
+    {
+        $this->db = NULL;
+
+        return $this;
+    }
+
+    /**
+     * Function getDb
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 22:03
+     *
+     * @return object
+     */
+    public function getDb()
+    {
+        return $this->db;
+    }
+
+    /*************************** DATABASE METHOD ***************************/
     /**
      * Hàm đếm toàn bộ bản ghi tồn tại trong bảng
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:43
+     * @time  : 2018-12-01 22:19
+     *
+     * @param array $select
      *
      * @return int
      */
-    public function countAll()
+    public function countAll($select = ['id'])
     {
-        $this->connection();
-        $db = DB::table($this->table);
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $total = $this->db->select($select)->from($this->table)->execute()->rowCount();
+        $this->debug->debug(__FUNCTION__, 'Total Result: ' . $total);
 
-        return $db->count();
+        return $total;
     }
 
     /**
@@ -232,15 +172,15 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:45
      *
-     * @param string|array $whereValue Giá trị cần kiểm tra
-     * @param string|null  $whereField Field tương ứng, ví dụ: ID
+     * @param string|array      $whereValue Giá trị cần kiểm tra
+     * @param string|null       $whereField Field tương ứng, ví dụ: ID
+     * @param string|array|null $select     Bản ghi cần chọn
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      */
-    public function checkExists($whereValue = '', $whereField = 'id')
+    public function checkExists($whereValue = '', $whereField = 'id', $select = ['*'])
     {
-        $this->connection();
-        $db = DB::table($this->table);
+        $db = $this->db->select($select)->from($this->table);
         if (is_array($whereValue) && count($whereValue) > 0) {
             foreach ($whereValue as $column => $column_value) {
                 if (is_array($column_value)) {
@@ -252,9 +192,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         } else {
             $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $total = $db->execute()->rowCount();
+        $this->debug->debug(__FUNCTION__, 'Total Result: ' . $total);
 
-        return $db->count();
+        return $total;
     }
 
     /**
@@ -263,15 +204,15 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:45
      *
-     * @param string|array $whereValue Giá trị cần kiểm tra
-     * @param string|null  $whereField Field tương ứng, ví dụ: ID
+     * @param string|array      $whereValue Giá trị cần kiểm tra
+     * @param string|null       $whereField Field tương ứng, ví dụ: ID
+     * @param string|array|null $select     Bản ghi cần chọn
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      */
-    public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id')
+    public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id', $select = ['*'])
     {
-        $this->connection();
-        $db = DB::table($this->table);
+        $db = $this->db->select($select)->from($this->table);
         if (is_array($whereValue) && count($whereValue) > 0) {
             foreach ($whereValue as $key => $value) {
                 if (is_array($value['value'])) {
@@ -283,9 +224,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         } else {
             $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
-        return $db->count();
+        return $db->execute()->rowCount();
     }
 
     /**
@@ -309,11 +249,12 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
-        $this->connection();
-        $db = DB::table($this->table)->latest($byColumn);
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $db = $this->db->select($selectField)->from($this->table);
+        $db->orderBy($byColumn, 'DESC')->limit(1);
+        $result = $db->execute()->fetch();
+        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
 
-        return $db->first($selectField);
+        return $result;
     }
 
     /**
@@ -337,11 +278,12 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
-        $this->connection();
-        $db = DB::table($this->table)->oldest($byColumn);
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $db = $this->db->select($selectField)->from($this->table);
+        $db->orderBy($byColumn, 'ASC')->limit(1);
+        $result = $db->execute()->fetch();
+        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
 
-        return $db->first($selectField);
+        return $result;
     }
 
     /**
@@ -359,23 +301,20 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
      * @param null|string|array $selectField Các field cần lấy
      *
-     * @see   https://laravel.com/docs/5.4/queries#selects
-     *
-     * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
+     * @return object|array|string|null Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
      */
     public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL)
     {
-        $this->connection();
         $format = strtolower($format);
         if (!empty($selectField)) {
             if (!is_array($selectField)) {
                 $selectField = [$selectField];
             }
-            $db = DB::table($this->table)->select($selectField);
         } else {
-            $db = DB::table($this->table)->select();
+            $selectField = ['*'];
         }
+        $db = $this->db->select($selectField)->from($this->table);
         if (is_array($value) && count($value) > 0) {
             foreach ($value as $f => $v) {
                 if (is_array($v)) {
@@ -387,62 +326,47 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         } else {
             $db->where($field, self::OPERATOR_EQUAL_TO, $value);
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         if ($format == 'result') {
-            $result = $db->get();
+            $result = $db->execute()->fetchAll();
             $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         } else {
-            $result = $db->first();
+            $result = $db->execute()->fetch();
             $this->debug->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
         }
+        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
         if ($format == 'json') {
             $this->debug->debug(__FUNCTION__, 'Output Result is Json');
 
-            return $result->toJson();
-        } elseif ($format == 'array') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
-
-            return $result->toArray();
-        } elseif ($format == 'base') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
-
-            return $result->toBase();
+            return json_encode($result);
         } else {
-            if ($format == 'result') {
-                if ($result->count() <= 0) {
-                    return NULL;
-                }
-            }
-
             return $result;
         }
     }
 
     /**
-     * Hàm lấy thông tin bản ghi theo tham số đầu vào - Đa điều kiện
+     * Function getInfoWithMultipleWhere
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 11/26/18 16:40
+     * @time  : 2018-12-01 22:42
      *
-     * @param array|string      $wheres      Giá trị cần kiểm tra
-     * @param null|string       $field       Field tương ứng, ví dụ: ID
-     * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
-     * @param null|string|array $selectField Các field cần lấy
+     * @param string $wheres
+     * @param string $field
+     * @param null   $format
+     * @param null   $selectField
      *
-     * @return array|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|\Illuminate\Support\Collection|null|object|string
+     * @return array|false|mixed|string
      */
     public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = NULL, $selectField = NULL)
     {
-        $this->connection();
         $format = strtolower($format);
         if (!empty($selectField)) {
             if (!is_array($selectField)) {
                 $selectField = [$selectField];
             }
-            $db = DB::table($this->table)->select($selectField);
         } else {
-            $db = DB::table($this->table)->select();
+            $selectField = ['*'];
         }
+        $db = $this->db->select($selectField)->from($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $key => $value) {
                 if (is_array($value['value'])) {
@@ -454,59 +378,41 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         } else {
             $db->where($field, self::OPERATOR_EQUAL_TO, $wheres);
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         if ($format == 'result') {
-            $result = $db->get();
+            $result = $db->execute()->fetchAll();
             $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         } else {
-            $result = $db->first();
+            $result = $db->execute()->fetch();
             $this->debug->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
         }
+        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
         if ($format == 'json') {
             $this->debug->debug(__FUNCTION__, 'Output Result is Json');
 
-            return $result->toJson();
-        } elseif ($format == 'array') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
-
-            return $result->toArray();
-        } elseif ($format == 'base') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
-
-            return $result->toBase();
+            return json_encode($result);
         } else {
-            if ($format == 'result') {
-                if ($result->count() <= 0) {
-                    return NULL;
-                }
-            }
-
             return $result;
         }
     }
 
     /**
-     * Hàm lấy giá trị 1 field của bản ghi dựa trên điều kiện 1 bản ghi đầu vào
+     * Function getValue
      *
-     * Đây là hàm cơ bản, chỉ áp dụng check theo 1 field
+     * @author : 713uk13m <dev@nguyenanhung.com>
+     * @time   : 2018-12-01 22:45
      *
-     * Lấy bản ghi đầu tiên phù hợp với điều kiện
+     * @param string $value
+     * @param string $field
+     * @param string $fieldOutput
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:51
-     *
-     * @param string $value       Giá trị cần kiểm tra
-     * @param string $field       Field tương ứng với giá tri kiểm tra, ví dụ: ID
-     * @param string $fieldOutput field kết quả đầu ra
-     *
-     * @see   https://laravel.com/docs/5.4/queries#selects
-     *
-     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
+     * @return mixed|null
      */
     public function getValue($value = '', $field = 'id', $fieldOutput = '')
     {
-        $this->connection();
-        $db = DB::table($this->table);
+        if (!is_array($fieldOutput)) {
+            $fieldOutput = [$fieldOutput];
+        }
+        $db = $this->db->select($fieldOutput)->from($this->table);
         if (is_array($value) && count($value) > 0) {
             foreach ($value as $column => $column_value) {
                 if (is_array($column_value)) {
@@ -518,40 +424,34 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         } else {
             $db->where($field, self::OPERATOR_EQUAL_TO, $value);
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->first();
-        $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
-        if (!empty($fieldOutput) && isset($result->$fieldOutput)) {
-            $this->debug->debug(__FUNCTION__, 'Tìm thấy thông tin cột dữ liệu ' . $fieldOutput . ' -> ' . $result->$fieldOutput);
+        $result = $db->execute()->fetch();
 
+        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
+        if (isset($result->$fieldOutput)) {
             return $result->$fieldOutput;
         } else {
-            $this->debug->error(__FUNCTION__, 'Không tìm thấy cột dữ liệu ' . $fieldOutput);
-
-            return $result;
+            return NULL;
         }
     }
 
     /**
-     * Hàm lấy giá trị 1 field của bản ghi dựa trên điều kiện 1 bản ghi đầu vào - Đa điều kiện
+     * Function getValueWithMultipleWhere
      *
-     * Đây là hàm cơ bản, chỉ áp dụng check theo 1 field
+     * @author : 713uk13m <dev@nguyenanhung.com>
+     * @time   : 2018-12-01 22:46
      *
-     * Lấy bản ghi đầu tiên phù hợp với điều kiện
+     * @param string $wheres
+     * @param string $field
+     * @param string $fieldOutput
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 11/26/18 16:41
-     *
-     * @param string $wheres      Giá trị cần kiểm tra
-     * @param string $field       Field tương ứng với giá tri kiểm tra, ví dụ: ID
-     * @param string $fieldOutput field kết quả đầu ra
-     *
-     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
+     * @return mixed|null
      */
     public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '')
     {
-        $this->connection();
-        $db = DB::table($this->table);
+        if (!is_array($fieldOutput)) {
+            $fieldOutput = [$fieldOutput];
+        }
+        $db = $this->db->select($fieldOutput)->from($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $key => $value) {
                 if (is_array($value['value'])) {
@@ -563,17 +463,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         } else {
             $db->where($field, self::OPERATOR_EQUAL_TO, $wheres);
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->first();
-        $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
-        if (!empty($fieldOutput) && isset($result->$fieldOutput)) {
-            $this->debug->debug(__FUNCTION__, 'Tìm thấy thông tin cột dữ liệu ' . $fieldOutput . ' -> ' . $result->$fieldOutput);
+        $result = $db->execute()->fetch();
 
+        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
+        if (isset($result->$fieldOutput)) {
             return $result->$fieldOutput;
         } else {
-            $this->debug->error(__FUNCTION__, 'Không tìm thấy cột dữ liệu ' . $fieldOutput);
-
-            return $result;
+            return NULL;
         }
     }
 
@@ -594,11 +490,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
-        $this->connection();
-        $db = DB::table($this->table);
-        $db->distinct();
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->get($selectField);
+        $db     = $this->db->select($selectField)->from($this->table)->distinct();
+        $result = $db->execute()->fetchAll();
         $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
         return $result;
@@ -647,13 +540,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
-        if (isset($options['format'])) {
-            $format = strtolower($options['format']);
-        } else {
-            $format = NULL;
-        }
-        $this->connection();
-        $db = DB::table($this->table);
+        $db = $this->db->select($selectField)->from($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
                 if (is_array($value)) {
@@ -670,27 +557,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 $db->orderBy($column, $direction);
             }
         }
-        if (isset($options['orderBy']) && $options['orderBy'] == 'random') {
-            $db->inRandomOrder();
-        }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->get($selectField);
+        $result = $db->execute()->fetchAll();
         $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format == 'json') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
 
-            return $result->toJson();
-        } elseif ($format == 'array') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
-
-            return $result->toArray();
-        } elseif ($format == 'base') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
-
-            return $result->toBase();
-        } else {
-            return $result;
-        }
+        return $result;
     }
 
     /**
@@ -719,13 +589,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
-        if (isset($options['format'])) {
-            $format = strtolower($options['format']);
-        } else {
-            $format = NULL;
-        }
-        $this->connection();
-        $db = DB::table($this->table);
+        $db = $this->db->select($selectField)->from($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
                 if (is_array($value['value'])) {
@@ -740,27 +604,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 $db->orderBy($column, $direction);
             }
         }
-        if (isset($options['orderBy']) && $options['orderBy'] == 'random') {
-            $db->inRandomOrder();
-        }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->get($selectField);
+        $result = $db->execute()->fetchAll();
         $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format == 'json') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
 
-            return $result->toJson();
-        } elseif ($format == 'array') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
-
-            return $result->toArray();
-        } elseif ($format == 'base') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
-
-            return $result->toBase();
-        } else {
-            return $result;
-        }
+        return $result;
     }
 
     /**
@@ -779,8 +626,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
-        $this->connection();
-        $db = DB::table($this->table);
+        $db = $this->db->select($selectField)->from($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
                 if (is_array($value)) {
@@ -792,10 +638,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         } else {
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->get($selectField);
-        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        $totalItem = $result->count();
+        $totalItem = $db->execute()->rowCount();
         $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
 
         return $totalItem;
@@ -809,19 +652,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @param array $data Mảng chứa dữ liệu cần insert
      *
-     * @see   https://laravel.com/docs/5.4/queries#inserts
-     *
      * @return int Insert ID của bản ghi
      */
     public function add($data = [])
     {
-        $this->connection();
-        $db = DB::table($this->table);
-        $id = $db->insertGetId($data);
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $id);
+        $insertId = $this->db->insert($data)->into($this->table)->execute(FALSE);
 
-        return $id;
+        return $insertId;
     }
 
     /**
@@ -839,8 +676,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function update($data = [], $wheres = [])
     {
-        $this->connection();
-        $db = DB::table($this->table);
+        $db = $this->db->update($data);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
                 if (is_array($value)) {
@@ -852,8 +688,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         } else {
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $resultId = $db->update($data);
+        $resultId = $db->execute();
         $this->debug->info(__FUNCTION__, 'Result Update Rows: ' . $resultId);
 
         return $resultId;
@@ -873,8 +708,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function delete($wheres = [])
     {
-        $this->connection();
-        $db = DB::table($this->table);
+        $db = $this->db->delete($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
                 if (is_array($value)) {
@@ -886,8 +720,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         } else {
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $resultId = $db->delete();
+        $resultId = $db->execute();
         $this->debug->info(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
 
         return $resultId;
