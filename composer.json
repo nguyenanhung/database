@@ -27,7 +27,8 @@
         "illuminate/console": "5.4.36",
         "illuminate/events": "5.4.36",
         "illuminate/database": "5.4.36",
-        "backup-manager/backup-manager": "^1.2"
+        "backup-manager/backup-manager": "^1.2",
+        "slim/pdo": "^1.10"
     },
     "require-dev": {
         "kint-php/kint": "^3.0"

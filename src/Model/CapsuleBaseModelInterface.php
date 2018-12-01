@@ -3,31 +3,59 @@
  * Project database.
  * Created by PhpStorm.
  * User: 713uk13m <dev@nguyenanhung.com>
- * Date: 10/16/18
- * Time: 15:42
+ * Date: 2018-12-01
+ * Time: 23:13
  */
 
-namespace nguyenanhung\MyDatabase\Interfaces;
+namespace nguyenanhung\MyDatabase\Model;
 
 /**
- * Interface BaseModelInterface
+ * Interface CapsuleBaseModelInterface
  *
- * @package   nguyenanhung\MyDatabase\Interfaces
+ * @package nguyenanhung\MyDatabase\Model
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
  */
-interface BaseModelInterface
+interface CapsuleBaseModelInterface
 {
     /**
-     * Hàm khởi tạo kết nối đến Cơ sở dữ liệu
-     *
-     * Sử dụng đối tượng DB được truyền từ bên ngoài vào
+     * Function connection
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 15:47
+     * @time  : 2018-12-01 23:10
      *
+     * @return $this
      */
     public function connection();
+
+    /**
+     * Function disconnect
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 22:27
+     *
+     */
+    public function disconnect();
+
+    /**
+     * Function getConnection
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 22:27
+     *
+     * @return object
+     */
+    public function getConnection();
+
+    /**
+     * Function getConnectionName
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 22:28
+     *
+     * @return string
+     */
+    public function getConnectionName();
 
     /**
      * Hàm set và kết nối cơ sở dữ liệu
@@ -35,12 +63,25 @@ interface BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:43
      *
-     * @param array $database Mảng dữ liệu thông tin DB cần kết nối
+     * @param array  $database Mảng dữ liệu thông tin DB cần kết nối
+     * @param string $name     Tên DB kết nối
+     *
+     * @return  $this;
      *
      * @see   https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php
      * @see   https://packagist.org/packages/illuminate/database#v5.4.36
      */
-    public function setDatabase($database = []);
+    public function setDatabase($database = [], $name = 'default');
+
+    /**
+     * Function getDatabase
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 23:07
+     *
+     * @return array|null
+     */
+    public function getDatabase();
 
     /**
      * Hàm set và kết nối đến bảng dữ liệu
@@ -49,14 +90,29 @@ interface BaseModelInterface
      * @time  : 10/16/18 11:43
      *
      * @param string $table Bảng cần lấy dữ liệu
+     *
+     * @return  $this;
      */
     public function setTable($table = '');
 
+    /**
+     * Function getTable
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 23:07
+     *
+     * @return string|null
+     */
+    public function getTable();
+
+    /*************************** DATABASE METHOD ***************************/
     /**
      * Hàm truncate bảng dữ liệu
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:15
+     *
+     * @see   https://laravel.com/docs/5.4/queries#deletes
      *
      */
     public function truncate();
@@ -77,12 +133,25 @@ interface BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:45
      *
-     * @param string $value Giá trị cần kiểm tra
-     * @param string $field Field tương ứng, ví dụ: ID
+     * @param string|array $whereValue Giá trị cần kiểm tra
+     * @param string|null  $whereField Field tương ứng, ví dụ: ID
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      */
-    public function checkExists($value = '', $field = 'id');
+    public function checkExists($whereValue = '', $whereField = 'id');
+
+    /**
+     * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào - Đa điều kiện
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:45
+     *
+     * @param string|array $whereValue Giá trị cần kiểm tra
+     * @param string|null  $whereField Field tương ứng, ví dụ: ID
+     *
+     * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
+     */
+    public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id');
 
     /**
      * Hàm lấy bản ghi mới nhất theo điều kiện
@@ -130,14 +199,32 @@ interface BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:51
      *
-     * @param string      $value  Giá trị cần kiểm tra
-     * @param string      $field  Field tương ứng, ví dụ: ID
-     * @param null|string $format Format dữ liệu đầu ra: null, json, array, base, result
+     * @param array|string      $value       Giá trị cần kiểm tra
+     * @param null|string       $field       Field tương ứng, ví dụ: ID
+     * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
+     * @param null|string|array $selectField Các field cần lấy
      *
-     * @return array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
+     * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
      */
-    public function getInfo($value = '', $field = 'id', $format = NULL);
+    public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL);
+
+    /**
+     * Hàm lấy thông tin bản ghi theo tham số đầu vào - Đa điều kiện
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/26/18 16:40
+     *
+     * @param array|string      $wheres      Giá trị cần kiểm tra
+     * @param null|string       $field       Field tương ứng, ví dụ: ID
+     * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
+     * @param null|string|array $selectField Các field cần lấy
+     *
+     * @return array|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|\Illuminate\Support\Collection|null|object|string
+     */
+    public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = NULL, $selectField = NULL);
 
     /**
      * Hàm lấy giá trị 1 field của bản ghi dựa trên điều kiện 1 bản ghi đầu vào
@@ -153,9 +240,29 @@ interface BaseModelInterface
      * @param string $field       Field tương ứng với giá tri kiểm tra, ví dụ: ID
      * @param string $fieldOutput field kết quả đầu ra
      *
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
      */
     public function getValue($value = '', $field = 'id', $fieldOutput = '');
+
+    /**
+     * Hàm lấy giá trị 1 field của bản ghi dựa trên điều kiện 1 bản ghi đầu vào - Đa điều kiện
+     *
+     * Đây là hàm cơ bản, chỉ áp dụng check theo 1 field
+     *
+     * Lấy bản ghi đầu tiên phù hợp với điều kiện
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/26/18 16:41
+     *
+     * @param string $wheres      Giá trị cần kiểm tra
+     * @param string $field       Field tương ứng với giá tri kiểm tra, ví dụ: ID
+     * @param string $fieldOutput field kết quả đầu ra
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
+     */
+    public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '');
 
     /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi trong 1 bảng
@@ -165,7 +272,9 @@ interface BaseModelInterface
      *
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
-     * @return \Illuminate\Support\Collection
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
+     * @return \Illuminate\Support\Collection|object|array
      */
     public function getDistinctResult($selectField = '');
 
@@ -179,7 +288,7 @@ interface BaseModelInterface
      *
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection|object|array
      */
     public function getResultDistinct($selectField = '');
 
@@ -190,7 +299,7 @@ interface BaseModelInterface
      * @time  : 10/16/18 16:14
      *
      * @param array|string $wheres              Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     * @param string       $selectField         Mảng dữ liệu danh sách các field cần so sánh
+     * @param string|array $selectField         Mảng dữ liệu danh sách các field cần so sánh
      * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
      *                                          example $options = [
      *                                          'format' => null,
@@ -199,10 +308,48 @@ interface BaseModelInterface
      *                                          ]
      *                                          ];
      *
-     * @return array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
+     * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
      */
     public function getResult($wheres = [], $selectField = '*', $options = NULL);
+
+    /**
+     * Function getResult - Đa điều kiện
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 16:14
+     *
+     * @param array|string $wheres              Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param string|array $selectField         Mảng dữ liệu danh sách các field cần so sánh
+     * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
+     *                                          example $options = [
+     *                                          'format' => null,
+     *                                          'orderBy => [
+     *                                          'id' => 'desc'
+     *                                          ]
+     *                                          ];
+     *
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
+     * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
+     *                                                     map theo biến format truyền vào
+     */
+    public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL);
+
+    /**
+     * Function countResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/25/18 14:10
+     *
+     * @param array  $wheres
+     * @param string $selectField
+     *
+     * @return int
+     */
+    public function countResult($wheres = [], $selectField = '*');
 
     /**
      * Hàm thêm mới bản ghi vào bảng
@@ -211,6 +358,8 @@ interface BaseModelInterface
      * @time  : 10/16/18 14:04
      *
      * @param array $data Mảng chứa dữ liệu cần insert
+     *
+     * @see   https://laravel.com/docs/5.4/queries#inserts
      *
      * @return int Insert ID của bản ghi
      */
@@ -225,6 +374,8 @@ interface BaseModelInterface
      * @param array        $data   Mảng dữ liệu cần Update
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
+     * @see   https://laravel.com/docs/5.4/queries#updates
+     *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
      */
     public function update($data = [], $wheres = []);
@@ -237,8 +388,9 @@ interface BaseModelInterface
      *
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
+     * @see   https://laravel.com/docs/5.4/queries#deletes
+     *
      * @return int Số bản ghi đã xóa
      */
     public function delete($wheres = []);
 }
-
