@@ -9,6 +9,9 @@
 
 namespace nguyenanhung\MyDatabase\Model;
 
+use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
 use nguyenanhung\MyDebug\Debug;
 use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
 use nguyenanhung\MyDatabase\Interfaces\ModelInterface;
@@ -32,10 +35,7 @@ class ConnectionBaseModel implements ProjectInterface, ModelInterface, Connectio
     protected $db;
     /** @var bool Cấu hình trạng thái Debug, TRUE nếu bật, FALSE nếu tắt */
     public $debugStatus = FALSE;
-    /**
-     * @var null|string Cấu hình Level Debug
-     * @see https://github.com/nguyenanhung/my-debug/blob/master/src/Interfaces/DebugInterface.php
-     */
+    /** @var null|string Cấu hình Level Debug */
     public $debugLevel = NULL;
     /** @var null|bool|string Cấu hình thư mục lưu trữ Log, VD: /your/to/path */
     public $debugLoggerPath = NULL;
@@ -84,5 +84,106 @@ class ConnectionBaseModel implements ProjectInterface, ModelInterface, Connectio
     public function getVersion()
     {
         return self::VERSION;
+    }
+
+    /**
+     * Function connection
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 21:33
+     *
+     * @return $this
+     */
+    public function connection()
+    {
+        $this->db = new DB;
+        $this->db->addConnection($this->database);
+        $this->db->setEventDispatcher(new Dispatcher(new Container));
+        $this->db->setAsGlobal();
+        $this->db->bootEloquent();
+
+        return $this;
+
+    }
+
+    /**
+     * @return object
+     */
+    public function getDb()
+    {
+        return $this->db;
+    }
+
+    public function disconnect()
+    {
+        if (isset($this->db)) {
+            $this->db = NULL;
+        }
+    }
+
+    /**
+     * Hàm set và kết nối cơ sở dữ liệu
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:43
+     *
+     * @param array $database Mảng dữ liệu thông tin DB cần kết nối
+     *
+     * @return  $this;
+     *
+     * @see   https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php
+     * @see   https://packagist.org/packages/illuminate/database#v5.4.36
+     */
+    public function setDatabase($database = [])
+    {
+        $this->database = $database;
+
+        return $this;
+    }
+
+    /**
+     * Hàm set và kết nối đến bảng dữ liệu
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:43
+     *
+     * @param string $table Bảng cần lấy dữ liệu
+     *
+     * @return  $this;
+     */
+    public function setTable($table = '')
+    {
+        $this->table = $table;
+
+        return $this;
+    }
+
+    /**
+     * Hàm lấy thông tin bản ghi theo tham số đầu vào
+     *
+     * Đây là hàm cơ bản, chỉ áp dụng check theo 1 field
+     *
+     * Lấy bản ghi đầu tiên phù hợp với điều kiện
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:51
+     *
+     * @param array|string      $value       Giá trị cần kiểm tra
+     * @param null|string       $field       Field tương ứng, ví dụ: ID
+     * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
+     * @param null|string|array $selectField Các field cần lấy
+     *
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
+     * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
+     *                                                     map theo biến format truyền vào
+     */
+    public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL)
+    {
+        $data = DB::table($this->table);
+
+        $result = $data->where($field, '=', $value)->get()->first();
+
+        return $result;
     }
 }
