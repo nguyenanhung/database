@@ -30,9 +30,10 @@ interface ModelInterface
     const OP_GT                             = '>';
     const OPERATOR_GREATER_THAN_OR_EQUAL_TO = '>=';
     const OP_GTE                            = '>=';
-    const OPERATOR_IS_LIKE                  = 'like';
-    const OPERATOR_IS_NULL                  = 'is null';
-    const OPERATOR_IS_NOT_NULL              = 'is not null';
-    const ORDER_ASCENDING                   = 'asc';
-    const ORDER_DESCENDING                  = 'desc';
+    const OPERATOR_IS_IN                    = 'IN';
+    const OPERATOR_IS_LIKE                  = 'LINE';
+    const OPERATOR_IS_NULL                  = 'IS NULL';
+    const OPERATOR_IS_NOT_NULL              = 'IS NOT NULL';
+    const ORDER_ASCENDING                   = 'ASC';
+    const ORDER_DESCENDING                  = 'DESC';
 }

@@ -26,6 +26,8 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     protected $debug;
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
     protected $database;
+    /** @var string DB Name */
+    protected $dbName = 'default';
     /** @var string|null Bảng cần lấy dữ liệu */
     protected $table;
     /** @var object Database */
@@ -63,9 +65,18 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
             $this->debug->setLoggerSubPath(__CLASS__);
             $this->debug->setLoggerFilename($this->debugLoggerFilename);
         }
-        $dsn      = $database['driver'] . ':host=' . $database['host'] . ';port=' . $database['port'] . ';dbname=' . $database['database'] . ';charset=' . $database['charset'] . ';collation=' . $database['collation'] . ';prefix=' . $database['prefix'];
-        $this->db = new \Slim\PDO\Database($dsn, $database['username'], $database['password'], $database['options']);
-        $this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
+        if (!empty($database)) {
+            $this->database = $database;
+        }
+        if (is_array($this->database) && !empty($this->database)) {
+            $this->db = new \Slim\PDO\Database(
+                $this->database['driver'] . ':host=' . $this->database['host'] . ';port=' . $this->database['port'] . ';dbname=' . $this->database['database'] . ';charset=' . $this->database['charset'] . ';collation=' . $this->database['collation'] . ';prefix=' . $this->database['prefix'],
+                $this->database['username'],
+                $this->database['password'],
+                $this->database['options']
+            );
+            $this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
+        }
     }
 
     /**
@@ -86,6 +97,38 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     public function getVersion()
     {
         return self::VERSION;
+    }
+
+    /**
+     * Function setDatabase
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 20:42
+     *
+     * @param array  $database
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setDatabase($database = [], $name = 'default')
+    {
+        $this->database = $database;
+        $this->dbName   = $name;
+
+        return $this;
+    }
+
+    /**
+     * Function getDatabase
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 20:42
+     *
+     * @return array|null
+     */
+    public function getDatabase()
+    {
+        return $this->database;
     }
 
     /**
@@ -119,6 +162,29 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     }
 
     /**
+     * Function connection
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 20:43
+     *
+     * @return $this
+     */
+    public function connection()
+    {
+        if (!is_object($this->db)) {
+            $this->db = new \Slim\PDO\Database(
+                $this->database['driver'] . ':host=' . $this->database['host'] . ';port=' . $this->database['port'] . ';dbname=' . $this->database['database'] . ';charset=' . $this->database['charset'] . ';collation=' . $this->database['collation'] . ';prefix=' . $this->database['prefix'],
+                $this->database['username'],
+                $this->database['password'],
+                $this->database['options']
+            );
+            $this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
+        }
+
+        return $this;
+    }
+
+    /**
      * Function disconnect
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -129,6 +195,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     public function disconnect()
     {
         $this->db = NULL;
+        unset($this->db);
 
         return $this;
     }
@@ -249,7 +316,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
             $selectField = [$selectField];
         }
         $db = $this->db->select($selectField)->from($this->table);
-        $db->orderBy($byColumn, 'DESC')->limit(1);
+        $db->orderBy($byColumn, self::ORDER_DESCENDING)->limit(1);
         $result = $db->execute()->fetch();
         $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
 
@@ -278,7 +345,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
             $selectField = [$selectField];
         }
         $db = $this->db->select($selectField)->from($this->table);
-        $db->orderBy($byColumn, 'ASC')->limit(1);
+        $db->orderBy($byColumn, self::ORDER_ASCENDING)->limit(1);
         $result = $db->execute()->fetch();
         $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
 

@@ -17,7 +17,6 @@ use BackupManager\Manager;
 use BackupManager\Filesystems\Destination;
 use nguyenanhung\MyDebug\Debug;
 use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
-use nguyenanhung\MyDatabase\Interfaces\BackupInterface;
 use nguyenanhung\MyDatabase\Repository\DataRepository;
 
 /**
@@ -61,7 +60,6 @@ class Backup implements ProjectInterface, BackupInterface
      */
     public function __destruct()
     {
-        // TODO: Implement __destruct() method.
     }
 
     /**

@@ -19,6 +19,29 @@ namespace nguyenanhung\MyDatabase\Model;
 interface PDOBaseModelInterface
 {
     /**
+     * Function setDatabase
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 20:42
+     *
+     * @param array  $database
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setDatabase($database = [], $name = 'default');
+
+    /**
+     * Function getDatabase
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 20:42
+     *
+     * @return array|null
+     */
+    public function getDatabase();
+
+    /**
      * Function setTable
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -39,6 +62,16 @@ interface PDOBaseModelInterface
      * @return string|null
      */
     public function getTable();
+
+    /**
+     * Function connection
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 20:43
+     *
+     * @return $this
+     */
+    public function connection();
 
     /**
      * Function disconnect

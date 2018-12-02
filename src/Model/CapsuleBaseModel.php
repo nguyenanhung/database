@@ -136,12 +136,15 @@ class CapsuleBaseModel implements ProjectInterface, ModelInterface, CapsuleBaseM
      * Function disconnect
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 22:27
+     * @time  : 2018-12-02 21:55
      *
+     * @return $this
      */
     public function disconnect()
     {
         $this->db = NULL;
+        unset($this->db);
+        return $this;
     }
 
     /**
