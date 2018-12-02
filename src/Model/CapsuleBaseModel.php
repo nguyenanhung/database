@@ -17,7 +17,7 @@ use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
 use nguyenanhung\MyDatabase\Interfaces\ModelInterface;
 
 /**
- * Class BaseModel
+ * Class CapsuleBaseModel
  *
  * Class Base Model sử dụng Query Builder của Illuminate Database
  *
@@ -144,6 +144,7 @@ class CapsuleBaseModel implements ProjectInterface, ModelInterface, CapsuleBaseM
     {
         $this->db = NULL;
         unset($this->db);
+
         return $this;
     }
 
@@ -843,6 +844,158 @@ class CapsuleBaseModel implements ProjectInterface, ModelInterface, CapsuleBaseM
         $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
 
         return $totalItem;
+    }
+
+    /**
+     * Function getResultWithSimpleJoin
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:03
+     *
+     * @param array  $joins
+     * @param string $select
+     * @param null   $options
+     *
+     * @return object|array|\Illuminate\Support\Collection|string
+     */
+    public function getResultWithSimpleJoin($joins = [], $select = '*', $options = NULL)
+    {
+        if (isset($options['format'])) {
+            $format = strtolower($options['format']);
+        } else {
+            $format = NULL;
+        }
+        $db = DB::table($this->table);
+        foreach ($joins as $key => $join) {
+            $db->join($join['table'], $join['first'], $join['operator'], $join['second']);
+        }
+        $result = $db->select($select)->get();
+        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        if ($format == 'json') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
+
+            return $result->toJson();
+        } elseif ($format == 'array') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
+
+            return $result->toArray();
+        } elseif ($format == 'base') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
+
+            return $result->toBase();
+        } else {
+            return $result;
+        }
+    }
+
+    /**
+     * Function getResultWithSimpleLeftJoin
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:05
+     *
+     * @param array  $joins
+     * @param string $select
+     * @param null   $options
+     *
+     * @return object|array|\Illuminate\Support\Collection|string
+     */
+    public function getResultWithSimpleLeftJoin($joins = [], $select = '*', $options = NULL)
+    {
+        if (isset($options['format'])) {
+            $format = strtolower($options['format']);
+        } else {
+            $format = NULL;
+        }
+        $db = DB::table($this->table);
+        foreach ($joins as $key => $join) {
+            $db->leftJoin($join['table'], $join['first'], $join['operator'], $join['second']);
+        }
+        $result = $db->select($select)->get();
+        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        if ($format == 'json') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
+
+            return $result->toJson();
+        } elseif ($format == 'array') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
+
+            return $result->toArray();
+        } elseif ($format == 'base') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
+
+            return $result->toBase();
+        } else {
+            return $result;
+        }
+    }
+
+    /**
+     * Function getResultWithSimpleCrossJoin
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:06
+     *
+     * @param array  $joins
+     * @param string $select
+     * @param null   $options
+     *
+     * @return object|array|\Illuminate\Support\Collection|string
+     */
+    public function getResultWithSimpleCrossJoin($joins = [], $select = '*', $options = NULL)
+    {
+        if (isset($options['format'])) {
+            $format = strtolower($options['format']);
+        } else {
+            $format = NULL;
+        }
+        $db = DB::table($this->table);
+        foreach ($joins as $key => $join) {
+            $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
+        }
+        $result = $db->select($select)->get();
+        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        if ($format == 'json') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
+
+            return $result->toJson();
+        } elseif ($format == 'array') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
+
+            return $result->toArray();
+        } elseif ($format == 'base') {
+            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
+
+            return $result->toBase();
+        } else {
+            return $result;
+        }
+    }
+
+    /**
+     * Function chunkResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:24
+     *
+     * @param int      $count
+     * @param callable $callback
+     *
+     * @return bool
+     */
+    public function chunkResult($count, callable $callback)
+    {
+        if (empty($count)) {
+            $count = 100;
+        }
+
+        return DB::table($this->table)->orderBy('id')->chunk($count, function ($results) use ($callback) {
+            foreach ($results as $key => $value) {
+                if ($callback($value, $key) === FALSE) {
+                    return FALSE;
+                }
+            }
+        });
     }
 
     /**

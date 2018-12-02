@@ -353,6 +353,61 @@ interface BaseModelInterface
     public function countResult($wheres = [], $selectField = '*');
 
     /**
+     * Function getResultWithSimpleJoin
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:03
+     *
+     * @param array  $joins
+     * @param string $select
+     * @param null   $options
+     *
+     * @return object|array|\Illuminate\Support\Collection|string
+     */
+    public function getResultWithSimpleJoin($joins = [], $select = '*', $options = NULL);
+
+    /**
+     * Function getResultWithSimpleLeftJoin
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:05
+     *
+     * @param array  $joins
+     * @param string $select
+     * @param null   $options
+     *
+     * @return object|array|\Illuminate\Support\Collection|string
+     */
+    public function getResultWithSimpleLeftJoin($joins = [], $select = '*', $options = NULL);
+
+    /**
+     * Function getResultWithSimpleCrossJoin
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:06
+     *
+     * @param array  $joins
+     * @param string $select
+     * @param null   $options
+     *
+     * @return object|array|\Illuminate\Support\Collection|string
+     */
+    public function getResultWithSimpleCrossJoin($joins = [], $select = '*', $options = NULL);
+
+    /**
+     * Function chunkResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:24
+     *
+     * @param int      $count
+     * @param callable $callback
+     *
+     * @return bool
+     */
+    public function chunkResult($count, callable $callback);
+
+    /**
      * Hàm thêm mới bản ghi vào bảng
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
