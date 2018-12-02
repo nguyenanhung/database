@@ -196,6 +196,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     {
         $this->db = NULL;
         unset($this->db);
+
         return $this;
     }
 
@@ -315,7 +316,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
             $selectField = [$selectField];
         }
         $db = $this->db->select($selectField)->from($this->table);
-        $db->orderBy($byColumn, 'DESC')->limit(1);
+        $db->orderBy($byColumn, self::ORDER_DESCENDING)->limit(1);
         $result = $db->execute()->fetch();
         $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
 
@@ -344,7 +345,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
             $selectField = [$selectField];
         }
         $db = $this->db->select($selectField)->from($this->table);
-        $db->orderBy($byColumn, 'ASC')->limit(1);
+        $db->orderBy($byColumn, self::ORDER_ASCENDING)->limit(1);
         $result = $db->execute()->fetch();
         $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
 

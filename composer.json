@@ -6,7 +6,9 @@
         "database",
         "backup",
         "sql",
-        "mysql"
+        "mysql",
+        "mysqli",
+        "pdo"
     ],
     "homepage": "https://github.com/nguyenanhung/database",
     "license": "GPL-3.0",

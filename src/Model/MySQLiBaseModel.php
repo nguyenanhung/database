@@ -268,7 +268,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         if (is_array($whereValue) && count($whereValue) > 0) {
             foreach ($whereValue as $column => $column_value) {
                 if (is_array($column_value)) {
-                    $this->db->where($column, $column_value, 'IN');
+                    $this->db->where($column, $column_value, self::OPERATOR_IS_IN);
                 } else {
                     $this->db->where($column, $column_value, self::OPERATOR_EQUAL_TO);
                 }
@@ -298,7 +298,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         if (is_array($whereValue) && count($whereValue) > 0) {
             foreach ($whereValue as $key => $value) {
                 if (is_array($value['value'])) {
-                    $this->db->where($value['field'], $value['value'], 'IN');
+                    $this->db->where($value['field'], $value['value'], self::OPERATOR_IS_IN);
                 } else {
                     $this->db->where($value['field'], $value['value'], $value['operator']);
                 }
@@ -325,7 +325,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     public function getLatest($selectField = '*', $byColumn = 'id')
     {
         try {
-            $this->db->orderBy($byColumn, "desc");
+            $this->db->orderBy($byColumn, self::ORDER_DESCENDING);
 
             return $this->db->get($this->table, 1, $selectField);
         }
@@ -351,7 +351,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     public function getOldest($selectField = '*', $byColumn = 'id')
     {
         try {
-            $this->db->orderBy($byColumn, "asc");
+            $this->db->orderBy($byColumn, self::ORDER_ASCENDING);
 
             return $this->db->get($this->table, 1, $selectField);
         }
@@ -379,7 +379,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         if (is_array($value) && count($value) > 0) {
             foreach ($value as $f => $v) {
                 if (is_array($v)) {
-                    $this->db->where($f, $v, 'IN');
+                    $this->db->where($f, $v, self::OPERATOR_IS_IN);
                 } else {
                     $this->db->where($f, $v, self::OPERATOR_EQUAL_TO);
                 }
@@ -412,7 +412,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $key => $value) {
                 if (is_array($value['value'])) {
-                    $this->db->where($value['field'], $value['value'], 'IN');
+                    $this->db->where($value['field'], $value['value'], self::OPERATOR_IS_IN);
                 } else {
                     $this->db->where($value['field'], $value['value'], $value['operator']);
                 }
@@ -445,7 +445,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         if (is_array($value) && count($value) > 0) {
             foreach ($value as $f => $v) {
                 if (is_array($v)) {
-                    $this->db->where($f, $v, 'IN');
+                    $this->db->where($f, $v, self::OPERATOR_IS_IN);
                 } else {
                     $this->db->where($f, $v, self::OPERATOR_EQUAL_TO);
                 }
@@ -479,7 +479,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $key => $value) {
                 if (is_array($value['value'])) {
-                    $this->db->where($value['field'], $value['value'], 'IN');
+                    $this->db->where($value['field'], $value['value'], self::OPERATOR_IS_IN);
                 } else {
                     $this->db->where($value['field'], $value['value'], $value['operator']);
                 }
@@ -554,7 +554,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             if (is_array($wheres) && count($wheres) > 0) {
                 foreach ($wheres as $field => $value) {
                     if (is_array($value)) {
-                        $this->db->where($field, $value, 'IN');
+                        $this->db->where($field, $value, self::OPERATOR_IS_IN);
                     } else {
                         $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
                     }
@@ -597,7 +597,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             if (is_array($wheres) && count($wheres) > 0) {
                 foreach ($wheres as $field => $value) {
                     if (is_array($value['value'])) {
-                        $this->db->where($value['field'], $value['value'], 'IN');
+                        $this->db->where($value['field'], $value['value'], self::OPERATOR_IS_IN);
                     } else {
                         $this->db->where($value['field'], $value['value'], $value['operator']);
                     }
@@ -636,7 +636,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
                 if (is_array($value)) {
-                    $this->db->where($field, $value, 'IN');
+                    $this->db->where($field, $value, self::OPERATOR_IS_IN);
                 } else {
                     $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
                 }
@@ -689,7 +689,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $column => $column_value) {
                 if (is_array($column_value)) {
-                    $this->db->where($column, $column_value, 'IN');
+                    $this->db->where($column, $column_value, self::OPERATOR_IS_IN);
                 } else {
                     $this->db->where($column, $column_value, self::OPERATOR_EQUAL_TO);
                 }
@@ -717,7 +717,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $column => $column_value) {
                 if (is_array($column_value)) {
-                    $this->db->where($column, $column_value, 'IN');
+                    $this->db->where($column, $column_value, self::OPERATOR_IS_IN);
                 } else {
                     $this->db->where($column, $column_value, self::OPERATOR_EQUAL_TO);
                 }
