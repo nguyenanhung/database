@@ -973,6 +973,32 @@ class CapsuleBaseModel implements ProjectInterface, ModelInterface, CapsuleBaseM
     }
 
     /**
+     * Function chunkResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:24
+     *
+     * @param int      $count
+     * @param callable $callback
+     *
+     * @return bool
+     */
+    public function chunkResult($count, callable $callback)
+    {
+        if (empty($count)) {
+            $count = 100;
+        }
+
+        return DB::table($this->table)->orderBy('id')->chunk($count, function ($results) use ($callback) {
+            foreach ($results as $key => $value) {
+                if ($callback($value, $key) === FALSE) {
+                    return FALSE;
+                }
+            }
+        });
+    }
+
+    /**
      * Hàm thêm mới bản ghi vào bảng
      *
      * @author: 713uk13m <dev@nguyenanhung.com>

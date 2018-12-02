@@ -395,6 +395,19 @@ interface BaseModelInterface
     public function getResultWithSimpleCrossJoin($joins = [], $select = '*', $options = NULL);
 
     /**
+     * Function chunkResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:24
+     *
+     * @param int      $count
+     * @param callable $callback
+     *
+     * @return bool
+     */
+    public function chunkResult($count, callable $callback);
+
+    /**
      * Hàm thêm mới bản ghi vào bảng
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
