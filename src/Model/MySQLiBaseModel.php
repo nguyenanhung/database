@@ -327,7 +327,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         try {
             $this->db->orderBy($byColumn, self::ORDER_DESCENDING);
 
-            return $this->db->get($this->table, 1, $selectField);
+            return $this->db->getOne($this->table, $selectField);
         }
         catch (\Exception $e) {
             $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
@@ -353,7 +353,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         try {
             $this->db->orderBy($byColumn, self::ORDER_ASCENDING);
 
-            return $this->db->get($this->table, 1, $selectField);
+            return $this->db->getOne($this->table, $selectField);
         }
         catch (\Exception $e) {
             $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
@@ -387,7 +387,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         } else {
             $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
         }
-        $result = $this->db->get($this->table, NULL, $selectField);
+        $result = $this->db->getOne($this->table, $selectField);
         if ($this->db->count > 0) {
             return $result;
         }
@@ -420,7 +420,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         } else {
             $this->db->where($field, $wheres, self::OPERATOR_EQUAL_TO);
         }
-        $result = $this->db->get($this->table, NULL, $selectField);
+        $result = $this->db->getOne($this->table, $selectField);
         if ($this->db->count > 0) {
             return $result;
         }
@@ -453,7 +453,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         } else {
             $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
         }
-        $result = $this->db->get($this->table, NULL, $fieldOutput);
+        $result = $this->db->getOne($this->table, $fieldOutput);
         $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
         if (isset($result->$fieldOutput)) {
             return $result->$fieldOutput;
@@ -487,7 +487,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         } else {
             $this->db->where($field, $wheres, self::OPERATOR_EQUAL_TO);
         }
-        $result = $this->db->get($this->table, NULL, $fieldOutput);
+        $result = $this->db->getOne($this->table, $fieldOutput);
         $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
         if (isset($result->$fieldOutput)) {
             return $result->$fieldOutput;
