@@ -7,12 +7,12 @@
  * Time: 01:59
  */
 
-namespace nguyenanhung\MyDatabase\Interfaces;
+namespace nguyenanhung\MyDatabase\Manager;
 
 /**
  * Interface BackupInterface
  *
- * @package   nguyenanhung\MyDatabase\Interfaces
+ * @package   nguyenanhung\MyDatabase\Manager
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
  */
