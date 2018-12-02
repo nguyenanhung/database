@@ -199,8 +199,11 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         }
         try {
             $this->db->disconnect($name);
+            unset($this->db);
         }
         catch (\Exception $e) {
+            $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
+
             return NULL;
         }
     }
@@ -246,6 +249,408 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
         $results = $this->db->get($this->table, NULL, $column);
 
         return (int) count($results);
+    }
+
+    /**
+     * Function checkExists
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:30
+     *
+     * @param string $whereValue
+     * @param string $whereField
+     * @param string $select
+     *
+     * @return int
+     */
+    public function checkExists($whereValue = '', $whereField = 'id', $select = '*')
+    {
+        if (is_array($whereValue) && count($whereValue) > 0) {
+            foreach ($whereValue as $column => $column_value) {
+                if (is_array($column_value)) {
+                    $this->db->where($column, $column_value, 'IN');
+                } else {
+                    $this->db->where($column, $column_value, self::OPERATOR_EQUAL_TO);
+                }
+            }
+        } else {
+            $this->db->where($whereField, $whereValue, self::OPERATOR_EQUAL_TO);
+        }
+        $this->db->get($this->table, NULL, $select);
+
+        return (int) $this->db->count;
+    }
+
+    /**
+     * Function checkExistsWithMultipleWhere
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:29
+     *
+     * @param string $whereValue
+     * @param string $whereField
+     * @param string $select
+     *
+     * @return int
+     */
+    public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id', $select = '*')
+    {
+        if (is_array($whereValue) && count($whereValue) > 0) {
+            foreach ($whereValue as $key => $value) {
+                if (is_array($value['value'])) {
+                    $this->db->where($value['field'], $value['value'], 'IN');
+                } else {
+                    $this->db->where($value['field'], $value['value'], $value['operator']);
+                }
+            }
+        } else {
+            $this->db->where($whereField, $whereValue, self::OPERATOR_EQUAL_TO);
+        }
+        $this->db->get($this->table, NULL, $select);
+
+        return (int) $this->db->count;
+    }
+
+    /**
+     * Function getLatest
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:34
+     *
+     * @param string $selectField
+     * @param string $byColumn
+     *
+     * @return array|null
+     */
+    public function getLatest($selectField = '*', $byColumn = 'id')
+    {
+        try {
+            $this->db->orderBy($byColumn, "desc");
+
+            return $this->db->get($this->table, 1, $selectField);
+        }
+        catch (\Exception $e) {
+            $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
+
+            return NULL;
+        }
+
+    }
+
+    /**
+     * Function getOldest
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:36
+     *
+     * @param string $selectField
+     * @param string $byColumn
+     *
+     * @return array|null
+     */
+    public function getOldest($selectField = '*', $byColumn = 'id')
+    {
+        try {
+            $this->db->orderBy($byColumn, "asc");
+
+            return $this->db->get($this->table, 1, $selectField);
+        }
+        catch (\Exception $e) {
+            $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
+
+            return NULL;
+        }
+    }
+
+    /**
+     * Function getInfo
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:38
+     *
+     * @param string $value
+     * @param string $field
+     * @param string $selectField
+     *
+     * @return array|null
+     */
+    public function getInfo($value = '', $field = 'id', $selectField = '*')
+    {
+        if (is_array($value) && count($value) > 0) {
+            foreach ($value as $f => $v) {
+                if (is_array($v)) {
+                    $this->db->where($f, $v, 'IN');
+                } else {
+                    $this->db->where($f, $v, self::OPERATOR_EQUAL_TO);
+                }
+            }
+        } else {
+            $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
+        }
+        $result = $this->db->get($this->table, NULL, $selectField);
+        if ($this->db->count > 0) {
+            return $result;
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Function getInfoWithMultipleWhere
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:39
+     *
+     * @param string $wheres
+     * @param string $field
+     * @param null   $selectField
+     *
+     * @return array|null
+     */
+    public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $selectField = NULL)
+    {
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $key => $value) {
+                if (is_array($value['value'])) {
+                    $this->db->where($value['field'], $value['value'], 'IN');
+                } else {
+                    $this->db->where($value['field'], $value['value'], $value['operator']);
+                }
+            }
+        } else {
+            $this->db->where($field, $wheres, self::OPERATOR_EQUAL_TO);
+        }
+        $result = $this->db->get($this->table, NULL, $selectField);
+        if ($this->db->count > 0) {
+            return $result;
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Function getValue
+     *
+     * @author : 713uk13m <dev@nguyenanhung.com>
+     * @time   : 2018-12-02 21:41
+     *
+     * @param string $value
+     * @param string $field
+     * @param string $fieldOutput
+     *
+     * @return mixed|null
+     */
+    public function getValue($value = '', $field = 'id', $fieldOutput = '')
+    {
+        if (is_array($value) && count($value) > 0) {
+            foreach ($value as $f => $v) {
+                if (is_array($v)) {
+                    $this->db->where($f, $v, 'IN');
+                } else {
+                    $this->db->where($f, $v, self::OPERATOR_EQUAL_TO);
+                }
+            }
+        } else {
+            $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
+        }
+        $result = $this->db->get($this->table, NULL, $fieldOutput);
+        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
+        if (isset($result->$fieldOutput)) {
+            return $result->$fieldOutput;
+        } else {
+            return NULL;
+        }
+    }
+
+    /**
+     * Function getValueWithMultipleWhere
+     *
+     * @author : 713uk13m <dev@nguyenanhung.com>
+     * @time   : 2018-12-02 21:42
+     *
+     * @param string $wheres
+     * @param string $field
+     * @param string $fieldOutput
+     *
+     * @return mixed|null
+     */
+    public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '')
+    {
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $key => $value) {
+                if (is_array($value['value'])) {
+                    $this->db->where($value['field'], $value['value'], 'IN');
+                } else {
+                    $this->db->where($value['field'], $value['value'], $value['operator']);
+                }
+            }
+        } else {
+            $this->db->where($field, $wheres, self::OPERATOR_EQUAL_TO);
+        }
+        $result = $this->db->get($this->table, NULL, $fieldOutput);
+        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
+        if (isset($result->$fieldOutput)) {
+            return $result->$fieldOutput;
+        } else {
+            return NULL;
+        }
+    }
+
+    /**
+     * Function getDistinctResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:45
+     *
+     * @param string $selectField
+     *
+     * @return array|null
+     */
+    public function getDistinctResult($selectField = '*')
+    {
+        try {
+            $result = $this->db->setQueryOption(['DISTINCT'])->get($this->table, NULL, $selectField);
+            $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+
+            return $result;
+        }
+        catch (\Exception $e) {
+            $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
+
+            return NULL;
+        }
+    }
+
+    /**
+     * Function getResultDistinct
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:43
+     *
+     * @param string $selectField
+     *
+     * @return array
+     */
+    public function getResultDistinct($selectField = '')
+    {
+        return $this->getDistinctResult($selectField);
+    }
+
+    /**
+     * Function getResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:47
+     *
+     * @param array  $wheres
+     * @param string $selectField
+     * @param null   $options
+     *
+     * @return array|null
+     */
+    public function getResult($wheres = [], $selectField = '*', $options = NULL)
+    {
+        try {
+            if (is_array($wheres) && count($wheres) > 0) {
+                foreach ($wheres as $field => $value) {
+                    if (is_array($value)) {
+                        $this->db->where($field, $value, 'IN');
+                    } else {
+                        $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
+                    }
+                }
+            } else {
+                $this->db->where($this->primaryKey, $wheres, self::OPERATOR_EQUAL_TO);
+            }
+            if (isset($options['orderBy']) && is_array($options['orderBy'])) {
+                foreach ($options['orderBy'] as $column => $direction) {
+                    $this->db->orderBy($column, $direction);
+                }
+            }
+            $result = $this->db->get($this->table, NULL, $selectField);
+            $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+
+            return $result;
+        }
+        catch (\Exception $e) {
+            $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
+
+            return NULL;
+        }
+    }
+
+    /**
+     * Function getResultWithMultipleWhere
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:48
+     *
+     * @param array  $wheres
+     * @param string $selectField
+     * @param null   $options
+     *
+     * @return array|null
+     */
+    public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL)
+    {
+        try {
+            if (is_array($wheres) && count($wheres) > 0) {
+                foreach ($wheres as $field => $value) {
+                    if (is_array($value['value'])) {
+                        $this->db->where($value['field'], $value['value'], 'IN');
+                    } else {
+                        $this->db->where($value['field'], $value['value'], $value['operator']);
+                    }
+                }
+            }
+            if (isset($options['orderBy']) && is_array($options['orderBy'])) {
+                foreach ($options['orderBy'] as $column => $direction) {
+                    $this->db->orderBy($column, $direction);
+                }
+            }
+            $result = $this->db->get($this->table, NULL, $selectField);
+            $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+
+            return $result;
+        }
+        catch (\Exception $e) {
+            $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
+
+            return NULL;
+        }
+    }
+
+    /**
+     * Function countResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:50
+     *
+     * @param array  $wheres
+     * @param string $selectField
+     *
+     * @return int
+     */
+    public function countResult($wheres = [], $selectField = '*')
+    {
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $this->db->where($field, $value, 'IN');
+                } else {
+                    $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
+                }
+            }
+        } else {
+            $this->db->where($this->primaryKey, $wheres, self::OPERATOR_EQUAL_TO);
+        }
+        $result = $this->db->get($this->table, NULL, $selectField);
+        $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($result));
+        if ($this->db->count > 0) {
+            return (int) $this->db->count;
+        }
+
+        return 0;
     }
 
     /**
