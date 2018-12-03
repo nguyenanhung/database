@@ -232,6 +232,19 @@ class CIBaseModel implements ProjectInterface, ModelInterface, CIBaseModelInterf
 
     /*************************** DATABASE METHOD ***************************/
     /**
+     * Hàm truncate bảng dữ liệu
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 14:07
+     *
+     * @return mixed
+     */
+    public function truncate()
+    {
+        return $this->db->truncate($this->table);
+    }
+
+    /**
      * Function countAll
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -245,6 +258,460 @@ class CIBaseModel implements ProjectInterface, ModelInterface, CIBaseModelInterf
     }
 
     /**
+     * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:45
+     *
+     * @param string|array $whereValue Giá trị cần kiểm tra
+     * @param string|null  $whereField Field tương ứng, ví dụ: ID
+     *
+     * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
+     */
+    public function checkExists($whereValue = '', $whereField = 'id')
+    {
+        $this->db->from($this->table);
+        if (is_array($whereValue) && count($whereValue) > 0) {
+            foreach ($whereValue as $column => $column_value) {
+                if (is_array($column_value)) {
+                    $this->db->where_in($column, $column_value);
+                } else {
+                    $this->db->where($column, $column_value);
+                }
+            }
+        } else {
+            $this->db->where($whereField, $whereValue);
+        }
+
+        return (int) $this->db->count_all_results();
+    }
+
+    /**
+     * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào - Đa điều kiện
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:45
+     *
+     * @param string|array $whereValue Giá trị cần kiểm tra
+     * @param string|null  $whereField Field tương ứng, ví dụ: ID
+     *
+     * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
+     */
+    public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id')
+    {
+        $this->db->from($this->table);
+        if (is_array($whereValue) && count($whereValue) > 0) {
+            foreach ($whereValue as $key => $value) {
+                if (is_array($value['value'])) {
+                    $this->db->where_in($value['field'], $value['value']);
+                } else {
+                    $this->db->where($value['field'] . $value['operator'], $value['value']);
+                }
+            }
+        } else {
+            $this->db->where($whereField, $whereValue);
+        }
+
+        return (int) $this->db->count_all_results();
+    }
+
+    /**
+     * Function getLatest
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 14:13
+     *
+     * @param string $selectField
+     * @param string $byColumn
+     *
+     * @return mixed|object|null
+     */
+    public function getLatest($selectField = '*', $byColumn = 'id')
+    {
+        $this->db->select($selectField);
+        $this->db->from($this->table);
+        $this->db->order_by($byColumn, 'DESC');
+        $this->db->limit(1);
+
+        return $this->db->get()->row();
+    }
+
+    /**
+     * Function getOldest
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 14:13
+     *
+     * @param string $selectField
+     * @param string $byColumn
+     *
+     * @return mixed|object|null
+     */
+    public function getOldest($selectField = '*', $byColumn = 'id')
+    {
+        $this->db->select($selectField);
+        $this->db->from($this->table);
+        $this->db->order_by($byColumn, 'ASC');
+        $this->db->limit(1);
+
+        return $this->db->get()->row();
+    }
+
+    /**
+     * Function getInfo
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 14:17
+     *
+     * @param string $value
+     * @param string $field
+     * @param null   $format
+     * @param null   $selectField
+     *
+     * @return mixed|object|array|null
+     */
+    public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL)
+    {
+        if (empty($selectField)) {
+            $selectField = '*';
+        }
+        $format = strtolower($format);
+        $this->db->select($selectField);
+        $this->db->from($this->table);
+        if (is_array($value) && count($value) > 0) {
+            foreach ($value as $f => $v) {
+                if (is_array($v)) {
+                    $this->db->where_in($f, $v);
+                } else {
+                    $this->db->where($f, $v);
+                }
+            }
+        } else {
+            $this->db->where($field, $value);
+        }
+        if ($format == 'array') {
+            return $this->db->get()->row_array();
+        } else {
+            return $this->db->get()->row();
+        }
+    }
+
+    /**
+     * Function getInfoWithMultipleWhere
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 14:18
+     *
+     * @param string $wheres
+     * @param string $field
+     * @param null   $format
+     * @param null   $selectField
+     *
+     * @return mixed|object|array|null
+     */
+    public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = NULL, $selectField = NULL)
+    {
+        if (empty($selectField)) {
+            $selectField = '*';
+        }
+        $format = strtolower($format);
+        $this->db->select($selectField);
+        $this->db->from($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $key => $value) {
+                if (is_array($value['value'])) {
+                    $this->db->where_in($value['field'], $value['value']);
+                } else {
+                    $this->db->where($value['field'] . $value['operator'], $value['value']);
+                }
+            }
+        } else {
+            $this->db->where($field, $wheres);
+        }
+        if ($format == 'array') {
+            return $this->db->get()->row_array();
+        } else {
+            return $this->db->get()->row();
+        }
+    }
+
+    /**
+     * Function getValue
+     *
+     * @author : 713uk13m <dev@nguyenanhung.com>
+     * @time   : 2018-12-03 14:19
+     *
+     * @param string $value
+     * @param string $field
+     * @param string $fieldOutput
+     *
+     * @return mixed|object|string|int|null
+     */
+    public function getValue($value = '', $field = 'id', $fieldOutput = '')
+    {
+        $this->db->select($fieldOutput);
+        $this->db->from($this->table);
+        if (is_array($value) && count($value) > 0) {
+            foreach ($value as $column => $column_value) {
+                if (is_array($column_value)) {
+                    $this->db->where_in($column, $column_value);
+                } else {
+                    $this->db->where($column, $column_value);
+                }
+            }
+        } else {
+            $this->db->where($field, self::OPERATOR_EQUAL_TO, $value);
+        }
+        $result = $this->db->get()->row();
+        if (isset($result->$fieldOutput)) {
+            return $result->$fieldOutput;
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Function getValueWithMultipleWhere
+     *
+     * @author : 713uk13m <dev@nguyenanhung.com>
+     * @time   : 2018-12-03 14:20
+     *
+     * @param string $wheres
+     * @param string $field
+     * @param string $fieldOutput
+     *
+     * @return mixed|object|string|int|null
+     */
+    public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '')
+    {
+        $this->db->select($fieldOutput);
+        $this->db->from($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $key => $value) {
+                if (is_array($value['value'])) {
+                    $this->db->where_in($value['field'], $value['value']);
+                } else {
+                    $this->db->where($value['field'] . $value['operator'], $value['value']);
+                }
+            }
+        } else {
+            $this->db->where($field, $wheres);
+        }
+        $result = $this->db->get()->row();
+        if (isset($result->$fieldOutput)) {
+            return $result->$fieldOutput;
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Function getDistinctResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 14:22
+     *
+     * @param string $selectField
+     *
+     * @return mixed|object
+     */
+    public function getDistinctResult($selectField = '*')
+    {
+        $this->db->select($selectField);
+        $this->db->distinct(TRUE);
+        $this->db->from($this->table);
+        $result = $this->db->get()->result();
+        $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+
+        return $result;
+    }
+
+    /**
+     * Hàm getResultDistinct là alias của hàm getDistinctResult
+     *
+     * Các tham số đầu ra và đầu vào theo quy chuẩn của hàm getDistinctResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 23:49
+     *
+     * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
+     *
+     * @return \Illuminate\Support\Collection|object|array
+     */
+    public function getResultDistinct($selectField = '*')
+    {
+        return $this->getDistinctResult($selectField);
+    }
+
+    /**
+     * Function getResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 14:28
+     *
+     * @param array  $wheres
+     * @param string $selectField
+     * @param null   $options
+     *
+     * @return mixed|object|array|null
+     */
+    public function getResult($wheres = [], $selectField = '*', $options = NULL)
+    {
+        $format = isset($options['format']) ? strtolower($options['format']) : NULL;
+        $this->db->select($selectField);
+        $this->db->from($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $this->db->where_in($field, $value);
+                } else {
+                    $this->db->where($field, $value);
+                }
+            }
+        } else {
+            $this->db->where($this->primaryKey, $wheres);
+        }
+        if (isset($options['orderBy']) && is_array($options['orderBy'])) {
+            foreach ($options['orderBy'] as $column => $direction) {
+                $this->db->order_by($column, $direction);
+            }
+        }
+        if (isset($options['orderBy']) && $options['orderBy'] == 'random') {
+            $this->db->order_by($this->primaryKey, 'RANDOM');
+        }
+        if ($format == 'array') {
+            return $this->db->get()->result_array();
+        } else {
+            return $this->db->get()->result();
+        }
+    }
+
+    /**
+     * Function getResultWithMultipleWhere
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 14:28
+     *
+     * @param array  $wheres
+     * @param string $selectField
+     * @param null   $options
+     *
+     * @return mixed|object|array|null
+     */
+    public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL)
+    {
+        $format = isset($options['format']) ? strtolower($options['format']) : NULL;
+        $this->db->select($selectField);
+        $this->db->from($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value['value'])) {
+                    $this->db->where_in($value['field'], $value['value']);
+                } else {
+                    $this->db->where($value['field'] . $value['operator'], $value['value']);
+                }
+            }
+        }
+        if (isset($options['orderBy']) && is_array($options['orderBy'])) {
+            foreach ($options['orderBy'] as $column => $direction) {
+                $this->db->order_by($column, $direction);
+            }
+        }
+        if (isset($options['orderBy']) && $options['orderBy'] == 'random') {
+            $this->db->order_by($this->primaryKey, 'RANDOM');
+        }
+        if ($format == 'array') {
+            return $this->db->get()->result_array();
+        } else {
+            return $this->db->get()->result();
+        }
+    }
+
+    /**
+     * Function countResult
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 14:29
+     *
+     * @param array  $wheres
+     * @param string $selectField
+     *
+     * @return int
+     */
+    public function countResult($wheres = [], $selectField = '*')
+    {
+        $this->db->select($selectField);
+        $this->db->from($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $this->db->where_in($field, $value);
+                } else {
+                    $this->db->where($field, $value);
+                }
+            }
+        } else {
+            $this->db->where($this->primaryKey, $wheres);
+        }
+
+        return (int) $this->db->count_all_results();
+    }
+
+    /**
+     * Function getResultWithSimpleJoin
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 14:32
+     *
+     * @param array  $joins
+     * @param string $select
+     * @param null   $options
+     *
+     * @return mixed|object|array|null
+     */
+    public function getResultWithSimpleJoin($joins = [], $select = '*', $options = NULL)
+    {
+        $format = isset($options['format']) ? strtolower($options['format']) : NULL;
+        $this->db->select($select);
+        $this->db->from($this->table);
+        foreach ($joins as $key => $join) {
+            $this->db->join($join['table'], $join['first'], $join['operator'], $join['second']);
+        }
+        if ($format == 'array') {
+            return $this->db->get()->result_array();
+        } else {
+            return $this->db->get()->result();
+        }
+    }
+
+    /**
+     * Function getResultWithSimpleLeftJoin
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 14:33
+     *
+     * @param array  $joins
+     * @param string $select
+     * @param null   $options
+     *
+     * @return mixed|object|array|null
+     */
+    public function getResultWithSimpleLeftJoin($joins = [], $select = '*', $options = NULL)
+    {
+        $format = isset($options['format']) ? strtolower($options['format']) : NULL;
+        $this->db->select($select);
+        $this->db->from($this->table);
+        foreach ($joins as $key => $join) {
+            $this->db->join($join['table'], $join['first'], 'left', $join['second']);
+        }
+        if ($format == 'array') {
+            return $this->db->get()->result_array();
+        } else {
+            return $this->db->get()->result();
+        }
+    }
+
+    /**
      * Hàm thêm mới bản ghi vào bảng
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -252,17 +719,15 @@ class CIBaseModel implements ProjectInterface, ModelInterface, CIBaseModelInterf
      *
      * @param array $data Mảng chứa dữ liệu cần insert
      *
-     * @see   https://laravel.com/docs/5.4/queries#inserts
-     *
      * @return int Insert ID của bản ghi
      */
     public function add($data = [])
     {
         $this->db->insert($this->table, $data);
-        $id = $this->db->insert_id();
-        $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $id);
+        $insertId = $this->db->insert_id();
+        $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $insertId);
 
-        return $id;
+        return (int) $insertId;
     }
 
     /**
@@ -273,8 +738,6 @@ class CIBaseModel implements ProjectInterface, ModelInterface, CIBaseModelInterf
      *
      * @param array        $data   Mảng dữ liệu cần Update
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     *
-     * @see   https://laravel.com/docs/5.4/queries#updates
      *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
      */
@@ -295,7 +758,7 @@ class CIBaseModel implements ProjectInterface, ModelInterface, CIBaseModelInterf
         $resultId = $this->db->affected_rows();
         $this->debug->info(__FUNCTION__, 'Result Update Rows: ' . $resultId);
 
-        return $resultId;
+        return (int) $resultId;
     }
 
     /**
@@ -305,8 +768,6 @@ class CIBaseModel implements ProjectInterface, ModelInterface, CIBaseModelInterf
      * @time  : 10/16/18 14:13
      *
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     *
-     * @see   https://laravel.com/docs/5.4/queries#deletes
      *
      * @return int Số bản ghi đã xóa
      */
@@ -327,6 +788,6 @@ class CIBaseModel implements ProjectInterface, ModelInterface, CIBaseModelInterf
         $resultId = $this->db->affected_rows();
         $this->debug->info(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
 
-        return $resultId;
+        return (int) $resultId;
     }
 }
