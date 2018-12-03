@@ -231,4 +231,102 @@ class CIBaseModel implements ProjectInterface, ModelInterface, CIBaseModelInterf
     }
 
     /*************************** DATABASE METHOD ***************************/
+    /**
+     * Function countAll
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 13:57
+     *
+     * @return int
+     */
+    public function countAll()
+    {
+        return (int) $this->db->count_all($this->table);
+    }
+
+    /**
+     * Hàm thêm mới bản ghi vào bảng
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:04
+     *
+     * @param array $data Mảng chứa dữ liệu cần insert
+     *
+     * @see   https://laravel.com/docs/5.4/queries#inserts
+     *
+     * @return int Insert ID của bản ghi
+     */
+    public function add($data = [])
+    {
+        $this->db->insert($this->table, $data);
+        $id = $this->db->insert_id();
+        $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $id);
+
+        return $id;
+    }
+
+    /**
+     * Hàm update dữ liệu
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:10
+     *
+     * @param array        $data   Mảng dữ liệu cần Update
+     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     *
+     * @see   https://laravel.com/docs/5.4/queries#updates
+     *
+     * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
+     */
+    public function update($data = [], $wheres = [])
+    {
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $this->db->where_in($field, $value);
+                } else {
+                    $this->db->where($field, $value);
+                }
+            }
+        } else {
+            $this->db->where($this->primaryKey, $wheres);
+        }
+        $this->db->update($this->table, $data);
+        $resultId = $this->db->affected_rows();
+        $this->debug->info(__FUNCTION__, 'Result Update Rows: ' . $resultId);
+
+        return $resultId;
+    }
+
+    /**
+     * Hàm xóa dữ liệu
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:13
+     *
+     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     *
+     * @see   https://laravel.com/docs/5.4/queries#deletes
+     *
+     * @return int Số bản ghi đã xóa
+     */
+    public function delete($wheres = [])
+    {
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $this->db->where_in($field, $value);
+                } else {
+                    $this->db->where($field, $value);
+                }
+            }
+        } else {
+            $this->db->where($this->primaryKey, $wheres);
+        }
+        $this->db->delete($this->table);
+        $resultId = $this->db->affected_rows();
+        $this->debug->info(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
+
+        return $resultId;
+    }
 }

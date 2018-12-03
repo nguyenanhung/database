@@ -116,4 +116,56 @@ interface CIBaseModelInterface
     public function getTable();
 
     /*************************** DATABASE METHOD ***************************/
+    /**
+     * Function countAll
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 13:57
+     *
+     * @return int
+     */
+    public function countAll();
+
+    /**
+     * Hàm thêm mới bản ghi vào bảng
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:04
+     *
+     * @param array $data Mảng chứa dữ liệu cần insert
+     *
+     * @see   https://laravel.com/docs/5.4/queries#inserts
+     *
+     * @return int Insert ID của bản ghi
+     */
+    public function add($data = []);
+
+    /**
+     * Hàm update dữ liệu
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:10
+     *
+     * @param array        $data   Mảng dữ liệu cần Update
+     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     *
+     * @see   https://laravel.com/docs/5.4/queries#updates
+     *
+     * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
+     */
+    public function update($data = [], $wheres = []);
+
+    /**
+     * Hàm xóa dữ liệu
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:13
+     *
+     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     *
+     * @see   https://laravel.com/docs/5.4/queries#deletes
+     *
+     * @return int Số bản ghi đã xóa
+     */
+    public function delete($wheres = []);
 }
