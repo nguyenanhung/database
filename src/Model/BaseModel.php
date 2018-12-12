@@ -43,6 +43,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     protected $table = NULL;
     /** @var object|null Đối tượng khởi tạo dùng gọi đến Class Capsule Manager \Illuminate\Database\Capsule\Manager */
     protected $db = NULL;
+    protected $schema;
     /** @var string DB Name */
     protected $dbName = 'default';
     /** @var bool Cấu hình trạng thái Debug, TRUE nếu bật, FALSE nếu tắt */
@@ -237,6 +238,19 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     public function getTable()
     {
         return $this->table;
+    }
+
+    /**
+     * Function getSchema
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 15:03
+     *
+     * @return \Illuminate\Database\Schema\Builder
+     */
+    public function getSchema()
+    {
+        return DB::schema();
     }
 
     /*************************** DATABASE METHOD ***************************/

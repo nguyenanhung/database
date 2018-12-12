@@ -106,6 +106,16 @@ interface BaseModelInterface
      */
     public function getTable();
 
+    /**
+     * Function getSchema
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 15:03
+     *
+     * @return \Illuminate\Database\Schema\Builder
+     */
+    public function getSchema();
+
     /*************************** DATABASE METHOD ***************************/
     /**
      * Function checkExistsTable

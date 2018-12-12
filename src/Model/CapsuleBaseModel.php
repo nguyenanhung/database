@@ -239,6 +239,19 @@ class CapsuleBaseModel implements ProjectInterface, ModelInterface, CapsuleBaseM
         return $this->table;
     }
 
+    /**
+     * Function getSchema
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 15:03
+     *
+     * @return \Illuminate\Database\Schema\Builder
+     */
+    public function getSchema()
+    {
+        return DB::schema();
+    }
+
     /*************************** DATABASE METHOD ***************************/
     /**
      * Function checkExistsTable
