@@ -128,6 +128,30 @@ interface BaseModelInterface
     public function checkExistsTable();
 
     /**
+     * Function checkExistsColumn
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 15:10
+     *
+     * @param string $column
+     *
+     * @return bool
+     */
+    public function checkExistsColumn($column = '');
+
+    /**
+     * Function checkExistsColumns
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 15:10
+     *
+     * @param array $columns
+     *
+     * @return bool
+     */
+    public function checkExistsColumns($columns = []);
+
+    /**
      * Hàm truncate bảng dữ liệu
      *
      * @author: 713uk13m <dev@nguyenanhung.com>

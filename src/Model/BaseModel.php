@@ -265,9 +265,42 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     public function checkExistsTable()
     {
         $this->connection();
-        $schema = DB::schema();
 
-        return $schema->hasTable($this->table);
+        return $this->getSchema()->hasTable($this->table);
+    }
+
+    /**
+     * Function checkExistsColumn
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 15:10
+     *
+     * @param string $column
+     *
+     * @return bool
+     */
+    public function checkExistsColumn($column = '')
+    {
+        $this->connection();
+
+        return $this->getSchema()->hasColumn($this->table, $column);
+    }
+
+    /**
+     * Function checkExistsColumns
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 15:10
+     *
+     * @param array $columns
+     *
+     * @return bool
+     */
+    public function checkExistsColumns($columns = [])
+    {
+        $this->connection();
+
+        return $this->getSchema()->hasColumns($this->table, $columns);
     }
 
     /**
