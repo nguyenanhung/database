@@ -107,6 +107,16 @@ interface CapsuleBaseModelInterface
 
     /*************************** DATABASE METHOD ***************************/
     /**
+     * Function checkExistsTable
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 14:58
+     *
+     * @return bool
+     */
+    public function checkExistsTable();
+
+    /**
      * Hàm truncate bảng dữ liệu
      *
      * @author: 713uk13m <dev@nguyenanhung.com>

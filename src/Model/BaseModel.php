@@ -241,6 +241,22 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
 
     /*************************** DATABASE METHOD ***************************/
     /**
+     * Function checkExistsTable
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 14:58
+     *
+     * @return bool
+     */
+    public function checkExistsTable()
+    {
+        $this->connection();
+        $schema = DB::schema();
+
+        return $schema->hasTable($this->table);
+    }
+
+    /**
      * Hàm truncate bảng dữ liệu
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
