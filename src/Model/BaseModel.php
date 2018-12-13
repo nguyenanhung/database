@@ -43,6 +43,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     protected $table = NULL;
     /** @var object|null Đối tượng khởi tạo dùng gọi đến Class Capsule Manager \Illuminate\Database\Capsule\Manager */
     protected $db = NULL;
+    protected $schema;
     /** @var string DB Name */
     protected $dbName = 'default';
     /** @var bool Cấu hình trạng thái Debug, TRUE nếu bật, FALSE nếu tắt */
@@ -239,7 +240,69 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         return $this->table;
     }
 
+    /**
+     * Function getSchema
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 15:03
+     *
+     * @return \Illuminate\Database\Schema\Builder
+     */
+    public function getSchema()
+    {
+        return DB::schema();
+    }
+
     /*************************** DATABASE METHOD ***************************/
+    /**
+     * Function checkExistsTable
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 14:58
+     *
+     * @return bool
+     */
+    public function checkExistsTable()
+    {
+        $this->connection();
+
+        return $this->getSchema()->hasTable($this->table);
+    }
+
+    /**
+     * Function checkExistsColumn
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 15:10
+     *
+     * @param string $column
+     *
+     * @return bool
+     */
+    public function checkExistsColumn($column = '')
+    {
+        $this->connection();
+
+        return $this->getSchema()->hasColumn($this->table, $column);
+    }
+
+    /**
+     * Function checkExistsColumns
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 15:10
+     *
+     * @param array $columns
+     *
+     * @return bool
+     */
+    public function checkExistsColumns($columns = [])
+    {
+        $this->connection();
+
+        return $this->getSchema()->hasColumns($this->table, $columns);
+    }
+
     /**
      * Hàm truncate bảng dữ liệu
      *
