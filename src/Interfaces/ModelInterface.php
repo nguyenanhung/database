@@ -30,8 +30,12 @@ interface ModelInterface
     const OP_GT                             = '>';
     const OPERATOR_GREATER_THAN_OR_EQUAL_TO = '>=';
     const OP_GTE                            = '>=';
+    const OPERATOR_IS_SPACESHIP             = '<=>';
     const OPERATOR_IS_IN                    = 'IN';
-    const OPERATOR_IS_LIKE                  = 'LINE';
+    const OPERATOR_IS_LIKE                  = 'LIKE';
+    const OPERATOR_IS_LIKE_BINARY           = 'LIKE BINARY';
+    const OPERATOR_IS_ILIKE                 = 'ilike';
+    const OPERATOR_IS_NOT_LIKE              = 'NOT LIKE';
     const OPERATOR_IS_NULL                  = 'IS NULL';
     const OPERATOR_IS_NOT_NULL              = 'IS NOT NULL';
     const ORDER_ASCENDING                   = 'ASC';
