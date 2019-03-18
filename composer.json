@@ -30,7 +30,7 @@
         "illuminate/console": "5.4.36",
         "illuminate/events": "5.4.36",
         "illuminate/database": "5.4.36",
-        "slim/pdo": "^1.10",
+        "faapz/pdo": "^1.11",
         "joshcam/mysqli-database-class": "^2.9"
     },
     "require-dev": {
