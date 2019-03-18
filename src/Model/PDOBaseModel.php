@@ -69,7 +69,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
             $this->database = $database;
         }
         if (is_array($this->database) && !empty($this->database)) {
-            $this->db = new \Slim\PDO\Database(
+            $this->db = new \FaaPz\PDO\Database(
                 $this->database['driver'] . ':host=' . $this->database['host'] . ';port=' . $this->database['port'] . ';dbname=' . $this->database['database'] . ';charset=' . $this->database['charset'] . ';collation=' . $this->database['collation'] . ';prefix=' . $this->database['prefix'],
                 $this->database['username'],
                 $this->database['password'],
@@ -172,7 +172,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     public function connection()
     {
         if (!is_object($this->db)) {
-            $this->db = new \Slim\PDO\Database(
+            $this->db = new \FaaPz\PDO\Database(
                 $this->database['driver'] . ':host=' . $this->database['host'] . ';port=' . $this->database['port'] . ';dbname=' . $this->database['database'] . ';charset=' . $this->database['charset'] . ';collation=' . $this->database['collation'] . ';prefix=' . $this->database['prefix'],
                 $this->database['username'],
                 $this->database['password'],
