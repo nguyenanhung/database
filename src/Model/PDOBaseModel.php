@@ -194,8 +194,9 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function disconnect()
     {
-        $this->db = NULL;
-        unset($this->db);
+        if (isset($this->db)) {
+            $this->db = NULL;
+        }
 
         return $this;
     }

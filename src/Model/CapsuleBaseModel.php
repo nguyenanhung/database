@@ -142,8 +142,9 @@ class CapsuleBaseModel implements ProjectInterface, ModelInterface, CapsuleBaseM
      */
     public function disconnect()
     {
-        $this->db = NULL;
-        unset($this->db);
+        if (isset($this->db)) {
+            $this->db = NULL;
+        }
 
         return $this;
     }

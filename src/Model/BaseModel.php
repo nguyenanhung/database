@@ -143,8 +143,9 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function disconnect()
     {
-        $this->db = NULL;
-        unset($this->db);
+        if (isset($this->db)) {
+            $this->db = NULL;
+        }
 
         return $this;
     }
