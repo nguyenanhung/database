@@ -29,6 +29,15 @@ interface CapsuleBaseModelInterface
     public function connection();
 
     /**
+     * Function closeConnection
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-03 16:41
+     *
+     */
+    public function closeConnection();
+
+    /**
      * Function disconnect
      *
      * @author: 713uk13m <dev@nguyenanhung.com>

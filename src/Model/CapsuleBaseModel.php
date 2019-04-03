@@ -133,6 +133,18 @@ class CapsuleBaseModel implements ProjectInterface, ModelInterface, CapsuleBaseM
     }
 
     /**
+     * Function closeConnection
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-03 16:41
+     *
+     */
+    public function closeConnection()
+    {
+        return $this->db->getDatabaseManager()->disconnect($this->dbName);
+    }
+
+    /**
      * Function disconnect
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
