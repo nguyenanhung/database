@@ -756,7 +756,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
         $resultId = $db->execute();
-        $this->debug->info(__FUNCTION__, 'Result Update Rows: ' . $resultId);
+        $this->debug->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
 
         return $resultId;
     }
@@ -788,7 +788,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
         $resultId = $db->execute();
-        $this->debug->info(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
+        $this->debug->debug(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
 
         return $resultId;
     }

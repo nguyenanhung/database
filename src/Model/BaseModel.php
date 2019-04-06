@@ -339,7 +339,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     {
         $this->connection();
         $db = DB::table($this->table);
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->count();
     }
@@ -374,7 +374,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
             }
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->count();
     }
@@ -409,7 +409,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
             }
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->count();
     }
@@ -437,7 +437,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         }
         $this->connection();
         $db = DB::table($this->table)->latest($byColumn);
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->first($selectField);
     }
@@ -473,7 +473,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             $db->where($selectField, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $db->latest($byColumn);
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->first($selectField);
     }
@@ -501,7 +501,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         }
         $this->connection();
         $db = DB::table($this->table)->oldest($byColumn);
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->first($selectField);
     }
@@ -537,7 +537,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             $db->where($selectField, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $db->oldest($byColumn);
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->first($selectField);
     }
@@ -589,7 +589,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 $db->where($field, self::OPERATOR_EQUAL_TO, $value);
             }
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         if ($format == 'result') {
             $result = $db->get();
             $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
@@ -656,7 +656,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         } else {
             $db->where($field, self::OPERATOR_EQUAL_TO, $wheres);
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         if ($format == 'result') {
             $result = $db->get();
             $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
@@ -724,7 +724,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 $db->where($field, self::OPERATOR_EQUAL_TO, $value);
             }
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->first();
         $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
         if (!empty($fieldOutput) && isset($result->$fieldOutput)) {
@@ -769,7 +769,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         } else {
             $db->where($field, self::OPERATOR_EQUAL_TO, $wheres);
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->first();
         $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
         if (!empty($fieldOutput) && isset($result->$fieldOutput)) {
@@ -803,7 +803,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $this->connection();
         $db = DB::table($this->table);
         $db->distinct();
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
         $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
@@ -846,7 +846,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             }
         }
         $db->distinct();
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
         $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
@@ -942,7 +942,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         if (isset($options['orderBy']) && $options['orderBy'] == 'random') {
             $db->inRandomOrder();
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
         $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
@@ -1012,7 +1012,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         if (isset($options['orderBy']) && $options['orderBy'] == 'random') {
             $db->inRandomOrder();
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
         $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
@@ -1065,7 +1065,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
             }
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
         $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         $totalItem = $result->count();
@@ -1101,7 +1101,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 }
             }
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
         $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         $totalItem = $result->count();
@@ -1241,8 +1241,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $this->connection();
         $db = DB::table($this->table);
         $id = $db->insertGetId($data);
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $id);
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
 
         return $id;
     }
@@ -1279,9 +1279,9 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
             }
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $resultId = $db->update($data);
-        $this->debug->info(__FUNCTION__, 'Result Update Rows: ' . $resultId);
+        $this->debug->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
 
         return $resultId;
     }
@@ -1317,9 +1317,9 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
             }
         }
-        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $resultId = $db->delete();
-        $this->debug->info(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
+        $this->debug->debug(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
 
         return $resultId;
     }
@@ -1351,15 +1351,15 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
         $checkExists = $db->count();
-        $this->debug->info(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
+        $this->debug->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
         if (!$checkExists) {
             $id = $db->insertGetId($data);
-            $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-            $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $id);
+            $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+            $this->debug->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
 
             return $id;
         } else {
-            $this->debug->info(__FUNCTION__, 'Đã tồn tại bản ghi, bỏ qua không ghi nữa');
+            $this->debug->debug(__FUNCTION__, 'Đã tồn tại bản ghi, bỏ qua không ghi nữa');
 
             return FALSE;
         }
@@ -1393,16 +1393,16 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
         $checkExists = $db->count();
-        $this->debug->info(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
+        $this->debug->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
         if (!$checkExists) {
             $id = $db->insertGetId($dataInsert);
-            $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-            $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $id);
+            $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+            $this->debug->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
 
             return $id;
         } else {
             $resultId = $db->update($dataUpdate);
-            $this->debug->info(__FUNCTION__, 'Result Update Rows: ' . $resultId);
+            $this->debug->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
 
             return $resultId;
         }
