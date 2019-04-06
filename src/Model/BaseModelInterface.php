@@ -489,4 +489,31 @@ interface BaseModelInterface
      * @return int Số bản ghi đã xóa
      */
     public function delete($wheres = []);
+
+    /**
+     * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 03:58
+     *
+     * @param array $data
+     * @param array $wheres
+     *
+     * @return bool|int
+     */
+    public function checkExistsAndInsertData($data = [], $wheres = []);
+
+    /**
+     * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới, nếu tồn tại sẵn sẽ update
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:01
+     *
+     * @param array $dataInsert
+     * @param array $dataUpdate
+     * @param array $wheres
+     *
+     * @return int
+     */
+    public function checkExistsAndInsertOrUpdateData($dataInsert = [], $dataUpdate = [], $wheres = []);
 }

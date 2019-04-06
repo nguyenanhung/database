@@ -1134,4 +1134,88 @@ class CapsuleBaseModel implements ProjectInterface, ModelInterface, CapsuleBaseM
 
         return $resultId;
     }
+
+    /**
+     * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 03:58
+     *
+     * @param array $data
+     * @param array $wheres
+     *
+     * @return bool|int
+     */
+    public function checkExistsAndInsertData($data = [], $wheres = [])
+    {
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $db->whereIn($field, $value);
+                } else {
+                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                }
+            }
+        } else {
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+        $checkExists = $db->count();
+        $this->debug->info(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
+        if (!$checkExists) {
+            $id = $db->insertGetId($data);
+            $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+            $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $id);
+
+            return $id;
+        } else {
+            $this->debug->info(__FUNCTION__, 'Đã tồn tại bản ghi, bỏ qua không ghi nữa');
+
+            return FALSE;
+        }
+    }
+
+    /**
+     * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới, nếu tồn tại sẵn sẽ update
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:01
+     *
+     * @param array $dataInsert
+     * @param array $dataUpdate
+     * @param array $wheres
+     *
+     * @return int
+     */
+    public function checkExistsAndInsertOrUpdateData($dataInsert = [], $dataUpdate = [], $wheres = [])
+    {
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $db->whereIn($field, $value);
+                } else {
+                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                }
+            }
+        } else {
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+        $checkExists = $db->count();
+        $this->debug->info(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
+        if (!$checkExists) {
+            $id = $db->insertGetId($dataInsert);
+            $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+            $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $id);
+
+            return $id;
+        } else {
+            $resultId = $db->update($dataUpdate);
+            $this->debug->info(__FUNCTION__, 'Result Update Rows: ' . $resultId);
+
+            return $resultId;
+        }
+    }
 }
