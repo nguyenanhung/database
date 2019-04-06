@@ -725,7 +725,7 @@ class CIBaseModel implements ProjectInterface, ModelInterface, CIBaseModelInterf
     {
         $this->db->insert($this->table, $data);
         $insertId = $this->db->insert_id();
-        $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $insertId);
+        $this->debug->debug(__FUNCTION__, 'Result Insert ID: ' . $insertId);
 
         return (int) $insertId;
     }
@@ -756,7 +756,7 @@ class CIBaseModel implements ProjectInterface, ModelInterface, CIBaseModelInterf
         }
         $this->db->update($this->table, $data);
         $resultId = $this->db->affected_rows();
-        $this->debug->info(__FUNCTION__, 'Result Update Rows: ' . $resultId);
+        $this->debug->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
 
         return (int) $resultId;
     }
@@ -786,7 +786,7 @@ class CIBaseModel implements ProjectInterface, ModelInterface, CIBaseModelInterf
         }
         $this->db->delete($this->table);
         $resultId = $this->db->affected_rows();
-        $this->debug->info(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
+        $this->debug->debug(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
 
         return (int) $resultId;
     }
