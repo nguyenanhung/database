@@ -226,6 +226,20 @@ interface BaseModelInterface
     public function getLatest($selectField = ['*'], $byColumn = 'created_at');
 
     /**
+     * Hàm lấy bản ghi mới nhất theo điều kiện đầu vào
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:16
+     *
+     * @param array  $whereValue
+     * @param array  $selectField
+     * @param string $byColumn
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
+     */
+    public function getLatestByColumn($whereValue = [], $selectField = ['*'], $byColumn = 'created_at');
+
+    /**
      * Hàm lấy bản ghi cũ nhất nhất theo điều kiện
      *
      * Mặc định giá trị so sánh dựa trên column created_at
@@ -242,6 +256,20 @@ interface BaseModelInterface
      *                                                                                            của bản ghi
      */
     public function getOldest($selectField = ['*'], $byColumn = 'created_at');
+
+    /**
+     * Hàm lấy bản ghi cũ nhất nhất theo điều kiện đầu vào
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:17
+     *
+     * @param array  $whereValue
+     * @param array  $selectField
+     * @param string $byColumn
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
+     */
+    public function getOldestByColumn($whereValue = [], $selectField = ['*'], $byColumn = 'created_at');
 
     /**
      * Hàm lấy thông tin bản ghi theo tham số đầu vào
@@ -333,6 +361,19 @@ interface BaseModelInterface
     public function getDistinctResult($selectField = '');
 
     /**
+     * Hàm lấy danh sách Distinct toàn bộ bản ghi theo điều kiện
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:21
+     *
+     * @param string $selectField
+     * @param array  $whereValue
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getDistinctResultByColumn($selectField = '', $whereValue = []);
+
+    /**
      * Hàm getResultDistinct là alias của hàm getDistinctResult
      *
      * Các tham số đầu ra và đầu vào theo quy chuẩn của hàm getDistinctResult
@@ -345,6 +386,19 @@ interface BaseModelInterface
      * @return \Illuminate\Support\Collection|object|array
      */
     public function getResultDistinct($selectField = '');
+
+    /**
+     * Hàm getResultDistinctByColumn là alias của hàm getDistinctResultByColumn
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:22
+     *
+     * @param string $selectField
+     * @param array  $whereValue
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getResultDistinctByColumn($selectField = '', $whereValue = []);
 
     /**
      * Function getResult
@@ -404,6 +458,19 @@ interface BaseModelInterface
      * @return int
      */
     public function countResult($wheres = [], $selectField = '*');
+
+    /**
+     * Function countResultWithMultipleWhere
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:29
+     *
+     * @param array  $wheres
+     * @param string $selectField
+     *
+     * @return int
+     */
+    public function countResultWithMultipleWhere($wheres = [], $selectField = '*');
 
     /**
      * Function getResultWithSimpleJoin
