@@ -43,6 +43,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     protected $table = NULL;
     /** @var object|null Đối tượng khởi tạo dùng gọi đến Class Capsule Manager \Illuminate\Database\Capsule\Manager */
     protected $db = NULL;
+    /** @var mixed $schema */
     protected $schema;
     /** @var string DB Name */
     protected $dbName = 'default';
@@ -932,12 +933,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function getResultWithSimpleJoin($joins = [], $select = '*', $options = NULL)
     {
-        if (isset($options['format'])) {
-            $format = strtolower($options['format']);
-        } else {
-            $format = NULL;
-        }
-        $db = DB::table($this->table);
+        $format = isset($options['format']) ? strtolower($options['format']) : NULL;
+        $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->join($join['table'], $join['first'], $join['operator'], $join['second']);
         }
@@ -974,12 +971,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function getResultWithSimpleLeftJoin($joins = [], $select = '*', $options = NULL)
     {
-        if (isset($options['format'])) {
-            $format = strtolower($options['format']);
-        } else {
-            $format = NULL;
-        }
-        $db = DB::table($this->table);
+        $format = isset($options['format']) ? strtolower($options['format']) : NULL;
+        $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->leftJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
@@ -1016,12 +1009,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function getResultWithSimpleCrossJoin($joins = [], $select = '*', $options = NULL)
     {
-        if (isset($options['format'])) {
-            $format = strtolower($options['format']);
-        } else {
-            $format = NULL;
-        }
-        $db = DB::table($this->table);
+        $format = isset($options['format']) ? strtolower($options['format']) : NULL;
+        $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
