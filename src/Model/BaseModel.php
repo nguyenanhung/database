@@ -43,6 +43,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     protected $table = NULL;
     /** @var object|null Đối tượng khởi tạo dùng gọi đến Class Capsule Manager \Illuminate\Database\Capsule\Manager */
     protected $db = NULL;
+    /** @var mixed $schema */
     protected $schema;
     /** @var string DB Name */
     protected $dbName = 'default';
@@ -367,7 +368,11 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 }
             }
         } else {
-            $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
+            if (is_array($whereValue)) {
+                $db->whereIn($whereField, $whereValue);
+            } else {
+                $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
+            }
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
@@ -398,7 +403,11 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 }
             }
         } else {
-            $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
+            if (is_array($whereValue)) {
+                $db->whereIn($whereField, $whereValue);
+            } else {
+                $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
+            }
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
@@ -434,6 +443,42 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     }
 
     /**
+     * Hàm lấy bản ghi mới nhất theo điều kiện đầu vào
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:16
+     *
+     * @param array  $whereValue
+     * @param array  $selectField
+     * @param string $byColumn
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
+     */
+    public function getLatestByColumn($whereValue = [], $selectField = ['*'], $byColumn = 'created_at')
+    {
+        if (!is_array($selectField)) {
+            $selectField = [$selectField];
+        }
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($whereValue) && count($whereValue) > 0) {
+            foreach ($whereValue as $column => $column_value) {
+                if (is_array($column_value)) {
+                    $db->whereIn($column, $column_value);
+                } else {
+                    $db->where($column, self::OPERATOR_EQUAL_TO, $column_value);
+                }
+            }
+        } else {
+            $db->where($selectField, self::OPERATOR_EQUAL_TO, $whereValue);
+        }
+        $db->latest($byColumn);
+        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+
+        return $db->first($selectField);
+    }
+
+    /**
      * Hàm lấy bản ghi cũ nhất nhất theo điều kiện
      *
      * Mặc định giá trị so sánh dựa trên column created_at
@@ -456,6 +501,42 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         }
         $this->connection();
         $db = DB::table($this->table)->oldest($byColumn);
+        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+
+        return $db->first($selectField);
+    }
+
+    /**
+     * Hàm lấy bản ghi cũ nhất nhất theo điều kiện đầu vào
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:17
+     *
+     * @param array  $whereValue
+     * @param array  $selectField
+     * @param string $byColumn
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
+     */
+    public function getOldestByColumn($whereValue = [], $selectField = ['*'], $byColumn = 'created_at')
+    {
+        if (!is_array($selectField)) {
+            $selectField = [$selectField];
+        }
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($whereValue) && count($whereValue) > 0) {
+            foreach ($whereValue as $column => $column_value) {
+                if (is_array($column_value)) {
+                    $db->whereIn($column, $column_value);
+                } else {
+                    $db->where($column, self::OPERATOR_EQUAL_TO, $column_value);
+                }
+            }
+        } else {
+            $db->where($selectField, self::OPERATOR_EQUAL_TO, $whereValue);
+        }
+        $db->oldest($byColumn);
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->first($selectField);
@@ -502,7 +583,11 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 }
             }
         } else {
-            $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+            if (is_array($value)) {
+                $db->whereIn($field, $value);
+            } else {
+                $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+            }
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         if ($format == 'result') {
@@ -633,7 +718,11 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 }
             }
         } else {
-            $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+            if (is_array($value)) {
+                $db->whereIn($field, $value);
+            } else {
+                $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+            }
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->first();
@@ -722,6 +811,49 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     }
 
     /**
+     * Hàm lấy danh sách Distinct toàn bộ bản ghi theo điều kiện
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:21
+     *
+     * @param string $selectField
+     * @param array  $whereValue
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getDistinctResultByColumn($selectField = '', $whereValue = [])
+    {
+        if (!is_array($selectField)) {
+            $selectField = [$selectField];
+        }
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($whereValue) && count($whereValue) > 0) {
+            foreach ($whereValue as $column => $column_value) {
+                if (is_array($column_value)) {
+                    $db->whereIn($column, $column_value);
+                } else {
+                    $db->where($column, self::OPERATOR_EQUAL_TO, $column_value);
+                }
+            }
+        } else {
+            if (!empty($whereValue)) {
+                if (is_array($whereValue)) {
+                    $db->whereIn($selectField, $whereValue);
+                } else {
+                    $db->where($selectField, self::OPERATOR_EQUAL_TO, $whereValue);
+                }
+            }
+        }
+        $db->distinct();
+        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $result = $db->get($selectField);
+        $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+
+        return $result;
+    }
+
+    /**
      * Hàm getResultDistinct là alias của hàm getDistinctResult
      *
      * Các tham số đầu ra và đầu vào theo quy chuẩn của hàm getDistinctResult
@@ -736,6 +868,22 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     public function getResultDistinct($selectField = '')
     {
         return $this->getDistinctResult($selectField);
+    }
+
+    /**
+     * Hàm getResultDistinctByColumn là alias của hàm getDistinctResultByColumn
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:22
+     *
+     * @param string $selectField
+     * @param array  $whereValue
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getResultDistinctByColumn($selectField = '', $whereValue = [])
+    {
+        return $this->getDistinctResultByColumn($selectField, $whereValue);
     }
 
     /**
@@ -780,7 +928,11 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 }
             }
         } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+            if (is_array($wheres)) {
+                $db->whereIn($this->primaryKey, $wheres);
+            } else {
+                $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+            }
         }
         if (isset($options['orderBy']) && is_array($options['orderBy'])) {
             foreach ($options['orderBy'] as $column => $direction) {
@@ -907,7 +1059,47 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 }
             }
         } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+            if (is_array($wheres)) {
+                $db->whereIn($this->primaryKey, $wheres);
+            } else {
+                $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+            }
+        }
+        $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $result = $db->get($selectField);
+        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        $totalItem = $result->count();
+        $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
+
+        return $totalItem;
+    }
+
+    /**
+     * Function countResultWithMultipleWhere
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:29
+     *
+     * @param array  $wheres
+     * @param string $selectField
+     *
+     * @return int
+     */
+    public function countResultWithMultipleWhere($wheres = [], $selectField = '*')
+    {
+        if (!is_array($selectField)) {
+            $selectField = [$selectField];
+        }
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $db->whereIn($field, $value);
+                } else {
+                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                }
+            }
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
@@ -932,12 +1124,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function getResultWithSimpleJoin($joins = [], $select = '*', $options = NULL)
     {
-        if (isset($options['format'])) {
-            $format = strtolower($options['format']);
-        } else {
-            $format = NULL;
-        }
-        $db = DB::table($this->table);
+        $format = isset($options['format']) ? strtolower($options['format']) : NULL;
+        $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->join($join['table'], $join['first'], $join['operator'], $join['second']);
         }
@@ -974,12 +1162,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function getResultWithSimpleLeftJoin($joins = [], $select = '*', $options = NULL)
     {
-        if (isset($options['format'])) {
-            $format = strtolower($options['format']);
-        } else {
-            $format = NULL;
-        }
-        $db = DB::table($this->table);
+        $format = isset($options['format']) ? strtolower($options['format']) : NULL;
+        $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->leftJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
@@ -1016,12 +1200,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function getResultWithSimpleCrossJoin($joins = [], $select = '*', $options = NULL)
     {
-        if (isset($options['format'])) {
-            $format = strtolower($options['format']);
-        } else {
-            $format = NULL;
-        }
-        $db = DB::table($this->table);
+        $format = isset($options['format']) ? strtolower($options['format']) : NULL;
+        $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
@@ -1093,7 +1273,11 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 }
             }
         } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+            if (is_array($wheres)) {
+                $db->whereIn($this->primaryKey, $wheres);
+            } else {
+                $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+            }
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $resultId = $db->update($data);
@@ -1127,12 +1311,100 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                 }
             }
         } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+            if (is_array($wheres)) {
+                $db->whereIn($this->primaryKey, $wheres);
+            } else {
+                $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+            }
         }
         $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $resultId = $db->delete();
         $this->debug->info(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
 
         return $resultId;
+    }
+
+    /**
+     * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 03:58
+     *
+     * @param array $data
+     * @param array $wheres
+     *
+     * @return bool|int
+     */
+    public function checkExistsAndInsertData($data = [], $wheres = [])
+    {
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $db->whereIn($field, $value);
+                } else {
+                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                }
+            }
+        } else {
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+        $checkExists = $db->count();
+        $this->debug->info(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
+        if (!$checkExists) {
+            $id = $db->insertGetId($data);
+            $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+            $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $id);
+
+            return $id;
+        } else {
+            $this->debug->info(__FUNCTION__, 'Đã tồn tại bản ghi, bỏ qua không ghi nữa');
+
+            return FALSE;
+        }
+    }
+
+    /**
+     * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới, nếu tồn tại sẵn sẽ update
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:01
+     *
+     * @param array $dataInsert
+     * @param array $dataUpdate
+     * @param array $wheres
+     *
+     * @return int
+     */
+    public function checkExistsAndInsertOrUpdateData($dataInsert = [], $dataUpdate = [], $wheres = [])
+    {
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $db->whereIn($field, $value);
+                } else {
+                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                }
+            }
+        } else {
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+        $checkExists = $db->count();
+        $this->debug->info(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
+        if (!$checkExists) {
+            $id = $db->insertGetId($dataInsert);
+            $this->debug->info(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+            $this->debug->info(__FUNCTION__, 'Result Insert ID: ' . $id);
+
+            return $id;
+        } else {
+            $resultId = $db->update($dataUpdate);
+            $this->debug->info(__FUNCTION__, 'Result Update Rows: ' . $resultId);
+
+            return $resultId;
+        }
     }
 }
