@@ -7,12 +7,12 @@
  * Time: 16:35
  */
 
-namespace nguyenanhung\MyDatabase\Interfaces;
+namespace nguyenanhung\MyDatabase;
 
 /**
  * Interface ModelInterface
  *
- * @package   nguyenanhung\MyDatabase\Interfaces
+ * @package   nguyenanhung\MyDatabase
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
  */

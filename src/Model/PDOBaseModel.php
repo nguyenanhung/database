@@ -9,9 +9,10 @@
 
 namespace nguyenanhung\MyDatabase\Model;
 
-use nguyenanhung\MyDatabase\Interfaces\ModelInterface;
-use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
 use nguyenanhung\MyDebug\Debug;
+use nguyenanhung\MyDatabase\ProjectInterface;
+use nguyenanhung\MyDatabase\ModelInterface;
+use nguyenanhung\MyDatabase\Version;
 
 /**
  * Class PDOBaseModel
@@ -22,6 +23,7 @@ use nguyenanhung\MyDebug\Debug;
  */
 class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInterface
 {
+    use Version;
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
@@ -84,19 +86,6 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function __destruct()
     {
-    }
-
-    /**
-     * Function getVersion
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 21:51
-     *
-     * @return mixed|string
-     */
-    public function getVersion()
-    {
-        return self::VERSION;
     }
 
     /**

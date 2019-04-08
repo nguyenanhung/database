@@ -7,19 +7,19 @@
  * Time: 14:55
  */
 
-namespace nguyenanhung\MyDatabase\Interfaces;
+namespace nguyenanhung\MyDatabase;
 
 /**
  * Interface ProjectInterface
  *
- * @package   nguyenanhung\MyDatabase\Interfaces
+ * @package   nguyenanhung\MyDatabase
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
  */
 interface ProjectInterface
 {
-    const VERSION                = '0.1.11';
-    const LAST_MODIFIED          = '2019-04-07';
+    const VERSION                = '1.0';
+    const LAST_MODIFIED          = '2019-04-08';
     const AUTHOR_NAME            = 'Hung Nguyen';
     const AUTHOR_EMAIL           = 'dev@nguyenanhung.com';
     const PROJECT_NAME           = 'My Database';
