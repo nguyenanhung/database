@@ -9,7 +9,8 @@
 
 namespace nguyenanhung\MyDatabase\Repository;
 
-use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
+use nguyenanhung\MyDatabase\ProjectInterface;
+use nguyenanhung\MyDatabase\Version;
 
 /**
  * Class DataRepository
@@ -20,21 +21,9 @@ use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
  */
 class DataRepository implements ProjectInterface
 {
+    use Version;
     const CONFIG_PATH = 'config';
     const CONFIG_EXT  = '.php';
-
-    /**
-     * Function getVersion
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 9/28/18 14:47
-     *
-     * @return string
-     */
-    public function getVersion()
-    {
-        return self::VERSION;
-    }
 
     /**
      * Hàm lấy nội dung config được quy định trong thư mục config

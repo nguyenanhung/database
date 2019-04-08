@@ -13,8 +13,9 @@ use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use nguyenanhung\MyDebug\Debug;
-use nguyenanhung\MyDatabase\Interfaces\ProjectInterface;
-use nguyenanhung\MyDatabase\Interfaces\ModelInterface;
+use nguyenanhung\MyDatabase\ProjectInterface;
+use nguyenanhung\MyDatabase\ModelInterface;
+use nguyenanhung\MyDatabase\Version;
 
 /**
  * Class BaseModel
@@ -35,6 +36,7 @@ use nguyenanhung\MyDatabase\Interfaces\ModelInterface;
  */
 class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
 {
+    use Version;
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
@@ -98,19 +100,6 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function __destruct()
     {
-    }
-
-    /**
-     * Hàm lấy thông tin phiên bản Package
-     *
-     * @author  : 713uk13m <dev@nguyenanhung.com>
-     * @time    : 10/13/18 15:12
-     *
-     * @return mixed|string Current Project Version, VD: 0.1.0
-     */
-    public function getVersion()
-    {
-        return self::VERSION;
     }
 
     /**
