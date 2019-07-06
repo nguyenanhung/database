@@ -16,6 +16,7 @@ use nguyenanhung\MyDebug\Debug;
 use nguyenanhung\MyDatabase\ProjectInterface;
 use nguyenanhung\MyDatabase\ModelInterface;
 use nguyenanhung\MyDatabase\Version;
+use nguyenanhung\MyDatabase\Helper;
 
 /**
  * Class BaseModel
@@ -36,7 +37,7 @@ use nguyenanhung\MyDatabase\Version;
  */
 class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
 {
-    use Version;
+    use Version, Helper;
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
@@ -105,10 +106,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function connection
      *
+     * @return $this
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 23:10
      *
-     * @return $this
      */
     public function connection()
     {
@@ -138,10 +139,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function disconnect
      *
+     * @return $this
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 21:55
      *
-     * @return $this
      */
     public function disconnect()
     {
@@ -151,10 +152,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function getConnection
      *
+     * @return object
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 22:27
      *
-     * @return object
      */
     public function getConnection()
     {
@@ -164,10 +165,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function getConnectionName
      *
+     * @return string
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 22:28
      *
-     * @return string
      */
     public function getConnectionName()
     {
@@ -177,13 +178,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm set và kết nối cơ sở dữ liệu
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:43
-     *
      * @param array  $database Mảng dữ liệu thông tin DB cần kết nối
      * @param string $name     Tên DB kết nối
      *
      * @return  $this;
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:43
      *
      * @see   https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php
      * @see   https://packagist.org/packages/illuminate/database#v5.4.36
@@ -199,10 +200,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function getDatabase
      *
+     * @return array|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 23:07
      *
-     * @return array|null
      */
     public function getDatabase()
     {
@@ -212,12 +213,12 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm set và kết nối đến bảng dữ liệu
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:43
-     *
      * @param string $table Bảng cần lấy dữ liệu
      *
      * @return  $this;
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:43
+     *
      */
     public function setTable($table = '')
     {
@@ -229,10 +230,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function getTable
      *
+     * @return string|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 23:07
      *
-     * @return string|null
      */
     public function getTable()
     {
@@ -242,10 +243,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function getSchema
      *
+     * @return \Illuminate\Database\Schema\Builder
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-12 15:03
      *
-     * @return \Illuminate\Database\Schema\Builder
      */
     public function getSchema()
     {
@@ -256,10 +257,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function checkExistsTable
      *
+     * @return bool
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-12 14:58
      *
-     * @return bool
      */
     public function checkExistsTable()
     {
@@ -271,12 +272,12 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function checkExistsColumn
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-12 15:10
-     *
      * @param string $column
      *
      * @return bool
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 15:10
+     *
      */
     public function checkExistsColumn($column = '')
     {
@@ -288,12 +289,12 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function checkExistsColumns
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-12 15:10
-     *
      * @param array $columns
      *
      * @return bool
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-12 15:10
+     *
      */
     public function checkExistsColumns($columns = [])
     {
@@ -319,10 +320,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm đếm toàn bộ bản ghi tồn tại trong bảng
      *
+     * @return int
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:43
      *
-     * @return int
      */
     public function countAll()
     {
@@ -336,13 +337,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:45
-     *
      * @param string|array $whereValue Giá trị cần kiểm tra
      * @param string|null  $whereField Field tương ứng, ví dụ: ID
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:45
+     *
      */
     public function checkExists($whereValue = '', $whereField = 'id')
     {
@@ -371,13 +372,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào - Đa điều kiện
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:45
-     *
      * @param string|array $whereValue Giá trị cần kiểm tra
      * @param string|null  $whereField Field tương ứng, ví dụ: ID
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:45
+     *
      */
     public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id')
     {
@@ -408,16 +409,16 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * Mặc định giá trị so sánh dựa trên column created_at
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/17/18 01:06
-     *
      * @param array  $selectField Danh sách các column cần lấy
      * @param string $byColumn    Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
-     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
-     *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
+     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/17/18 01:06
+     *
      */
     public function getLatest($selectField = ['*'], $byColumn = 'created_at')
     {
@@ -434,14 +435,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm lấy bản ghi mới nhất theo điều kiện đầu vào
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2019-04-07 04:16
-     *
      * @param array  $whereValue
      * @param array  $selectField
      * @param string $byColumn
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:16
+     *
      */
     public function getLatestByColumn($whereValue = [], $selectField = ['*'], $byColumn = 'created_at')
     {
@@ -472,16 +473,16 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * Mặc định giá trị so sánh dựa trên column created_at
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/17/18 01:06
-     *
      * @param array  $selectField Danh sách các column cần lấy
      * @param string $byColumn    Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
-     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
-     *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
+     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/17/18 01:06
+     *
      */
     public function getOldest($selectField = ['*'], $byColumn = 'created_at')
     {
@@ -498,14 +499,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm lấy bản ghi cũ nhất nhất theo điều kiện đầu vào
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2019-04-07 04:17
-     *
      * @param array  $whereValue
      * @param array  $selectField
      * @param string $byColumn
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:17
+     *
      */
     public function getOldestByColumn($whereValue = [], $selectField = ['*'], $byColumn = 'created_at')
     {
@@ -538,18 +539,18 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:51
-     *
      * @param array|string      $value       Giá trị cần kiểm tra
      * @param null|string       $field       Field tương ứng, ví dụ: ID
      * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
      * @param null|string|array $selectField Các field cần lấy
      *
-     * @see   https://laravel.com/docs/5.4/queries#selects
-     *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:51
+     *
      */
     public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL)
     {
@@ -612,15 +613,15 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm lấy thông tin bản ghi theo tham số đầu vào - Đa điều kiện
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 11/26/18 16:40
-     *
      * @param array|string      $wheres      Giá trị cần kiểm tra
      * @param null|string       $field       Field tương ứng, ví dụ: ID
      * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
      * @param null|string|array $selectField Các field cần lấy
      *
      * @return array|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|\Illuminate\Support\Collection|null|object|string
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/26/18 16:40
+     *
      */
     public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = NULL, $selectField = NULL)
     {
@@ -683,16 +684,16 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:51
-     *
      * @param string $value       Giá trị cần kiểm tra
      * @param string $field       Field tương ứng với giá tri kiểm tra, ví dụ: ID
      * @param string $fieldOutput field kết quả đầu ra
      *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
      * @see   https://laravel.com/docs/5.4/queries#selects
      *
-     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:51
+     *
      */
     public function getValue($value = '', $field = 'id', $fieldOutput = '')
     {
@@ -734,14 +735,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 11/26/18 16:41
-     *
      * @param string $wheres      Giá trị cần kiểm tra
      * @param string $field       Field tương ứng với giá tri kiểm tra, ví dụ: ID
      * @param string $fieldOutput field kết quả đầu ra
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/26/18 16:41
+     *
      */
     public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '')
     {
@@ -775,14 +776,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi trong 1 bảng
      *
+     * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
+     *
+     * @return \Illuminate\Support\Collection|object|array
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 13:59
      *
-     * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
-     *
-     * @see   https://laravel.com/docs/5.4/queries#selects
-     *
-     * @return \Illuminate\Support\Collection|object|array
      */
     public function getDistinctResult($selectField = '')
     {
@@ -802,13 +803,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi theo điều kiện
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2019-04-07 04:21
-     *
      * @param string $selectField
      * @param array  $whereValue
      *
      * @return \Illuminate\Support\Collection
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:21
+     *
      */
     public function getDistinctResultByColumn($selectField = '', $whereValue = [])
     {
@@ -847,12 +848,12 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * Các tham số đầu ra và đầu vào theo quy chuẩn của hàm getDistinctResult
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 23:49
-     *
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
      * @return \Illuminate\Support\Collection|object|array
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 23:49
+     *
      */
     public function getResultDistinct($selectField = '')
     {
@@ -862,13 +863,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm getResultDistinctByColumn là alias của hàm getDistinctResultByColumn
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2019-04-07 04:22
-     *
      * @param string $selectField
      * @param array  $whereValue
      *
      * @return \Illuminate\Support\Collection
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:22
+     *
      */
     public function getResultDistinctByColumn($selectField = '', $whereValue = [])
     {
@@ -877,9 +878,6 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
 
     /**
      * Function getResult
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 16:14
      *
      * @param array|string $wheres              Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      * @param string|array $selectField         Mảng dữ liệu danh sách các field cần so sánh
@@ -891,10 +889,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *                                          ]
      *                                          ];
      *
-     * @see   https://laravel.com/docs/5.4/queries#selects
-     *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 16:14
+     *
      */
     public function getResult($wheres = [], $selectField = '*', $options = NULL)
     {
@@ -922,6 +923,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             } else {
                 $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
             }
+        }
+        if ((isset($options['limit']) && $options['limit'] > 0) && isset($options['offset'])) {
+            $page = $this->preparePaging($options['offset'], $options['limit']);
+            $db->offset($page['offset'])->limit($page['limit']);
         }
         if (isset($options['orderBy']) && is_array($options['orderBy'])) {
             foreach ($options['orderBy'] as $column => $direction) {
@@ -954,9 +959,6 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function getResult - Đa điều kiện
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 16:14
-     *
      * @param array|string $wheres              Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      * @param string|array $selectField         Mảng dữ liệu danh sách các field cần so sánh
      * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
@@ -967,10 +969,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *                                          ]
      *                                          ];
      *
-     * @see   https://laravel.com/docs/5.4/queries#selects
-     *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 16:14
+     *
      */
     public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL)
     {
@@ -992,6 +997,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                     $db->where($value['field'], $value['operator'], $value['value']);
                 }
             }
+        }
+        if ((isset($options['limit']) && $options['limit'] > 0) && isset($options['offset'])) {
+            $page = $this->preparePaging($options['offset'], $options['limit']);
+            $db->offset($page['offset'])->limit($page['limit']);
         }
         if (isset($options['orderBy']) && is_array($options['orderBy'])) {
             foreach ($options['orderBy'] as $column => $direction) {
@@ -1024,13 +1033,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function countResult
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 11/25/18 14:10
-     *
      * @param array  $wheres
      * @param string $selectField
      *
      * @return int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/25/18 14:10
+     *
      */
     public function countResult($wheres = [], $selectField = '*')
     {
@@ -1066,13 +1075,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function countResultWithMultipleWhere
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2019-04-07 04:29
-     *
      * @param array  $wheres
      * @param string $selectField
      *
      * @return int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:29
+     *
      */
     public function countResultWithMultipleWhere($wheres = [], $selectField = '*')
     {
@@ -1102,14 +1111,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function getResultWithSimpleJoin
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-03 02:03
-     *
      * @param array  $joins
      * @param string $select
      * @param null   $options
      *
      * @return object|array|\Illuminate\Support\Collection|string
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:03
+     *
      */
     public function getResultWithSimpleJoin($joins = [], $select = '*', $options = NULL)
     {
@@ -1140,14 +1149,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function getResultWithSimpleLeftJoin
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-03 02:05
-     *
      * @param array  $joins
      * @param string $select
      * @param null   $options
      *
      * @return object|array|\Illuminate\Support\Collection|string
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:05
+     *
      */
     public function getResultWithSimpleLeftJoin($joins = [], $select = '*', $options = NULL)
     {
@@ -1178,14 +1187,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function getResultWithSimpleCrossJoin
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-03 02:06
-     *
      * @param array  $joins
      * @param string $select
      * @param null   $options
      *
      * @return object|array|\Illuminate\Support\Collection|string
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:06
+     *
      */
     public function getResultWithSimpleCrossJoin($joins = [], $select = '*', $options = NULL)
     {
@@ -1216,14 +1225,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm thêm mới bản ghi vào bảng
      *
+     * @param array $data Mảng chứa dữ liệu cần insert
+     *
+     * @return int Insert ID của bản ghi
+     * @see   https://laravel.com/docs/5.4/queries#inserts
+     *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:04
      *
-     * @param array $data Mảng chứa dữ liệu cần insert
-     *
-     * @see   https://laravel.com/docs/5.4/queries#inserts
-     *
-     * @return int Insert ID của bản ghi
      */
     public function add($data = [])
     {
@@ -1239,15 +1248,15 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm update dữ liệu
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 14:10
-     *
      * @param array        $data   Mảng dữ liệu cần Update
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
+     * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
      * @see   https://laravel.com/docs/5.4/queries#updates
      *
-     * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:10
+     *
      */
     public function update($data = [], $wheres = [])
     {
@@ -1278,14 +1287,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm xóa dữ liệu
      *
+     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     *
+     * @return int Số bản ghi đã xóa
+     * @see   https://laravel.com/docs/5.4/queries#deletes
+     *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:13
      *
-     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     *
-     * @see   https://laravel.com/docs/5.4/queries#deletes
-     *
-     * @return int Số bản ghi đã xóa
      */
     public function delete($wheres = [])
     {
@@ -1316,13 +1325,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2019-04-07 03:58
-     *
      * @param array $data
      * @param array $wheres
      *
      * @return bool|int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 03:58
+     *
      */
     public function checkExistsAndInsertData($data = [], $wheres = [])
     {
@@ -1357,14 +1366,14 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới, nếu tồn tại sẵn sẽ update
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2019-04-07 04:01
-     *
      * @param array $dataInsert
      * @param array $dataUpdate
      * @param array $wheres
      *
      * @return int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:01
+     *
      */
     public function checkExistsAndInsertOrUpdateData($dataInsert = [], $dataUpdate = [], $wheres = [])
     {
