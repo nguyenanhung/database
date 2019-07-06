@@ -9,6 +9,9 @@
 
 namespace nguyenanhung\MyDatabase\Model;
 
+use nguyenanhung\MyDatabase\Helper;
+use PDO;
+use FaaPz\PDO\Database;
 use nguyenanhung\MyDebug\Debug;
 use nguyenanhung\MyDatabase\ProjectInterface;
 use nguyenanhung\MyDatabase\ModelInterface;
@@ -23,7 +26,7 @@ use nguyenanhung\MyDatabase\Version;
  */
 class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInterface
 {
-    use Version;
+    use Version, Helper;
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
@@ -71,13 +74,13 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
             $this->database = $database;
         }
         if (is_array($this->database) && !empty($this->database)) {
-            $this->db = new \FaaPz\PDO\Database(
+            $this->db = new Database(
                 $this->database['driver'] . ':host=' . $this->database['host'] . ';port=' . $this->database['port'] . ';dbname=' . $this->database['database'] . ';charset=' . $this->database['charset'] . ';collation=' . $this->database['collation'] . ';prefix=' . $this->database['prefix'],
                 $this->database['username'],
                 $this->database['password'],
                 $this->database['options']
             );
-            $this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
+            $this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         }
     }
 
@@ -91,13 +94,13 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Function setDatabase
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 20:42
-     *
      * @param array  $database
      * @param string $name
      *
      * @return $this
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 20:42
+     *
      */
     public function setDatabase($database = [], $name = 'default')
     {
@@ -110,10 +113,10 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Function getDatabase
      *
+     * @return array|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 20:42
      *
-     * @return array|null
      */
     public function getDatabase()
     {
@@ -123,12 +126,12 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Function setTable
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 21:54
-     *
      * @param string $table
      *
      * @return $this
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 21:54
+     *
      */
     public function setTable($table = '')
     {
@@ -140,10 +143,10 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Function getTable
      *
+     * @return string|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 21:54
      *
-     * @return string|null
      */
     public function getTable()
     {
@@ -153,21 +156,21 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Function connection
      *
+     * @return $this
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 20:43
      *
-     * @return $this
      */
     public function connection()
     {
         if (!is_object($this->db)) {
-            $this->db = new \FaaPz\PDO\Database(
+            $this->db = new Database(
                 $this->database['driver'] . ':host=' . $this->database['host'] . ';port=' . $this->database['port'] . ';dbname=' . $this->database['database'] . ';charset=' . $this->database['charset'] . ';collation=' . $this->database['collation'] . ';prefix=' . $this->database['prefix'],
                 $this->database['username'],
                 $this->database['password'],
                 $this->database['options']
             );
-            $this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
+            $this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         }
 
         return $this;
@@ -176,10 +179,10 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Function disconnect
      *
+     * @return $this
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 22:03
      *
-     * @return $this
      */
     public function disconnect()
     {
@@ -193,10 +196,10 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Function getDb
      *
+     * @return object
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 22:03
      *
-     * @return object
      */
     public function getDb()
     {
@@ -207,12 +210,12 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Hàm đếm toàn bộ bản ghi tồn tại trong bảng
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 22:19
-     *
      * @param array $select
      *
      * @return int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 22:19
+     *
      */
     public function countAll($select = ['id'])
     {
@@ -225,14 +228,14 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:45
-     *
      * @param string|array      $whereValue Giá trị cần kiểm tra
      * @param string|null       $whereField Field tương ứng, ví dụ: ID
      * @param string|array|null $select     Bản ghi cần chọn
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:45
+     *
      */
     public function checkExists($whereValue = '', $whereField = 'id', $select = ['*'])
     {
@@ -257,14 +260,14 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào - Đa điều kiện
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:45
-     *
      * @param string|array      $whereValue Giá trị cần kiểm tra
      * @param string|null       $whereField Field tương ứng, ví dụ: ID
      * @param string|array|null $select     Bản ghi cần chọn
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:45
+     *
      */
     public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id', $select = ['*'])
     {
@@ -289,16 +292,16 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      *
      * Mặc định giá trị so sánh dựa trên column created_at
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/17/18 01:06
-     *
      * @param array  $selectField Danh sách các column cần lấy
      * @param string $byColumn    Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
-     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
-     *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
+     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/17/18 01:06
+     *
      */
     public function getLatest($selectField = ['*'], $byColumn = 'created_at')
     {
@@ -318,16 +321,16 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      *
      * Mặc định giá trị so sánh dựa trên column created_at
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/17/18 01:06
-     *
      * @param array  $selectField Danh sách các column cần lấy
      * @param string $byColumn    Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
-     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
-     *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
+     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/17/18 01:06
+     *
      */
     public function getOldest($selectField = ['*'], $byColumn = 'created_at')
     {
@@ -349,9 +352,6 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      *
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:51
-     *
      * @param array|string      $value       Giá trị cần kiểm tra
      * @param null|string       $field       Field tương ứng, ví dụ: ID
      * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
@@ -359,6 +359,9 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      *
      * @return object|array|string|null Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:51
+     *
      */
     public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL)
     {
@@ -402,15 +405,15 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Function getInfoWithMultipleWhere
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 22:42
-     *
      * @param string $wheres
      * @param string $field
      * @param null   $format
      * @param null   $selectField
      *
      * @return array|false|mixed|string
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 22:42
+     *
      */
     public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = NULL, $selectField = NULL)
     {
@@ -454,14 +457,14 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Function getValue
      *
-     * @author : 713uk13m <dev@nguyenanhung.com>
-     * @time   : 2018-12-01 22:45
-     *
      * @param string $value
      * @param string $field
      * @param string $fieldOutput
      *
      * @return mixed|null
+     * @author : 713uk13m <dev@nguyenanhung.com>
+     * @time   : 2018-12-01 22:45
+     *
      */
     public function getValue($value = '', $field = 'id', $fieldOutput = '')
     {
@@ -493,14 +496,14 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Function getValueWithMultipleWhere
      *
-     * @author : 713uk13m <dev@nguyenanhung.com>
-     * @time   : 2018-12-01 22:46
-     *
      * @param string $wheres
      * @param string $field
      * @param string $fieldOutput
      *
      * @return mixed|null
+     * @author : 713uk13m <dev@nguyenanhung.com>
+     * @time   : 2018-12-01 22:46
+     *
      */
     public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '')
     {
@@ -532,14 +535,14 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi trong 1 bảng
      *
+     * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
+     *
+     * @return \Illuminate\Support\Collection|object|array
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 13:59
      *
-     * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
-     *
-     * @see   https://laravel.com/docs/5.4/queries#selects
-     *
-     * @return \Illuminate\Support\Collection|object|array
      */
     public function getDistinctResult($selectField = '')
     {
@@ -558,12 +561,12 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      *
      * Các tham số đầu ra và đầu vào theo quy chuẩn của hàm getDistinctResult
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 23:49
-     *
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
      * @return \Illuminate\Support\Collection|object|array
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 23:49
+     *
      */
     public function getResultDistinct($selectField = '')
     {
@@ -572,9 +575,6 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
 
     /**
      * Function getResult
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 16:14
      *
      * @param array|string $wheres              Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      * @param string|array $selectField         Mảng dữ liệu danh sách các field cần so sánh
@@ -586,10 +586,13 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      *                                          ]
      *                                          ];
      *
-     * @see   https://laravel.com/docs/5.4/queries#selects
-     *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 16:14
+     *
      */
     public function getResult($wheres = [], $selectField = '*', $options = NULL)
     {
@@ -608,6 +611,10 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
         } else {
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
+        if ((isset($options['limit']) && $options['limit'] > 0) && isset($options['offset'])) {
+            $page = $this->preparePaging($options['offset'], $options['limit']);
+            $db->offset($page['offset'])->limit($page['limit']);
+        }
         if (isset($options['orderBy']) && is_array($options['orderBy'])) {
             foreach ($options['orderBy'] as $column => $direction) {
                 $db->orderBy($column, $direction);
@@ -622,9 +629,6 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Function getResult - Đa điều kiện
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 16:14
-     *
      * @param array|string $wheres              Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      * @param string|array $selectField         Mảng dữ liệu danh sách các field cần so sánh
      * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
@@ -635,10 +639,13 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      *                                          ]
      *                                          ];
      *
-     * @see   https://laravel.com/docs/5.4/queries#selects
-     *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
+     * @see   https://laravel.com/docs/5.4/queries#selects
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 16:14
+     *
      */
     public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL)
     {
@@ -655,6 +662,10 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
                 }
             }
         }
+        if ((isset($options['limit']) && $options['limit'] > 0) && isset($options['offset'])) {
+            $page = $this->preparePaging($options['offset'], $options['limit']);
+            $db->offset($page['offset'])->limit($page['limit']);
+        }
         if (isset($options['orderBy']) && is_array($options['orderBy'])) {
             foreach ($options['orderBy'] as $column => $direction) {
                 $db->orderBy($column, $direction);
@@ -669,13 +680,13 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Function countResult
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 11/25/18 14:10
-     *
      * @param array  $wheres
      * @param string $selectField
      *
      * @return int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 11/25/18 14:10
+     *
      */
     public function countResult($wheres = [], $selectField = '*')
     {
@@ -703,12 +714,12 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Hàm thêm mới bản ghi vào bảng
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 14:04
-     *
      * @param array $data Mảng chứa dữ liệu cần insert
      *
      * @return int Insert ID của bản ghi
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:04
+     *
      */
     public function add($data = [])
     {
@@ -720,15 +731,15 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Hàm update dữ liệu
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 14:10
-     *
      * @param array        $data   Mảng dữ liệu cần Update
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
+     * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
      * @see   https://laravel.com/docs/5.4/queries#updates
      *
-     * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:10
+     *
      */
     public function update($data = [], $wheres = [])
     {
@@ -753,14 +764,14 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
     /**
      * Hàm xóa dữ liệu
      *
+     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     *
+     * @return int Số bản ghi đã xóa
+     * @see   https://laravel.com/docs/5.4/queries#deletes
+     *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:13
      *
-     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     *
-     * @see   https://laravel.com/docs/5.4/queries#deletes
-     *
-     * @return int Số bản ghi đã xóa
      */
     public function delete($wheres = [])
     {

@@ -9,10 +9,13 @@
 
 namespace nguyenanhung\MyDatabase\Model;
 
+use Exception;
+use MysqliDb;
 use nguyenanhung\MyDebug\Debug;
 use nguyenanhung\MyDatabase\ProjectInterface;
 use nguyenanhung\MyDatabase\ModelInterface;
 use nguyenanhung\MyDatabase\Version;
+use nguyenanhung\MyDatabase\Helper;
 
 /**
  * Class MySQLiBaseModel
@@ -23,7 +26,7 @@ use nguyenanhung\MyDatabase\Version;
  */
 class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseModelInterface
 {
-    use Version;
+    use Version, Helper;
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
@@ -65,7 +68,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             $this->debug->setLoggerSubPath(__CLASS__);
             $this->debug->setLoggerFilename($this->debugLoggerFilename);
             if (isset($this->database) && is_array($this->database) && !empty($this->database)) {
-                $this->db = new \MysqliDb();
+                $this->db = new MysqliDb();
                 $this->db->addConnection($this->dbName, $this->database);
             }
         }
@@ -81,13 +84,13 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function setDatabase
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 20:53
-     *
      * @param array  $database
      * @param string $name
      *
      * @return $this
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 20:53
+     *
      */
     public function setDatabase($database = [], $name = 'default')
     {
@@ -100,10 +103,10 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getDatabase
      *
+     * @return array|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 20:53
      *
-     * @return array|null
      */
     public function getDatabase()
     {
@@ -113,10 +116,10 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getDbName
      *
+     * @return string
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 20:59
      *
-     * @return string
      */
     public function getDbName()
     {
@@ -126,12 +129,12 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function setTable
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 21:54
-     *
      * @param string $table
      *
      * @return $this
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 21:54
+     *
      */
     public function setTable($table = '')
     {
@@ -143,10 +146,10 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getTable
      *
+     * @return string|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 21:54
      *
-     * @return string|null
      */
     public function getTable()
     {
@@ -156,15 +159,15 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function connection
      *
+     * @return $this
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 20:43
      *
-     * @return $this
      */
     public function connection()
     {
         if (!is_object($this->db)) {
-            $this->db = new \MysqliDb();
+            $this->db = new MysqliDb();
             $this->db->addConnection($this->dbName, $this->database);
         }
 
@@ -174,12 +177,12 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function disconnect
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:01
-     *
      * @param string $name
      *
      * @return void|null
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:01
+     *
      */
     public function disconnect($name = '')
     {
@@ -190,7 +193,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             $this->db->disconnect($name);
             unset($this->db);
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
 
             return NULL;
@@ -212,10 +215,10 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getDb
      *
+     * @return object
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 22:03
      *
-     * @return object
      */
     public function getDb()
     {
@@ -226,12 +229,12 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function countAll
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:13
-     *
      * @param string $column
      *
      * @return int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:13
+     *
      */
     public function countAll($column = '*')
     {
@@ -243,14 +246,14 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function checkExists
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:30
-     *
      * @param string $whereValue
      * @param string $whereField
      * @param string $select
      *
      * @return int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:30
+     *
      */
     public function checkExists($whereValue = '', $whereField = 'id', $select = '*')
     {
@@ -273,14 +276,14 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function checkExistsWithMultipleWhere
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:29
-     *
      * @param string $whereValue
      * @param string $whereField
      * @param string $select
      *
      * @return int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:29
+     *
      */
     public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id', $select = '*')
     {
@@ -303,13 +306,13 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getLatest
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:34
-     *
      * @param string $selectField
      * @param string $byColumn
      *
      * @return array|null
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:34
+     *
      */
     public function getLatest($selectField = '*', $byColumn = 'id')
     {
@@ -318,7 +321,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
 
             return $this->db->getOne($this->table, $selectField);
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
 
             return NULL;
@@ -329,13 +332,13 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getOldest
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:36
-     *
      * @param string $selectField
      * @param string $byColumn
      *
      * @return array|null
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:36
+     *
      */
     public function getOldest($selectField = '*', $byColumn = 'id')
     {
@@ -344,7 +347,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
 
             return $this->db->getOne($this->table, $selectField);
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
 
             return NULL;
@@ -354,14 +357,14 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getInfo
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:38
-     *
      * @param string $value
      * @param string $field
      * @param string $selectField
      *
      * @return array|null
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:38
+     *
      */
     public function getInfo($value = '', $field = 'id', $selectField = '*')
     {
@@ -387,14 +390,14 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getInfoWithMultipleWhere
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:39
-     *
      * @param string $wheres
      * @param string $field
      * @param null   $selectField
      *
      * @return array|null
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:39
+     *
      */
     public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $selectField = NULL)
     {
@@ -420,14 +423,14 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getValue
      *
-     * @author : 713uk13m <dev@nguyenanhung.com>
-     * @time   : 2018-12-02 21:41
-     *
      * @param string $value
      * @param string $field
      * @param string $fieldOutput
      *
      * @return mixed|null
+     * @author : 713uk13m <dev@nguyenanhung.com>
+     * @time   : 2018-12-02 21:41
+     *
      */
     public function getValue($value = '', $field = 'id', $fieldOutput = '')
     {
@@ -454,14 +457,14 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getValueWithMultipleWhere
      *
-     * @author : 713uk13m <dev@nguyenanhung.com>
-     * @time   : 2018-12-02 21:42
-     *
      * @param string $wheres
      * @param string $field
      * @param string $fieldOutput
      *
      * @return mixed|null
+     * @author : 713uk13m <dev@nguyenanhung.com>
+     * @time   : 2018-12-02 21:42
+     *
      */
     public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '')
     {
@@ -488,12 +491,12 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getDistinctResult
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:45
-     *
      * @param string $selectField
      *
      * @return array|null
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:45
+     *
      */
     public function getDistinctResult($selectField = '*')
     {
@@ -503,7 +506,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
 
             return $result;
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
 
             return NULL;
@@ -513,12 +516,12 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getResultDistinct
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:43
-     *
      * @param string $selectField
      *
      * @return array
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:43
+     *
      */
     public function getResultDistinct($selectField = '')
     {
@@ -528,14 +531,14 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getResult
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:47
-     *
      * @param array  $wheres
      * @param string $selectField
      * @param null   $options
      *
      * @return array|null
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:47
+     *
      */
     public function getResult($wheres = [], $selectField = '*', $options = NULL)
     {
@@ -556,12 +559,18 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
                     $this->db->orderBy($column, $direction);
                 }
             }
-            $result = $this->db->get($this->table, NULL, $selectField);
+            if ((isset($options['limit']) && $options['limit'] > 0) && isset($options['offset'])) {
+                $page    = $this->preparePaging($options['offset'], $options['limit']);
+                $numRows = array($page['offset'], $options['limit']);
+                $result  = $this->db->get($this->table, $numRows, $selectField);
+            } else {
+                $result = $this->db->get($this->table, NULL, $selectField);
+            }
             $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
 
             return $result;
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
 
             return NULL;
@@ -571,14 +580,14 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function getResultWithMultipleWhere
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:48
-     *
      * @param array  $wheres
      * @param string $selectField
      * @param null   $options
      *
      * @return array|null
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:48
+     *
      */
     public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL)
     {
@@ -597,12 +606,18 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
                     $this->db->orderBy($column, $direction);
                 }
             }
-            $result = $this->db->get($this->table, NULL, $selectField);
+            if ((isset($options['limit']) && $options['limit'] > 0) && isset($options['offset'])) {
+                $page    = $this->preparePaging($options['offset'], $options['limit']);
+                $numRows = array($page['offset'], $options['limit']);
+                $result  = $this->db->get($this->table, $numRows, $selectField);
+            } else {
+                $result = $this->db->get($this->table, NULL, $selectField);
+            }
             $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
 
             return $result;
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
 
             return NULL;
@@ -612,13 +627,13 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function countResult
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:50
-     *
      * @param array  $wheres
      * @param string $selectField
      *
      * @return int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:50
+     *
      */
     public function countResult($wheres = [], $selectField = '*')
     {
@@ -645,12 +660,12 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function add
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:22
-     *
      * @param array $data
      *
      * @return int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:22
+     *
      */
     public function add($data = [])
     {
@@ -665,13 +680,13 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function update
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:21
-     *
      * @param array $data
      * @param array $wheres
      *
      * @return int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:21
+     *
      */
     public function update($data = [], $wheres = [])
     {
@@ -694,12 +709,12 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function delete
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:17
-     *
      * @param array $wheres
      *
      * @return string
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:17
+     *
      */
     public function delete($wheres = [])
     {
