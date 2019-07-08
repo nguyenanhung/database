@@ -1285,6 +1285,45 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     }
 
     /**
+     * Hàm update dữ liệu - Đa điều kiện
+     *
+     * @param array        $data   Mảng dữ liệu cần Update
+     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     *
+     * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
+     * @see   https://laravel.com/docs/5.4/queries#updates
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:10
+     *
+     */
+    public function updateWithMultipleWhere($data = [], $wheres = [])
+    {
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value['value'])) {
+                    $db->whereIn($value['field'], $value['value']);
+                } else {
+                    $db->where($value['field'], $value['operator'], $value['value']);
+                }
+            }
+        } else {
+            if (is_array($wheres)) {
+                $db->whereIn($this->primaryKey, $wheres);
+            } else {
+                $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+            }
+        }
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $resultId = $db->update($data);
+        $this->debug->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
+
+        return $resultId;
+    }
+
+    /**
      * Hàm xóa dữ liệu
      *
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
@@ -1306,6 +1345,44 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                     $db->whereIn($field, $value);
                 } else {
                     $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                }
+            }
+        } else {
+            if (is_array($wheres)) {
+                $db->whereIn($this->primaryKey, $wheres);
+            } else {
+                $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+            }
+        }
+        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $resultId = $db->delete();
+        $this->debug->debug(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
+
+        return $resultId;
+    }
+
+    /**
+     * Hàm xóa dữ liệu - Đa điều kiện
+     *
+     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     *
+     * @return int Số bản ghi đã xóa
+     * @see   https://laravel.com/docs/5.4/queries#deletes
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 14:13
+     *
+     */
+    public function deleteWithMultipleWhere($wheres = [])
+    {
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value['value'])) {
+                    $db->whereIn($value['field'], $value['value']);
+                } else {
+                    $db->where($value['field'], $value['operator'], $value['value']);
                 }
             }
         } else {
@@ -1364,6 +1441,47 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     }
 
     /**
+     * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới - Đa điều kiện
+     *
+     * @param array $data
+     * @param array $wheres
+     *
+     * @return bool|int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 03:58
+     *
+     */
+    public function checkExistsAndInsertDataWithMultipleWhere($data = [], $wheres = [])
+    {
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value['value'])) {
+                    $db->whereIn($value['field'], $value['value']);
+                } else {
+                    $db->where($value['field'], $value['operator'], $value['value']);
+                }
+            }
+        } else {
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+        $checkExists = $db->count();
+        $this->debug->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
+        if (!$checkExists) {
+            $id = $db->insertGetId($data);
+            $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+            $this->debug->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
+
+            return $id;
+        } else {
+            $this->debug->debug(__FUNCTION__, 'Đã tồn tại bản ghi, bỏ qua không ghi nữa');
+
+            return FALSE;
+        }
+    }
+
+    /**
      * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới, nếu tồn tại sẵn sẽ update
      *
      * @param array $dataInsert
@@ -1385,6 +1503,49 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
                     $db->whereIn($field, $value);
                 } else {
                     $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                }
+            }
+        } else {
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+        $checkExists = $db->count();
+        $this->debug->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
+        if (!$checkExists) {
+            $id = $db->insertGetId($dataInsert);
+            $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+            $this->debug->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
+
+            return $id;
+        } else {
+            $resultId = $db->update($dataUpdate);
+            $this->debug->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
+
+            return $resultId;
+        }
+    }
+
+    /**
+     * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới, nếu tồn tại sẵn sẽ update - Đa điều kiện
+     *
+     * @param array $dataInsert
+     * @param array $dataUpdate
+     * @param array $wheres
+     *
+     * @return int
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-04-07 04:01
+     *
+     */
+    public function checkExistsAndInsertOrUpdateDataWithMultipleWhere($dataInsert = [], $dataUpdate = [], $wheres = [])
+    {
+        $this->connection();
+        $db = DB::table($this->table);
+        if (is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value['value'])) {
+                    $db->whereIn($value['field'], $value['value']);
+                } else {
+                    $db->where($value['field'], $value['operator'], $value['value']);
                 }
             }
         } else {
