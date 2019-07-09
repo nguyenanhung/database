@@ -350,11 +350,19 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $this->connection();
         $db = DB::table($this->table);
         if (is_array($whereValue) && count($whereValue) > 0) {
-            foreach ($whereValue as $column => $column_value) {
-                if (is_array($column_value)) {
-                    $db->whereIn($column, $column_value);
+            foreach ($whereValue as $field => $value) {
+                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
+                    if (is_array($value['value'])) {
+                        $db->whereIn($value['field'], $value['value']);
+                    } else {
+                        $db->where($value['field'], $value['operator'], $value['value']);
+                    }
                 } else {
-                    $db->where($column, self::OPERATOR_EQUAL_TO, $column_value);
+                    if (is_array($value)) {
+                        $db->whereIn($field, $value);
+                    } else {
+                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    }
                 }
             }
         } else {
@@ -382,26 +390,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id')
     {
-        $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($whereValue) && count($whereValue) > 0) {
-            foreach ($whereValue as $key => $value) {
-                if (is_array($value['value'])) {
-                    $db->whereIn($value['field'], $value['value']);
-                } else {
-                    $db->where($value['field'], $value['operator'], $value['value']);
-                }
-            }
-        } else {
-            if (is_array($whereValue)) {
-                $db->whereIn($whereField, $whereValue);
-            } else {
-                $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
-            }
-        }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-
-        return $db->count();
+        return $this->checkExists($whereValue, $whereField);
     }
 
     /**
@@ -566,10 +555,18 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         }
         if (is_array($value) && count($value) > 0) {
             foreach ($value as $f => $v) {
-                if (is_array($v)) {
-                    $db->whereIn($f, $v);
+                if (is_array($v) && isset($v['field']) && isset($v['value'])) {
+                    if (is_array($v['value'])) {
+                        $db->whereIn($v['field'], $v['value']);
+                    } else {
+                        $db->where($v['field'], $v['operator'], $v['value']);
+                    }
                 } else {
-                    $db->where($f, self::OPERATOR_EQUAL_TO, $v);
+                    if (is_array($v)) {
+                        $db->whereIn($f, $v);
+                    } else {
+                        $db->where($f, self::OPERATOR_EQUAL_TO, $v);
+                    }
                 }
             }
         } else {
@@ -625,56 +622,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = NULL, $selectField = NULL)
     {
-        $this->connection();
-        $format = strtolower($format);
-        if (!empty($selectField)) {
-            if (!is_array($selectField)) {
-                $selectField = [$selectField];
-            }
-            $db = DB::table($this->table)->select($selectField);
-        } else {
-            $db = DB::table($this->table)->select();
-        }
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $key => $value) {
-                if (is_array($value['value'])) {
-                    $db->whereIn($value['field'], $value['value']);
-                } else {
-                    $db->where($value['field'], $value['operator'], $value['value']);
-                }
-            }
-        } else {
-            $db->where($field, self::OPERATOR_EQUAL_TO, $wheres);
-        }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        if ($format == 'result') {
-            $result = $db->get();
-            $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        } else {
-            $result = $db->first();
-            $this->debug->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
-        }
-        if ($format == 'json') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
-
-            return $result->toJson();
-        } elseif ($format == 'array') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
-
-            return $result->toArray();
-        } elseif ($format == 'base') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
-
-            return $result->toBase();
-        } else {
-            if ($format == 'result') {
-                if ($result->count() <= 0) {
-                    return NULL;
-                }
-            }
-
-            return $result;
-        }
+        return $this->getInfo($wheres, $field, $format, $selectField);
     }
 
     /**
@@ -700,11 +648,19 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $this->connection();
         $db = DB::table($this->table);
         if (is_array($value) && count($value) > 0) {
-            foreach ($value as $column => $column_value) {
-                if (is_array($column_value)) {
-                    $db->whereIn($column, $column_value);
+            foreach ($value as $f => $v) {
+                if (is_array($v) && isset($v['field']) && isset($v['value'])) {
+                    if (is_array($v['value'])) {
+                        $db->whereIn($v['field'], $v['value']);
+                    } else {
+                        $db->where($v['field'], $v['operator'], $v['value']);
+                    }
                 } else {
-                    $db->where($column, self::OPERATOR_EQUAL_TO, $column_value);
+                    if (is_array($v)) {
+                        $db->whereIn($f, $v);
+                    } else {
+                        $db->where($f, self::OPERATOR_EQUAL_TO, $v);
+                    }
                 }
             }
         } else {
@@ -746,31 +702,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '')
     {
-        $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $key => $value) {
-                if (is_array($value['value'])) {
-                    $db->whereIn($value['field'], $value['value']);
-                } else {
-                    $db->where($value['field'], $value['operator'], $value['value']);
-                }
-            }
-        } else {
-            $db->where($field, self::OPERATOR_EQUAL_TO, $wheres);
-        }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->first();
-        $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
-        if (!empty($fieldOutput) && isset($result->$fieldOutput)) {
-            $this->debug->debug(__FUNCTION__, 'Tìm thấy thông tin cột dữ liệu ' . $fieldOutput . ' -> ' . $result->$fieldOutput);
-
-            return $result->$fieldOutput;
-        } else {
-            $this->debug->error(__FUNCTION__, 'Không tìm thấy cột dữ liệu ' . $fieldOutput);
-
-            return $result;
-        }
+        return $this->getValue($wheres, $field, $fieldOutput);
     }
 
     /**
@@ -911,10 +843,18 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $db = DB::table($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
-                if (is_array($value)) {
-                    $db->whereIn($field, $value);
+                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
+                    if (is_array($value['value'])) {
+                        $db->whereIn($value['field'], $value['value']);
+                    } else {
+                        $db->where($value['field'], $value['operator'], $value['value']);
+                    }
                 } else {
-                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    if (is_array($value)) {
+                        $db->whereIn($field, $value);
+                    } else {
+                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    }
                 }
             }
         } else {
@@ -979,55 +919,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL)
     {
-        if (!is_array($selectField)) {
-            $selectField = [$selectField];
-        }
-        if (isset($options['format'])) {
-            $format = strtolower($options['format']);
-        } else {
-            $format = NULL;
-        }
-        $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $field => $value) {
-                if (is_array($value['value'])) {
-                    $db->whereIn($value['field'], $value['value']);
-                } else {
-                    $db->where($value['field'], $value['operator'], $value['value']);
-                }
-            }
-        }
-        if ((isset($options['limit']) && $options['limit'] > 0) && isset($options['offset'])) {
-            $page = $this->preparePaging($options['offset'], $options['limit']);
-            $db->offset($page['offset'])->limit($page['limit']);
-        }
-        if (isset($options['orderBy']) && is_array($options['orderBy'])) {
-            foreach ($options['orderBy'] as $column => $direction) {
-                $db->orderBy($column, $direction);
-            }
-        }
-        if (isset($options['orderBy']) && $options['orderBy'] == 'random') {
-            $db->inRandomOrder();
-        }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->get($selectField);
-        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format == 'json') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
-
-            return $result->toJson();
-        } elseif ($format == 'array') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
-
-            return $result->toArray();
-        } elseif ($format == 'base') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
-
-            return $result->toBase();
-        } else {
-            return $result;
-        }
+        return $this->getResult($wheres, $selectField, $options);
     }
 
     /**
@@ -1050,10 +942,18 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $db = DB::table($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
-                if (is_array($value)) {
-                    $db->whereIn($field, $value);
+                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
+                    if (is_array($value['value'])) {
+                        $db->whereIn($value['field'], $value['value']);
+                    } else {
+                        $db->where($value['field'], $value['operator'], $value['value']);
+                    }
                 } else {
-                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    if (is_array($value)) {
+                        $db->whereIn($field, $value);
+                    } else {
+                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    }
                 }
             }
         } else {
@@ -1085,27 +985,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function countResultWithMultipleWhere($wheres = [], $selectField = '*')
     {
-        if (!is_array($selectField)) {
-            $selectField = [$selectField];
-        }
-        $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $field => $value) {
-                if (is_array($value)) {
-                    $db->whereIn($field, $value);
-                } else {
-                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                }
-            }
-        }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->get($selectField);
-        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        $totalItem = $result->count();
-        $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
-
-        return $totalItem;
+        return $this->getResult($wheres, $selectField);
     }
 
     /**
@@ -1264,10 +1144,18 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $db = DB::table($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
-                if (is_array($value)) {
-                    $db->whereIn($field, $value);
+                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
+                    if (is_array($value['value'])) {
+                        $db->whereIn($value['field'], $value['value']);
+                    } else {
+                        $db->where($value['field'], $value['operator'], $value['value']);
+                    }
                 } else {
-                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    if (is_array($value)) {
+                        $db->whereIn($field, $value);
+                    } else {
+                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    }
                 }
             }
         } else {
@@ -1299,28 +1187,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function updateWithMultipleWhere($data = [], $wheres = [])
     {
-        $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $field => $value) {
-                if (is_array($value['value'])) {
-                    $db->whereIn($value['field'], $value['value']);
-                } else {
-                    $db->where($value['field'], $value['operator'], $value['value']);
-                }
-            }
-        } else {
-            if (is_array($wheres)) {
-                $db->whereIn($this->primaryKey, $wheres);
-            } else {
-                $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
-            }
-        }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $resultId = $db->update($data);
-        $this->debug->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
-
-        return $resultId;
+        return $this->update($data, $wheres);
     }
 
     /**
@@ -1341,10 +1208,18 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $db = DB::table($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
-                if (is_array($value)) {
-                    $db->whereIn($field, $value);
+                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
+                    if (is_array($value['value'])) {
+                        $db->whereIn($value['field'], $value['value']);
+                    } else {
+                        $db->where($value['field'], $value['operator'], $value['value']);
+                    }
                 } else {
-                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    if (is_array($value)) {
+                        $db->whereIn($field, $value);
+                    } else {
+                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    }
                 }
             }
         } else {
@@ -1375,28 +1250,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function deleteWithMultipleWhere($wheres = [])
     {
-        $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $field => $value) {
-                if (is_array($value['value'])) {
-                    $db->whereIn($value['field'], $value['value']);
-                } else {
-                    $db->where($value['field'], $value['operator'], $value['value']);
-                }
-            }
-        } else {
-            if (is_array($wheres)) {
-                $db->whereIn($this->primaryKey, $wheres);
-            } else {
-                $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
-            }
-        }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $resultId = $db->delete();
-        $this->debug->debug(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
-
-        return $resultId;
+        return $this->delete($wheres);
     }
 
     /**
@@ -1416,10 +1270,18 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $db = DB::table($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
-                if (is_array($value)) {
-                    $db->whereIn($field, $value);
+                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
+                    if (is_array($value['value'])) {
+                        $db->whereIn($value['field'], $value['value']);
+                    } else {
+                        $db->where($value['field'], $value['operator'], $value['value']);
+                    }
                 } else {
-                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    if (is_array($value)) {
+                        $db->whereIn($field, $value);
+                    } else {
+                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    }
                 }
             }
         } else {
@@ -1453,32 +1315,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function checkExistsAndInsertDataWithMultipleWhere($data = [], $wheres = [])
     {
-        $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $field => $value) {
-                if (is_array($value['value'])) {
-                    $db->whereIn($value['field'], $value['value']);
-                } else {
-                    $db->where($value['field'], $value['operator'], $value['value']);
-                }
-            }
-        } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
-        }
-        $checkExists = $db->count();
-        $this->debug->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
-        if (!$checkExists) {
-            $id = $db->insertGetId($data);
-            $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-            $this->debug->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
-
-            return $id;
-        } else {
-            $this->debug->debug(__FUNCTION__, 'Đã tồn tại bản ghi, bỏ qua không ghi nữa');
-
-            return FALSE;
-        }
+        return $this->checkExistsAndInsertData($data, $wheres);
     }
 
     /**
@@ -1499,10 +1336,18 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $db = DB::table($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
-                if (is_array($value)) {
-                    $db->whereIn($field, $value);
+                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
+                    if (is_array($value['value'])) {
+                        $db->whereIn($value['field'], $value['value']);
+                    } else {
+                        $db->where($value['field'], $value['operator'], $value['value']);
+                    }
                 } else {
-                    $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    if (is_array($value)) {
+                        $db->whereIn($field, $value);
+                    } else {
+                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    }
                 }
             }
         } else {
@@ -1538,32 +1383,6 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function checkExistsAndInsertOrUpdateDataWithMultipleWhere($dataInsert = [], $dataUpdate = [], $wheres = [])
     {
-        $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $field => $value) {
-                if (is_array($value['value'])) {
-                    $db->whereIn($value['field'], $value['value']);
-                } else {
-                    $db->where($value['field'], $value['operator'], $value['value']);
-                }
-            }
-        } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
-        }
-        $checkExists = $db->count();
-        $this->debug->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
-        if (!$checkExists) {
-            $id = $db->insertGetId($dataInsert);
-            $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-            $this->debug->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
-
-            return $id;
-        } else {
-            $resultId = $db->update($dataUpdate);
-            $this->debug->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
-
-            return $resultId;
-        }
+        return $this->checkExistsAndInsertOrUpdateData($dataInsert, $dataUpdate, $wheres);
     }
 }
