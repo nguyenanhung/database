@@ -985,7 +985,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function countResultWithMultipleWhere($wheres = [], $selectField = '*')
     {
-        return $this->getResult($wheres, $selectField);
+        return $this->countResult($wheres, $selectField);
     }
 
     /**
