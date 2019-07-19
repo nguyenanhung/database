@@ -231,8 +231,6 @@ class PDOUtilsModel implements ProjectInterface, ModelInterface
             }
             $result = FALSE;
         }
-        $this->disconnect();
-
         return $result;
     }
 }
