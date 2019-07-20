@@ -209,16 +209,16 @@ class PDOUtilsModel implements ProjectInterface, ModelInterface
 
     /*************************** DATABASE METHOD ***************************/
     /**
-     * Function rawQuery
+     * Function rawExecStatement
      *
      * @param string $statement
      *
      * @return bool
      * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2019-07-19 14:59
+     * @time  : 2019-07-20 09:07
      *
      */
-    public function rawQuery($statement = '')
+    public function rawExecStatement($statement = '')
     {
         try {
             $this->db->exec($statement);
@@ -231,6 +231,7 @@ class PDOUtilsModel implements ProjectInterface, ModelInterface
             }
             $result = FALSE;
         }
+
         return $result;
     }
 }

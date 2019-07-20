@@ -125,6 +125,28 @@ interface BaseModelInterface
      */
     public function getSchema();
 
+    /**
+     * Function setSelectRaw
+     *
+     * @param bool $selectRaw
+     *
+     * @return $this
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-07-20 09:11
+     *
+     */
+    public function setSelectRaw($selectRaw = FALSE);
+
+    /**
+     * Function getSelectRaw
+     *
+     * @return bool|null
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-07-20 09:11
+     *
+     */
+    public function getSelectRaw();
+
     /*************************** DATABASE METHOD ***************************/
     /**
      * Function checkExistsTable
