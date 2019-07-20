@@ -50,6 +50,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     protected $schema;
     /** @var string DB Name */
     protected $dbName = 'default';
+    /** @var bool|null Cấu hình trạng thái select Raw */
+    protected $selectRaw;
     /** @var bool Cấu hình trạng thái Debug, TRUE nếu bật, FALSE nếu tắt */
     public $debugStatus = FALSE;
     /** @var null|string Cấu hình Level Debug */
@@ -251,6 +253,36 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     public function getSchema()
     {
         return DB::schema();
+    }
+
+    /**
+     * Function setSelectRaw
+     *
+     * @param bool $selectRaw
+     *
+     * @return $this
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-07-20 09:11
+     *
+     */
+    public function setSelectRaw($selectRaw = FALSE)
+    {
+        $this->selectRaw = $selectRaw;
+
+        return $this;
+    }
+
+    /**
+     * Function getSelectRaw
+     *
+     * @return bool|null
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2019-07-20 09:11
+     *
+     */
+    public function getSelectRaw()
+    {
+        return $this->selectRaw;
     }
 
     /*************************** DATABASE METHOD ***************************/
@@ -549,7 +581,11 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             if (!is_array($selectField)) {
                 $selectField = [$selectField];
             }
-            $db = DB::table($this->table)->select($selectField);
+            if ($this->selectRaw === TRUE) {
+                $db = DB::table($this->table)->selectRaw($selectField['expression'], $selectField['bindingParam']);
+            } else {
+                $db = DB::table($this->table)->select($selectField);
+            }
         } else {
             $db = DB::table($this->table)->select();
         }
