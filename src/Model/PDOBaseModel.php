@@ -219,6 +219,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function countAll($select = ['id'])
     {
+        $this->connection();
         $total = $this->db->select($select)->from($this->table)->execute()->rowCount();
         $this->debug->debug(__FUNCTION__, 'Total Result: ' . $total);
 
@@ -239,6 +240,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function checkExists($whereValue = '', $whereField = 'id', $select = ['*'])
     {
+        $this->connection();
         $db = $this->db->select($select)->from($this->table);
         if (is_array($whereValue) && count($whereValue) > 0) {
             foreach ($whereValue as $column => $column_value) {
@@ -271,6 +273,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id', $select = ['*'])
     {
+        $this->connection();
         $db = $this->db->select($select)->from($this->table);
         if (is_array($whereValue) && count($whereValue) > 0) {
             foreach ($whereValue as $key => $value) {
@@ -305,6 +308,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function getLatest($selectField = ['*'], $byColumn = 'created_at')
     {
+        $this->connection();
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
@@ -334,6 +338,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function getOldest($selectField = ['*'], $byColumn = 'created_at')
     {
+        $this->connection();
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
@@ -365,6 +370,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL)
     {
+        $this->connection();
         $format = strtolower($format);
         if (!empty($selectField)) {
             if (!is_array($selectField)) {
@@ -417,6 +423,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = NULL, $selectField = NULL)
     {
+        $this->connection();
         $format = strtolower($format);
         if (!empty($selectField)) {
             if (!is_array($selectField)) {
@@ -468,6 +475,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function getValue($value = '', $field = 'id', $fieldOutput = '')
     {
+        $this->connection();
         if (!is_array($fieldOutput)) {
             $fieldOutput = [$fieldOutput];
         }
@@ -507,6 +515,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '')
     {
+        $this->connection();
         if (!is_array($fieldOutput)) {
             $fieldOutput = [$fieldOutput];
         }
@@ -546,6 +555,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function getDistinctResult($selectField = '')
     {
+        $this->connection();
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
@@ -596,6 +606,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function getResult($wheres = [], $selectField = '*', $options = NULL)
     {
+        $this->connection();
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
@@ -649,6 +660,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL)
     {
+        $this->connection();
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
@@ -690,6 +702,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function countResult($wheres = [], $selectField = '*')
     {
+        $this->connection();
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
@@ -723,6 +736,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function add($data = [])
     {
+        $this->connection();
         $insertId = $this->db->insert($data)->into($this->table)->execute(FALSE);
 
         return $insertId;
@@ -743,6 +757,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function update($data = [], $wheres = [])
     {
+        $this->connection();
         $db = $this->db->update($data);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
@@ -775,6 +790,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      */
     public function delete($wheres = [])
     {
+        $this->connection();
         $db = $this->db->delete($this->table);
         if (is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
