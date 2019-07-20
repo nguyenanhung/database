@@ -25,7 +25,7 @@ use nguyenanhung\MyDatabase\Helper;
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
  */
-class PDOUtilsModel implements ProjectInterface, ModelInterface
+class PDOUtilsModel implements ProjectInterface, ModelInterface, PDOUtilsModelInterface
 {
     use Version, Helper;
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
@@ -221,6 +221,7 @@ class PDOUtilsModel implements ProjectInterface, ModelInterface
     public function rawExecStatement($statement = '')
     {
         try {
+            $this->connection();
             $this->db->exec($statement);
             $result = TRUE;
         }
