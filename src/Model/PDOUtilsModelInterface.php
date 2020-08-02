@@ -93,6 +93,16 @@ interface PDOUtilsModelInterface
      */
     public function getDb();
 
+    /**
+     * Function getPrimaryKey
+     *
+     * @return string
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 41:53
+     */
+    public function getPrimaryKey();
+
     /*************************** DATABASE METHOD ***************************/
     /**
      * Function rawExecStatement

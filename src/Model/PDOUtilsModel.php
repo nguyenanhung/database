@@ -57,7 +57,7 @@ class PDOUtilsModel implements ProjectInterface, ModelInterface, PDOUtilsModelIn
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      */
-    public function __construct($database = [])
+    public function __construct($database = array())
     {
         $this->debug = new Debug();
         if ($this->debugStatus === TRUE) {
@@ -106,7 +106,7 @@ class PDOUtilsModel implements ProjectInterface, ModelInterface, PDOUtilsModelIn
      * @time  : 2018-12-02 20:42
      *
      */
-    public function setDatabase($database = [], $name = 'default')
+    public function setDatabase($database = array(), $name = 'default')
     {
         $this->database = $database;
         $this->dbName   = $name;
@@ -210,6 +210,19 @@ class PDOUtilsModel implements ProjectInterface, ModelInterface, PDOUtilsModelIn
         return $this->db;
     }
 
+    /**
+     * Function getPrimaryKey
+     *
+     * @return string
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 41:53
+     */
+    public function getPrimaryKey()
+    {
+        return $this->primaryKey;
+    }
+
     /*************************** DATABASE METHOD ***************************/
     /**
      * Function rawExecStatement
@@ -217,9 +230,9 @@ class PDOUtilsModel implements ProjectInterface, ModelInterface, PDOUtilsModelIn
      * @param string $statement
      *
      * @return bool
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2019-07-20 09:07
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 41:36
      */
     public function rawExecStatement($statement = '')
     {
@@ -229,6 +242,8 @@ class PDOUtilsModel implements ProjectInterface, ModelInterface, PDOUtilsModelIn
             $result = TRUE;
         }
         catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
             if (function_exists('log_message')) {
                 log_message('error', 'Error Message: ' . $e->getMessage());
                 log_message('error', 'Error Trace As String: ' . $e->getTraceAsString());
