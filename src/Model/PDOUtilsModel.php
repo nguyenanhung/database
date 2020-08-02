@@ -53,6 +53,9 @@ class PDOUtilsModel implements ProjectInterface, ModelInterface, PDOUtilsModelIn
      * PDOUtilsModel constructor.
      *
      * @param array $database
+     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
      */
     public function __construct($database = [])
     {
@@ -226,9 +229,9 @@ class PDOUtilsModel implements ProjectInterface, ModelInterface, PDOUtilsModelIn
             $result = TRUE;
         }
         catch (Exception $e) {
-            $errorMsg = 'Error Code: ' . $e->getCode() . ' - File: ' . $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage();
             if (function_exists('log_message')) {
-                log_message('error', $errorMsg);
+                log_message('error', 'Error Message: ' . $e->getMessage());
+                log_message('error', 'Error Trace As String: ' . $e->getTraceAsString());
             }
             $result = FALSE;
         }

@@ -21,96 +21,89 @@ interface MySQLiBaseModelInterface
     /**
      * Function setDatabase
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 20:53
-     *
      * @param array  $database
      * @param string $name
      *
      * @return $this
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 20:53
      */
-    public function setDatabase($database = [], $name = 'default');
+    public function setDatabase($database = array(), $name = 'default');
 
     /**
      * Function getDatabase
      *
+     * @return array|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 20:53
-     *
-     * @return array|null
      */
     public function getDatabase();
 
     /**
      * Function getDbName
      *
+     * @return string
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 20:59
-     *
-     * @return string
      */
     public function getDbName();
 
     /**
      * Function setTable
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 21:54
-     *
      * @param string $table
      *
      * @return $this
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-01 21:54
      */
     public function setTable($table = '');
 
     /**
      * Function getTable
      *
+     * @return string|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 21:54
-     *
-     * @return string|null
      */
     public function getTable();
 
     /**
      * Function connection
      *
+     * @return $this
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 20:43
-     *
-     * @return $this
      */
     public function connection();
 
     /**
      * Function disconnect
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:01
-     *
      * @param string $name
      *
      * @return void|null
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-02 21:01
      */
     public function disconnect($name = '');
 
     /**
      * Function disconnectAll
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:01
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 29:15
      */
     public function disconnectAll();
 
     /**
      * Function getDb
      *
+     * @return object
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 22:03
      *
-     * @return object
      */
     public function getDb();
 
@@ -118,224 +111,224 @@ interface MySQLiBaseModelInterface
     /**
      * Function countAll
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:13
-     *
      * @param string $column
      *
-     * @return int
+     * @return int|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 33:24
      */
     public function countAll($column = '*');
 
     /**
      * Function checkExists
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:30
-     *
      * @param string $whereValue
      * @param string $whereField
      * @param string $select
      *
-     * @return int
+     * @return int|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 33:50
      */
     public function checkExists($whereValue = '', $whereField = 'id', $select = '*');
 
     /**
      * Function checkExistsWithMultipleWhere
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:29
-     *
      * @param string $whereValue
      * @param string $whereField
      * @param string $select
      *
-     * @return int
+     * @return int|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 34:04
      */
     public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id', $select = '*');
 
     /**
      * Function getLatest
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:34
-     *
      * @param string $selectField
      * @param string $byColumn
      *
      * @return array|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 34:21
      */
     public function getLatest($selectField = '*', $byColumn = 'id');
 
     /**
      * Function getOldest
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:36
-     *
      * @param string $selectField
      * @param string $byColumn
      *
      * @return array|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 34:30
      */
     public function getOldest($selectField = '*', $byColumn = 'id');
 
     /**
      * Function getInfo
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:38
-     *
      * @param string $value
      * @param string $field
      * @param string $selectField
      *
      * @return array|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 34:56
      */
     public function getInfo($value = '', $field = 'id', $selectField = '*');
 
     /**
      * Function getInfoWithMultipleWhere
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:39
-     *
      * @param string $wheres
      * @param string $field
      * @param null   $selectField
      *
      * @return array|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 35:18
      */
     public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $selectField = NULL);
 
     /**
      * Function getValue
      *
-     * @author : 713uk13m <dev@nguyenanhung.com>
-     * @time   : 2018-12-02 21:41
-     *
      * @param string $value
      * @param string $field
      * @param string $fieldOutput
      *
      * @return mixed|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 35:39
      */
     public function getValue($value = '', $field = 'id', $fieldOutput = '');
 
     /**
      * Function getValueWithMultipleWhere
      *
-     * @author : 713uk13m <dev@nguyenanhung.com>
-     * @time   : 2018-12-02 21:42
-     *
      * @param string $wheres
      * @param string $field
      * @param string $fieldOutput
      *
-     * @return mixed|null
+     * @return   mixed|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 36:20
      */
     public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '');
 
     /**
      * Function getDistinctResult
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:45
-     *
      * @param string $selectField
      *
-     * @return array|null
+     * @return array|\MysqliDb|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 36:54
      */
     public function getDistinctResult($selectField = '*');
 
     /**
      * Function getResultDistinct
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:43
-     *
      * @param string $selectField
      *
-     * @return array
+     * @return array|\MysqliDb|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 36:58
      */
     public function getResultDistinct($selectField = '');
 
     /**
      * Function getResult
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:47
-     *
      * @param array  $wheres
      * @param string $selectField
      * @param null   $options
      *
-     * @return array|null
+     * @return array|\MysqliDb|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 37:11
      */
-    public function getResult($wheres = [], $selectField = '*', $options = NULL);
+    public function getResult($wheres = array(), $selectField = '*', $options = NULL);
 
     /**
      * Function getResultWithMultipleWhere
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:48
-     *
      * @param array  $wheres
      * @param string $selectField
      * @param null   $options
      *
-     * @return array|null
+     * @return array|\MysqliDb|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 37:18
      */
-    public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL);
+    public function getResultWithMultipleWhere($wheres = array(), $selectField = '*', $options = NULL);
 
     /**
      * Function countResult
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:50
      *
      * @param array  $wheres
      * @param string $selectField
      *
      * @return int
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 37:51
      */
-    public function countResult($wheres = [], $selectField = '*');
+    public function countResult($wheres = array(), $selectField = '*');
 
     /**
      * Function add
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:22
-     *
      * @param array $data
      *
-     * @return int
+     * @return int|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 38:06
      */
-    public function add($data = []);
+    public function add($data = array());
 
     /**
      * Function update
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:21
-     *
      * @param array $data
      * @param array $wheres
      *
      * @return int
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 38:31
      */
-    public function update($data = [], $wheres = []);
+    public function update($data = array(), $wheres = array());
 
     /**
      * Function delete
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:17
-     *
      * @param array $wheres
      *
-     * @return string
+     * @return int
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 38:47
      */
-    public function delete($wheres = []);
+    public function delete($wheres = array());
 }

@@ -44,7 +44,6 @@ interface ProjectInterface
      * @return mixed|string Current Project Version, VD: 0.1.0
      * @author  : 713uk13m <dev@nguyenanhung.com>
      * @time    : 10/13/18 15:12
-     *
      */
     public function getVersion();
 }
