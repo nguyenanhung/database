@@ -29,7 +29,7 @@ interface PDOUtilsModelInterface
      * @time  : 2019-07-20 09:09
      *
      */
-    public function setDatabase($database = [], $name = 'default');
+    public function setDatabase($database = array(), $name = 'default');
 
     /**
      * Function getDatabase

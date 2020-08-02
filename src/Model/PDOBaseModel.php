@@ -53,7 +53,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      *
      * @param array $database
      */
-    public function __construct($database = [])
+    public function __construct($database = array())
     {
         $this->debug = new Debug();
         if ($this->debugStatus === TRUE) {
@@ -102,7 +102,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      * @time  : 2018-12-02 20:42
      *
      */
-    public function setDatabase($database = [], $name = 'default')
+    public function setDatabase($database = array(), $name = 'default')
     {
         $this->database = $database;
         $this->dbName   = $name;
@@ -604,7 +604,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      * @time  : 10/16/18 16:14
      *
      */
-    public function getResult($wheres = [], $selectField = '*', $options = NULL)
+    public function getResult($wheres = array(), $selectField = '*', $options = NULL)
     {
         $this->connection();
         if (!is_array($selectField)) {
@@ -658,7 +658,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      * @time  : 10/16/18 16:14
      *
      */
-    public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL)
+    public function getResultWithMultipleWhere($wheres = array(), $selectField = '*', $options = NULL)
     {
         $this->connection();
         if (!is_array($selectField)) {
@@ -700,7 +700,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      * @time  : 11/25/18 14:10
      *
      */
-    public function countResult($wheres = [], $selectField = '*')
+    public function countResult($wheres = array(), $selectField = '*')
     {
         $this->connection();
         if (!is_array($selectField)) {
@@ -734,7 +734,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      * @time  : 10/16/18 14:04
      *
      */
-    public function add($data = [])
+    public function add($data = array())
     {
         $this->connection();
         $insertId = $this->db->insert($data)->into($this->table)->execute(FALSE);
@@ -755,7 +755,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      * @time  : 10/16/18 14:10
      *
      */
-    public function update($data = [], $wheres = [])
+    public function update($data = array(), $wheres = array())
     {
         $this->connection();
         $db = $this->db->update($data);
@@ -788,7 +788,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      * @time  : 10/16/18 14:13
      *
      */
-    public function delete($wheres = [])
+    public function delete($wheres = array())
     {
         $this->connection();
         $db = $this->db->delete($this->table);

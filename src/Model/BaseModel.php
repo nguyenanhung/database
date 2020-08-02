@@ -68,7 +68,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @param array $database
      */
-    public function __construct($database = [])
+    public function __construct($database = array())
     {
         $this->debug = new Debug();
         if ($this->debugStatus === TRUE) {
@@ -191,7 +191,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @see   https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php
      * @see   https://packagist.org/packages/illuminate/database#v5.4.36
      */
-    public function setDatabase($database = [], $name = 'default')
+    public function setDatabase($database = array(), $name = 'default')
     {
         $this->database = $database;
         $this->dbName   = $name;
@@ -328,7 +328,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 2018-12-12 15:10
      *
      */
-    public function checkExistsColumns($columns = [])
+    public function checkExistsColumns($columns = array())
     {
         $this->connection();
 
@@ -465,7 +465,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 2019-04-07 04:16
      *
      */
-    public function getLatestByColumn($whereValue = [], $selectField = ['*'], $byColumn = 'created_at')
+    public function getLatestByColumn($whereValue = array(), $selectField = ['*'], $byColumn = 'created_at')
     {
         if (!is_array($selectField)) {
             $selectField = [$selectField];
@@ -529,7 +529,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 2019-04-07 04:17
      *
      */
-    public function getOldestByColumn($whereValue = [], $selectField = ['*'], $byColumn = 'created_at')
+    public function getOldestByColumn($whereValue = array(), $selectField = ['*'], $byColumn = 'created_at')
     {
         if (!is_array($selectField)) {
             $selectField = [$selectField];
@@ -779,7 +779,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 2019-04-07 04:21
      *
      */
-    public function getDistinctResultByColumn($selectField = '', $whereValue = [])
+    public function getDistinctResultByColumn($selectField = '', $whereValue = array())
     {
         if (!is_array($selectField)) {
             $selectField = [$selectField];
@@ -839,7 +839,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 2019-04-07 04:22
      *
      */
-    public function getResultDistinctByColumn($selectField = '', $whereValue = [])
+    public function getResultDistinctByColumn($selectField = '', $whereValue = array())
     {
         return $this->getDistinctResultByColumn($selectField, $whereValue);
     }
@@ -865,7 +865,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 16:14
      *
      */
-    public function getResult($wheres = [], $selectField = '*', $options = NULL)
+    public function getResult($wheres = array(), $selectField = '*', $options = NULL)
     {
         if (!is_array($selectField)) {
             $selectField = [$selectField];
@@ -953,7 +953,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 16:14
      *
      */
-    public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL)
+    public function getResultWithMultipleWhere($wheres = array(), $selectField = '*', $options = NULL)
     {
         return $this->getResult($wheres, $selectField, $options);
     }
@@ -969,7 +969,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 11/25/18 14:10
      *
      */
-    public function countResult($wheres = [], $selectField = '*')
+    public function countResult($wheres = array(), $selectField = '*')
     {
         if (!is_array($selectField)) {
             $selectField = [$selectField];
@@ -1019,7 +1019,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 2019-04-07 04:29
      *
      */
-    public function countResultWithMultipleWhere($wheres = [], $selectField = '*')
+    public function countResultWithMultipleWhere($wheres = array(), $selectField = '*')
     {
         return $this->countResult($wheres, $selectField);
     }
@@ -1036,7 +1036,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 2018-12-03 02:03
      *
      */
-    public function getResultWithSimpleJoin($joins = [], $select = '*', $options = NULL)
+    public function getResultWithSimpleJoin($joins = array(), $select = '*', $options = NULL)
     {
         $format = isset($options['format']) ? strtolower($options['format']) : NULL;
         $db     = DB::table($this->table);
@@ -1074,7 +1074,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 2018-12-03 02:05
      *
      */
-    public function getResultWithSimpleLeftJoin($joins = [], $select = '*', $options = NULL)
+    public function getResultWithSimpleLeftJoin($joins = array(), $select = '*', $options = NULL)
     {
         $format = isset($options['format']) ? strtolower($options['format']) : NULL;
         $db     = DB::table($this->table);
@@ -1112,7 +1112,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 2018-12-03 02:06
      *
      */
-    public function getResultWithSimpleCrossJoin($joins = [], $select = '*', $options = NULL)
+    public function getResultWithSimpleCrossJoin($joins = array(), $select = '*', $options = NULL)
     {
         $format = isset($options['format']) ? strtolower($options['format']) : NULL;
         $db     = DB::table($this->table);
@@ -1150,7 +1150,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 14:04
      *
      */
-    public function add($data = [])
+    public function add($data = array())
     {
         $this->connection();
         $db = DB::table($this->table);
@@ -1174,7 +1174,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 14:10
      *
      */
-    public function update($data = [], $wheres = [])
+    public function update($data = array(), $wheres = array())
     {
         $this->connection();
         $db = DB::table($this->table);
@@ -1221,7 +1221,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 14:10
      *
      */
-    public function updateWithMultipleWhere($data = [], $wheres = [])
+    public function updateWithMultipleWhere($data = array(), $wheres = array())
     {
         return $this->update($data, $wheres);
     }
@@ -1238,7 +1238,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 14:13
      *
      */
-    public function delete($wheres = [])
+    public function delete($wheres = array())
     {
         $this->connection();
         $db = DB::table($this->table);
@@ -1284,7 +1284,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 14:13
      *
      */
-    public function deleteWithMultipleWhere($wheres = [])
+    public function deleteWithMultipleWhere($wheres = array())
     {
         return $this->delete($wheres);
     }
@@ -1300,7 +1300,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 2019-04-07 03:58
      *
      */
-    public function checkExistsAndInsertData($data = [], $wheres = [])
+    public function checkExistsAndInsertData($data = array(), $wheres = array())
     {
         $this->connection();
         $db = DB::table($this->table);
@@ -1349,7 +1349,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 2019-04-07 03:58
      *
      */
-    public function checkExistsAndInsertDataWithMultipleWhere($data = [], $wheres = [])
+    public function checkExistsAndInsertDataWithMultipleWhere($data = array(), $wheres = array())
     {
         return $this->checkExistsAndInsertData($data, $wheres);
     }
@@ -1366,7 +1366,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 2019-04-07 04:01
      *
      */
-    public function checkExistsAndInsertOrUpdateData($dataInsert = [], $dataUpdate = [], $wheres = [])
+    public function checkExistsAndInsertOrUpdateData($dataInsert = array(), $dataUpdate = array(), $wheres = array())
     {
         $this->connection();
         $db = DB::table($this->table);
@@ -1417,7 +1417,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 2019-04-07 04:01
      *
      */
-    public function checkExistsAndInsertOrUpdateDataWithMultipleWhere($dataInsert = [], $dataUpdate = [], $wheres = [])
+    public function checkExistsAndInsertOrUpdateDataWithMultipleWhere($dataInsert = array(), $dataUpdate = array(), $wheres = array())
     {
         return $this->checkExistsAndInsertOrUpdateData($dataInsert, $dataUpdate, $wheres);
     }
