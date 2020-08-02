@@ -9,6 +9,7 @@
 
 namespace nguyenanhung\MyDatabase\Model;
 
+use Exception;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
@@ -38,6 +39,7 @@ use nguyenanhung\MyDatabase\Helper;
 class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
 {
     use Version, Helper;
+
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
@@ -116,11 +118,17 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     public function connection()
     {
         if (!is_object($this->db)) {
-            $this->db = new DB;
-            $this->db->addConnection($this->database);
-            $this->db->setEventDispatcher(new Dispatcher(new Container));
-            $this->db->setAsGlobal();
-            $this->db->bootEloquent();
+            try {
+                $this->db = new DB;
+                $this->db->addConnection($this->database);
+                $this->db->setEventDispatcher(new Dispatcher(new Container));
+                $this->db->setAsGlobal();
+                $this->db->bootEloquent();
+            }
+            catch (Exception $e) {
+                $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+                $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+            }
         }
 
         return $this;
@@ -129,26 +137,39 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function closeConnection
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2019-04-03 16:41
+     * @return void
      *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 46:46
      */
     public function closeConnection()
     {
-        return $this->db->getDatabaseManager()->disconnect($this->dbName);
+        try {
+            return $this->db->getDatabaseManager()->disconnect($this->dbName);
+        }
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+        }
     }
 
     /**
      * Function disconnect
      *
-     * @return $this
+     * @return void
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 21:55
-     *
      */
     public function disconnect()
     {
-        return $this->db->getDatabaseManager()->disconnect($this->dbName);
+        try {
+            return $this->db->getDatabaseManager()->disconnect($this->dbName);
+        }
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+        }
     }
 
     /**
@@ -245,14 +266,20 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function getSchema
      *
-     * @return \Illuminate\Database\Schema\Builder
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-12 15:03
-     *
+     * @return \Illuminate\Database\Schema\Builder|void
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 48:25
      */
     public function getSchema()
     {
-        return DB::schema();
+        try {
+            return DB::schema();
+        }
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+        }
     }
 
     /**
@@ -286,6 +313,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     }
 
     /*************************** DATABASE METHOD ***************************/
+
     /**
      * Function checkExistsTable
      *
