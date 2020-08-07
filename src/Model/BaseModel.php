@@ -643,10 +643,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         if ($format == 'result') {
             $result = $db->get();
-            $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+            // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         } else {
             $result = $db->first();
-            $this->debug->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
+            // $this->debug->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
         }
         if ($format == 'json') {
             $this->debug->debug(__FUNCTION__, 'Output Result is Json');
@@ -942,7 +942,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         }
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
-        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
             $this->debug->debug(__FUNCTION__, 'Output Result is Json');
 
@@ -1029,7 +1029,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         }
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
-        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         $totalItem = $result->count();
         $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
 
@@ -1072,7 +1072,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             $db->join($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $result = $db->select($select)->get();
-        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
             $this->debug->debug(__FUNCTION__, 'Output Result is Json');
 
@@ -1110,7 +1110,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             $db->leftJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $result = $db->select($select)->get();
-        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
             $this->debug->debug(__FUNCTION__, 'Output Result is Json');
 
@@ -1148,7 +1148,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $result = $db->select($select)->get();
-        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
             $this->debug->debug(__FUNCTION__, 'Output Result is Json');
 
