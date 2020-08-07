@@ -69,6 +69,9 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * BaseModel constructor.
      *
      * @param array $database
+     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
      */
     public function __construct($database = array())
     {
@@ -110,10 +113,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function connection
      *
-     * @return $this
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 23:10
-     *
+     * @return $this|\nguyenanhung\MyDatabase\Model\BaseModelInterface
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/07/2020 11:53
      */
     public function connection()
     {
@@ -178,7 +181,6 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @return object
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 22:27
-     *
      */
     public function getConnection()
     {
@@ -191,7 +193,6 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @return string
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 22:28
-     *
      */
     public function getConnectionName()
     {
@@ -226,7 +227,6 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @return array|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 23:07
-     *
      */
     public function getDatabase()
     {
@@ -241,7 +241,6 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @return  $this;
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:43
-     *
      */
     public function setTable($table = '')
     {
@@ -256,7 +255,6 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @return string|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 23:07
-     *
      */
     public function getTable()
     {
@@ -287,10 +285,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @param bool $selectRaw
      *
-     * @return $this
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2019-07-20 09:11
-     *
+     * @return $this|\nguyenanhung\MyDatabase\Model\BaseModelInterface
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/07/2020 12:59
      */
     public function setSelectRaw($selectRaw = FALSE)
     {
@@ -303,9 +301,9 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * Function getSelectRaw
      *
      * @return bool|null
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2019-07-20 09:11
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/07/2020 13:05
      */
     public function getSelectRaw()
     {
@@ -318,9 +316,9 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * Function checkExistsTable
      *
      * @return bool
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-12 14:58
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/07/2020 13:10
      */
     public function checkExistsTable()
     {
@@ -336,8 +334,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @return bool
      * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-12 15:10
-     *
+     * @time  : 2018-12-12 15:1
      */
     public function checkExistsColumn($column = '')
     {
@@ -354,7 +351,6 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @return bool
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-12 15:10
-     *
      */
     public function checkExistsColumns($columns = array())
     {
@@ -649,16 +645,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             // $this->debug->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
         }
         if ($format == 'json') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
         } elseif ($format == 'array') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
         } elseif ($format == 'base') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
         } else {
             if ($format == 'result') {
@@ -738,8 +731,6 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $result = $db->first();
         // $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
         if (!empty($fieldOutput) && isset($result->$fieldOutput)) {
-            $this->debug->debug(__FUNCTION__, 'Tìm thấy thông tin cột dữ liệu ' . $fieldOutput . ' -> ' . $result->$fieldOutput);
-
             return $result->$fieldOutput;
         } else {
             $this->debug->error(__FUNCTION__, 'Không tìm thấy cột dữ liệu ' . $fieldOutput);
@@ -791,6 +782,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $db->distinct();
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
+
         // $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
         return $result;
@@ -834,6 +826,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $db->distinct();
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
+
         //$this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
         return $result;
@@ -944,16 +937,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $result = $db->get($selectField);
         // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
         } elseif ($format == 'array') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
         } elseif ($format == 'base') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
         } else {
             return $result;
@@ -1031,6 +1021,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $result = $db->get($selectField);
         // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         $totalItem = $result->count();
+
         // $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
 
         return $totalItem;
@@ -1074,16 +1065,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $result = $db->select($select)->get();
         // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
         } elseif ($format == 'array') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
         } elseif ($format == 'base') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
         } else {
             return $result;
@@ -1112,16 +1100,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $result = $db->select($select)->get();
         // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
         } elseif ($format == 'array') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
         } elseif ($format == 'base') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
         } else {
             return $result;
@@ -1150,16 +1135,13 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $result = $db->select($select)->get();
         // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Json');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
         } elseif ($format == 'array') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Array');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
         } elseif ($format == 'base') {
-            $this->debug->debug(__FUNCTION__, 'Output Result is Base');
-
+            // $this->debug->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
         } else {
             return $result;
@@ -1184,7 +1166,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $db = DB::table($this->table);
         $id = $db->insertGetId($data);
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $this->debug->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
+
+        // $this->debug->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
 
         return $id;
     }
@@ -1231,7 +1214,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         }
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $resultId = $db->update($data);
-        $this->debug->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
+
+        // $this->debug->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
 
         return $resultId;
     }
@@ -1295,7 +1279,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         }
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $resultId = $db->delete();
-        $this->debug->debug(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
+
+        // $this->debug->debug(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
 
         return $resultId;
     }
@@ -1352,7 +1337,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
         $checkExists = $db->count();
-        $this->debug->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
+        // $this->debug->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
         if (!$checkExists) {
             $id = $db->insertGetId($data);
             $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
@@ -1418,7 +1403,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
         $checkExists = $db->count();
-        $this->debug->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
+        // $this->debug->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
         if (!$checkExists) {
             $id = $db->insertGetId($dataInsert);
             $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
