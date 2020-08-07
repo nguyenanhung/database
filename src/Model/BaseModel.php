@@ -834,7 +834,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $db->distinct();
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
-        $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+        //$this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
         return $result;
     }
