@@ -29,7 +29,7 @@ interface PDOBaseModelInterface
      *
      * @return $this
      */
-    public function setDatabase($database = [], $name = 'default');
+    public function setDatabase($database = array(), $name = 'default');
 
     /**
      * Function getDatabase
@@ -282,7 +282,7 @@ interface PDOBaseModelInterface
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
      */
-    public function getResult($wheres = [], $selectField = '*', $options = NULL);
+    public function getResult($wheres = array(), $selectField = '*', $options = NULL);
 
     /**
      * Function getResult - Đa điều kiện
@@ -305,7 +305,7 @@ interface PDOBaseModelInterface
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
      */
-    public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL);
+    public function getResultWithMultipleWhere($wheres = array(), $selectField = '*', $options = NULL);
 
     /**
      * Function countResult
@@ -318,7 +318,7 @@ interface PDOBaseModelInterface
      *
      * @return int
      */
-    public function countResult($wheres = [], $selectField = '*');
+    public function countResult($wheres = array(), $selectField = '*');
 
     /**
      * Hàm thêm mới bản ghi vào bảng
@@ -330,7 +330,7 @@ interface PDOBaseModelInterface
      *
      * @return int Insert ID của bản ghi
      */
-    public function add($data = []);
+    public function add($data = array());
 
     /**
      * Hàm update dữ liệu
@@ -345,7 +345,7 @@ interface PDOBaseModelInterface
      *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
      */
-    public function update($data = [], $wheres = []);
+    public function update($data = array(), $wheres = array());
 
     /**
      * Hàm xóa dữ liệu
@@ -359,5 +359,5 @@ interface PDOBaseModelInterface
      *
      * @return int Số bản ghi đã xóa
      */
-    public function delete($wheres = []);
+    public function delete($wheres = array());
 }

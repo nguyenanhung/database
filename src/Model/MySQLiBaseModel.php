@@ -50,6 +50,9 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
 
     /**
      * MySQLiBaseModel constructor.
+     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
      */
     public function __construct()
     {
@@ -90,9 +93,8 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @return $this
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 20:53
-     *
      */
-    public function setDatabase($database = [], $name = 'default')
+    public function setDatabase($database = array(), $name = 'default')
     {
         $this->database = $database;
         $this->dbName   = $name;
@@ -106,7 +108,6 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @return array|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 20:53
-     *
      */
     public function getDatabase()
     {
@@ -119,7 +120,6 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @return string
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 20:59
-     *
      */
     public function getDbName()
     {
@@ -134,7 +134,6 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @return $this
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 21:54
-     *
      */
     public function setTable($table = '')
     {
@@ -149,7 +148,6 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @return string|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 21:54
-     *
      */
     public function getTable()
     {
@@ -162,7 +160,6 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @return $this
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 20:43
-     *
      */
     public function connection()
     {
@@ -182,7 +179,6 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @return void|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-02 21:01
-     *
      */
     public function disconnect($name = '')
     {
@@ -194,7 +190,8 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             unset($this->db);
         }
         catch (Exception $e) {
-            $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
 
             return NULL;
         }
@@ -203,13 +200,19 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     /**
      * Function disconnectAll
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:01
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 29:15
      */
     public function disconnectAll()
     {
-        $this->db->disconnectAll();
+        try {
+            $this->db->disconnectAll();
+        }
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+        }
     }
 
     /**
@@ -231,16 +234,24 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      *
      * @param string $column
      *
-     * @return int
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:13
-     *
+     * @return int|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 33:24
      */
     public function countAll($column = '*')
     {
-        $results = $this->db->get($this->table, NULL, $column);
+        try {
+            $results = $this->db->get($this->table, NULL, $column);
 
-        return (int) count($results);
+            return (int) count($results);
+        }
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+            return NULL;
+        }
     }
 
     /**
@@ -250,27 +261,35 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param string $whereField
      * @param string $select
      *
-     * @return int
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:30
-     *
+     * @return int|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 33:50
      */
     public function checkExists($whereValue = '', $whereField = 'id', $select = '*')
     {
-        if (is_array($whereValue) && count($whereValue) > 0) {
-            foreach ($whereValue as $column => $column_value) {
-                if (is_array($column_value)) {
-                    $this->db->where($column, $column_value, self::OPERATOR_IS_IN);
-                } else {
-                    $this->db->where($column, $column_value, self::OPERATOR_EQUAL_TO);
+        try {
+            if (is_array($whereValue) && count($whereValue) > 0) {
+                foreach ($whereValue as $column => $column_value) {
+                    if (is_array($column_value)) {
+                        $this->db->where($column, $column_value, self::OPERATOR_IS_IN);
+                    } else {
+                        $this->db->where($column, $column_value, self::OPERATOR_EQUAL_TO);
+                    }
                 }
+            } else {
+                $this->db->where($whereField, $whereValue, self::OPERATOR_EQUAL_TO);
             }
-        } else {
-            $this->db->where($whereField, $whereValue, self::OPERATOR_EQUAL_TO);
-        }
-        $this->db->get($this->table, NULL, $select);
+            $this->db->get($this->table, NULL, $select);
 
-        return (int) $this->db->count;
+            return (int) $this->db->count;
+        }
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+            return NULL;
+        }
     }
 
     /**
@@ -280,27 +299,35 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param string $whereField
      * @param string $select
      *
-     * @return int
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:29
-     *
+     * @return int|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 34:04
      */
     public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id', $select = '*')
     {
-        if (is_array($whereValue) && count($whereValue) > 0) {
-            foreach ($whereValue as $key => $value) {
-                if (is_array($value['value'])) {
-                    $this->db->where($value['field'], $value['value'], self::OPERATOR_IS_IN);
-                } else {
-                    $this->db->where($value['field'], $value['value'], $value['operator']);
+        try {
+            if (is_array($whereValue) && count($whereValue) > 0) {
+                foreach ($whereValue as $key => $value) {
+                    if (is_array($value['value'])) {
+                        $this->db->where($value['field'], $value['value'], self::OPERATOR_IS_IN);
+                    } else {
+                        $this->db->where($value['field'], $value['value'], $value['operator']);
+                    }
                 }
+            } else {
+                $this->db->where($whereField, $whereValue, self::OPERATOR_EQUAL_TO);
             }
-        } else {
-            $this->db->where($whereField, $whereValue, self::OPERATOR_EQUAL_TO);
-        }
-        $this->db->get($this->table, NULL, $select);
+            $this->db->get($this->table, NULL, $select);
 
-        return (int) $this->db->count;
+            return (int) $this->db->count;
+        }
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+            return NULL;
+        }
     }
 
     /**
@@ -310,9 +337,9 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param string $byColumn
      *
      * @return array|null
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:34
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 34:21
      */
     public function getLatest($selectField = '*', $byColumn = 'id')
     {
@@ -322,7 +349,8 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             return $this->db->getOne($this->table, $selectField);
         }
         catch (Exception $e) {
-            $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
 
             return NULL;
         }
@@ -336,9 +364,9 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param string $byColumn
      *
      * @return array|null
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:36
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 34:30
      */
     public function getOldest($selectField = '*', $byColumn = 'id')
     {
@@ -348,7 +376,8 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             return $this->db->getOne($this->table, $selectField);
         }
         catch (Exception $e) {
-            $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
 
             return NULL;
         }
@@ -362,29 +391,37 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param string $selectField
      *
      * @return array|null
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:38
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 34:56
      */
     public function getInfo($value = '', $field = 'id', $selectField = '*')
     {
-        if (is_array($value) && count($value) > 0) {
-            foreach ($value as $f => $v) {
-                if (is_array($v)) {
-                    $this->db->where($f, $v, self::OPERATOR_IS_IN);
-                } else {
-                    $this->db->where($f, $v, self::OPERATOR_EQUAL_TO);
+        try {
+            if (is_array($value) && count($value) > 0) {
+                foreach ($value as $f => $v) {
+                    if (is_array($v)) {
+                        $this->db->where($f, $v, self::OPERATOR_IS_IN);
+                    } else {
+                        $this->db->where($f, $v, self::OPERATOR_EQUAL_TO);
+                    }
                 }
+            } else {
+                $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
             }
-        } else {
-            $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
-        }
-        $result = $this->db->getOne($this->table, $selectField);
-        if ($this->db->count > 0) {
-            return $result;
-        }
+            $result = $this->db->getOne($this->table, $selectField);
+            if ($this->db->count > 0) {
+                return $result;
+            }
 
-        return NULL;
+            return NULL;
+        }
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+            return NULL;
+        }
     }
 
     /**
@@ -395,29 +432,37 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param null   $selectField
      *
      * @return array|null
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:39
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 35:18
      */
     public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $selectField = NULL)
     {
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $key => $value) {
-                if (is_array($value['value'])) {
-                    $this->db->where($value['field'], $value['value'], self::OPERATOR_IS_IN);
-                } else {
-                    $this->db->where($value['field'], $value['value'], $value['operator']);
+        try {
+            if (is_array($wheres) && count($wheres) > 0) {
+                foreach ($wheres as $key => $value) {
+                    if (is_array($value['value'])) {
+                        $this->db->where($value['field'], $value['value'], self::OPERATOR_IS_IN);
+                    } else {
+                        $this->db->where($value['field'], $value['value'], $value['operator']);
+                    }
                 }
+            } else {
+                $this->db->where($field, $wheres, self::OPERATOR_EQUAL_TO);
             }
-        } else {
-            $this->db->where($field, $wheres, self::OPERATOR_EQUAL_TO);
-        }
-        $result = $this->db->getOne($this->table, $selectField);
-        if ($this->db->count > 0) {
-            return $result;
-        }
+            $result = $this->db->getOne($this->table, $selectField);
+            if ($this->db->count > 0) {
+                return $result;
+            }
 
-        return NULL;
+            return NULL;
+        }
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+            return NULL;
+        }
     }
 
     /**
@@ -428,28 +473,36 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param string $fieldOutput
      *
      * @return mixed|null
-     * @author : 713uk13m <dev@nguyenanhung.com>
-     * @time   : 2018-12-02 21:41
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 35:39
      */
     public function getValue($value = '', $field = 'id', $fieldOutput = '')
     {
-        if (is_array($value) && count($value) > 0) {
-            foreach ($value as $f => $v) {
-                if (is_array($v)) {
-                    $this->db->where($f, $v, self::OPERATOR_IS_IN);
-                } else {
-                    $this->db->where($f, $v, self::OPERATOR_EQUAL_TO);
+        try {
+            if (is_array($value) && count($value) > 0) {
+                foreach ($value as $f => $v) {
+                    if (is_array($v)) {
+                        $this->db->where($f, $v, self::OPERATOR_IS_IN);
+                    } else {
+                        $this->db->where($f, $v, self::OPERATOR_EQUAL_TO);
+                    }
                 }
+            } else {
+                $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
             }
-        } else {
-            $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
+            $result = $this->db->getOne($this->table, $fieldOutput);
+            // $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
+            if (isset($result->$fieldOutput)) {
+                return $result->$fieldOutput;
+            } else {
+                return NULL;
+            }
         }
-        $result = $this->db->getOne($this->table, $fieldOutput);
-        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
-        if (isset($result->$fieldOutput)) {
-            return $result->$fieldOutput;
-        } else {
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
             return NULL;
         }
     }
@@ -461,29 +514,37 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param string $field
      * @param string $fieldOutput
      *
-     * @return mixed|null
-     * @author : 713uk13m <dev@nguyenanhung.com>
-     * @time   : 2018-12-02 21:42
-     *
+     * @return   mixed|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 36:20
      */
     public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '')
     {
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $key => $value) {
-                if (is_array($value['value'])) {
-                    $this->db->where($value['field'], $value['value'], self::OPERATOR_IS_IN);
-                } else {
-                    $this->db->where($value['field'], $value['value'], $value['operator']);
+        try {
+            if (is_array($wheres) && count($wheres) > 0) {
+                foreach ($wheres as $key => $value) {
+                    if (is_array($value['value'])) {
+                        $this->db->where($value['field'], $value['value'], self::OPERATOR_IS_IN);
+                    } else {
+                        $this->db->where($value['field'], $value['value'], $value['operator']);
+                    }
                 }
+            } else {
+                $this->db->where($field, $wheres, self::OPERATOR_EQUAL_TO);
             }
-        } else {
-            $this->db->where($field, $wheres, self::OPERATOR_EQUAL_TO);
+            $result = $this->db->getOne($this->table, $fieldOutput);
+            // $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
+            if (isset($result->$fieldOutput)) {
+                return $result->$fieldOutput;
+            } else {
+                return NULL;
+            }
         }
-        $result = $this->db->getOne($this->table, $fieldOutput);
-        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
-        if (isset($result->$fieldOutput)) {
-            return $result->$fieldOutput;
-        } else {
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
             return NULL;
         }
     }
@@ -493,21 +554,22 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      *
      * @param string $selectField
      *
-     * @return array|null
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:45
-     *
+     * @return array|\MysqliDb|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 36:54
      */
     public function getDistinctResult($selectField = '*')
     {
         try {
             $result = $this->db->setQueryOption(['DISTINCT'])->get($this->table, NULL, $selectField);
-            $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+            // $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
             return $result;
         }
         catch (Exception $e) {
-            $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
 
             return NULL;
         }
@@ -518,10 +580,10 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      *
      * @param string $selectField
      *
-     * @return array
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:43
-     *
+     * @return array|\MysqliDb|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 36:58
      */
     public function getResultDistinct($selectField = '')
     {
@@ -535,12 +597,12 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param string $selectField
      * @param null   $options
      *
-     * @return array|null
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:47
-     *
+     * @return array|\MysqliDb|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 37:11
      */
-    public function getResult($wheres = [], $selectField = '*', $options = NULL)
+    public function getResult($wheres = array(), $selectField = '*', $options = NULL)
     {
         try {
             if (is_array($wheres) && count($wheres) > 0) {
@@ -566,12 +628,13 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             } else {
                 $result = $this->db->get($this->table, NULL, $selectField);
             }
-            $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+            // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
 
             return $result;
         }
         catch (Exception $e) {
-            $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
 
             return NULL;
         }
@@ -584,12 +647,12 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param string $selectField
      * @param null   $options
      *
-     * @return array|null
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:48
-     *
+     * @return array|\MysqliDb|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 37:18
      */
-    public function getResultWithMultipleWhere($wheres = [], $selectField = '*', $options = NULL)
+    public function getResultWithMultipleWhere($wheres = array(), $selectField = '*', $options = NULL)
     {
         try {
             if (is_array($wheres) && count($wheres) > 0) {
@@ -613,12 +676,13 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             } else {
                 $result = $this->db->get($this->table, NULL, $selectField);
             }
-            $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+            // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
 
             return $result;
         }
         catch (Exception $e) {
-            $this->debug->error(__FUNCTION__, $e->getFile() . ' - Line: ' . $e->getLine() . ' - Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
 
             return NULL;
         }
@@ -631,30 +695,38 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param string $selectField
      *
      * @return int
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:50
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 37:51
      */
-    public function countResult($wheres = [], $selectField = '*')
+    public function countResult($wheres = array(), $selectField = '*')
     {
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $field => $value) {
-                if (is_array($value)) {
-                    $this->db->where($field, $value, self::OPERATOR_IS_IN);
-                } else {
-                    $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
+        try {
+            if (is_array($wheres) && count($wheres) > 0) {
+                foreach ($wheres as $field => $value) {
+                    if (is_array($value)) {
+                        $this->db->where($field, $value, self::OPERATOR_IS_IN);
+                    } else {
+                        $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
+                    }
                 }
+            } else {
+                $this->db->where($this->primaryKey, $wheres, self::OPERATOR_EQUAL_TO);
             }
-        } else {
-            $this->db->where($this->primaryKey, $wheres, self::OPERATOR_EQUAL_TO);
-        }
-        $result = $this->db->get($this->table, NULL, $selectField);
-        $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($result));
-        if ($this->db->count > 0) {
-            return (int) $this->db->count;
-        }
+            $result = $this->db->get($this->table, NULL, $selectField);
+            // $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($result));
+            if ($this->db->count > 0) {
+                return (int) $this->db->count;
+            }
 
-        return 0;
+            return 0;
+        }
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+            return 0;
+        }
     }
 
     /**
@@ -662,19 +734,27 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      *
      * @param array $data
      *
-     * @return int
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:22
-     *
+     * @return int|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 38:06
      */
-    public function add($data = [])
+    public function add($data = array())
     {
-        $insertId = $this->db->insert($this->table, $data);
-        if ($insertId) {
-            return (int) $insertId;
-        }
+        try {
+            $insertId = $this->db->insert($this->table, $data);
+            if ($insertId) {
+                return (int) $insertId;
+            }
 
-        return 0;
+            return 0;
+        }
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+            return 0;
+        }
     }
 
     /**
@@ -684,26 +764,34 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param array $wheres
      *
      * @return int
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:21
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 38:31
      */
-    public function update($data = [], $wheres = [])
+    public function update($data = array(), $wheres = array())
     {
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $column => $column_value) {
-                if (is_array($column_value)) {
-                    $this->db->where($column, $column_value, self::OPERATOR_IS_IN);
-                } else {
-                    $this->db->where($column, $column_value, self::OPERATOR_EQUAL_TO);
+        try {
+            if (is_array($wheres) && count($wheres) > 0) {
+                foreach ($wheres as $column => $column_value) {
+                    if (is_array($column_value)) {
+                        $this->db->where($column, $column_value, self::OPERATOR_IS_IN);
+                    } else {
+                        $this->db->where($column, $column_value, self::OPERATOR_EQUAL_TO);
+                    }
                 }
             }
-        }
-        if ($this->db->update($this->table, $data)) {
-            return (int) $this->db->count;
-        }
+            if ($this->db->update($this->table, $data)) {
+                return (int) $this->db->count;
+            }
 
-        return 0;
+            return 0;
+        }
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+            return 0;
+        }
     }
 
     /**
@@ -711,26 +799,34 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      *
      * @param array $wheres
      *
-     * @return string
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:17
-     *
+     * @return int
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 38:47
      */
-    public function delete($wheres = [])
+    public function delete($wheres = array())
     {
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $column => $column_value) {
-                if (is_array($column_value)) {
-                    $this->db->where($column, $column_value, self::OPERATOR_IS_IN);
-                } else {
-                    $this->db->where($column, $column_value, self::OPERATOR_EQUAL_TO);
+        try {
+            if (is_array($wheres) && count($wheres) > 0) {
+                foreach ($wheres as $column => $column_value) {
+                    if (is_array($column_value)) {
+                        $this->db->where($column, $column_value, self::OPERATOR_IS_IN);
+                    } else {
+                        $this->db->where($column, $column_value, self::OPERATOR_EQUAL_TO);
+                    }
                 }
             }
-        }
-        if ($this->db->delete($this->table)) {
-            return (int) $this->db->count;
-        }
+            if ($this->db->delete($this->table)) {
+                return (int) $this->db->count;
+            }
 
-        return 0;
+            return 0;
+        }
+        catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+            return 0;
+        }
     }
 }

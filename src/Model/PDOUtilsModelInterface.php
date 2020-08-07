@@ -29,7 +29,7 @@ interface PDOUtilsModelInterface
      * @time  : 2019-07-20 09:09
      *
      */
-    public function setDatabase($database = [], $name = 'default');
+    public function setDatabase($database = array(), $name = 'default');
 
     /**
      * Function getDatabase
@@ -92,6 +92,16 @@ interface PDOUtilsModelInterface
      *
      */
     public function getDb();
+
+    /**
+     * Function getPrimaryKey
+     *
+     * @return string
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 41:53
+     */
+    public function getPrimaryKey();
 
     /*************************** DATABASE METHOD ***************************/
     /**

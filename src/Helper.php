@@ -25,9 +25,9 @@ trait Helper
      * @param int $pageSize
      *
      * @return array
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2019-07-06 10:23
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/02/2020 23:39
      */
     public function preparePaging($pageIndex = 1, $pageSize = 10)
     {

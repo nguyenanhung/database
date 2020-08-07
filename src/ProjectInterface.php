@@ -18,8 +18,8 @@ namespace nguyenanhung\MyDatabase;
  */
 interface ProjectInterface
 {
-    const VERSION                = '1.0.9';
-    const LAST_MODIFIED          = '2020-01-13';
+    const VERSION                = '1.0.10';
+    const LAST_MODIFIED          = '2020-08-07';
     const AUTHOR_NAME            = 'Hung Nguyen';
     const AUTHOR_EMAIL           = 'dev@nguyenanhung.com';
     const PROJECT_NAME           = 'My Database';
@@ -44,7 +44,6 @@ interface ProjectInterface
      * @return mixed|string Current Project Version, VD: 0.1.0
      * @author  : 713uk13m <dev@nguyenanhung.com>
      * @time    : 10/13/18 15:12
-     *
      */
     public function getVersion();
 }
