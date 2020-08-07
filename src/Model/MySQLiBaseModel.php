@@ -492,7 +492,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
                 $this->db->where($field, $value, self::OPERATOR_EQUAL_TO);
             }
             $result = $this->db->getOne($this->table, $fieldOutput);
-            $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
+            // $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
             if (isset($result->$fieldOutput)) {
                 return $result->$fieldOutput;
             } else {
@@ -534,7 +534,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
                 $this->db->where($field, $wheres, self::OPERATOR_EQUAL_TO);
             }
             $result = $this->db->getOne($this->table, $fieldOutput);
-            $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
+            // $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
             if (isset($result->$fieldOutput)) {
                 return $result->$fieldOutput;
             } else {
@@ -563,7 +563,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     {
         try {
             $result = $this->db->setQueryOption(['DISTINCT'])->get($this->table, NULL, $selectField);
-            $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+            // $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
             return $result;
         }
@@ -628,7 +628,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             } else {
                 $result = $this->db->get($this->table, NULL, $selectField);
             }
-            $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+            // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
 
             return $result;
         }
@@ -676,7 +676,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             } else {
                 $result = $this->db->get($this->table, NULL, $selectField);
             }
-            $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+            // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
 
             return $result;
         }
@@ -714,7 +714,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
                 $this->db->where($this->primaryKey, $wheres, self::OPERATOR_EQUAL_TO);
             }
             $result = $this->db->get($this->table, NULL, $selectField);
-            $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($result));
+            // $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($result));
             if ($this->db->count > 0) {
                 return (int) $this->db->count;
             }

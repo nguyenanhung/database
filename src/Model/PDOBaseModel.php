@@ -315,7 +315,8 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
         $db = $this->db->select($selectField)->from($this->table);
         $db->orderBy($byColumn, self::ORDER_DESCENDING)->limit(1);
         $result = $db->execute()->fetch();
-        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
+
+        // $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
 
         return $result;
     }
@@ -345,7 +346,8 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
         $db = $this->db->select($selectField)->from($this->table);
         $db->orderBy($byColumn, self::ORDER_ASCENDING)->limit(1);
         $result = $db->execute()->fetch();
-        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
+
+        // $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
 
         return $result;
     }
@@ -446,12 +448,12 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
         }
         if ($format == 'result') {
             $result = $db->execute()->fetchAll();
-            $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+            //$this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         } else {
             $result = $db->execute()->fetch();
-            $this->debug->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
+            //$this->debug->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
         }
-        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
+        //$this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
         if ($format == 'json') {
             $this->debug->debug(__FUNCTION__, 'Output Result is Json');
 
@@ -493,7 +495,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
         }
         $result = $db->execute()->fetch();
 
-        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
+        //$this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
         if (isset($result->$fieldOutput)) {
             return $result->$fieldOutput;
         } else {
@@ -533,7 +535,7 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
         }
         $result = $db->execute()->fetch();
 
-        $this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
+        //$this->debug->debug(__FUNCTION__, 'GET Result => ' . json_encode($result));
         if (isset($result->$fieldOutput)) {
             return $result->$fieldOutput;
         } else {
@@ -561,7 +563,8 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
         }
         $db     = $this->db->select($selectField)->from($this->table)->distinct();
         $result = $db->execute()->fetchAll();
-        $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+
+        //$this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
         return $result;
     }
@@ -632,7 +635,8 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
             }
         }
         $result = $db->execute()->fetchAll();
-        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+
+        // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
 
         return $result;
     }
@@ -684,7 +688,8 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
             }
         }
         $result = $db->execute()->fetchAll();
-        $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+
+        // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
 
         return $result;
     }
@@ -719,7 +724,8 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
         $totalItem = $db->execute()->rowCount();
-        $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
+
+        // $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
 
         return $totalItem;
     }

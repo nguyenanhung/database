@@ -736,7 +736,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         }
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->first();
-        $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+        // $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
         if (!empty($fieldOutput) && isset($result->$fieldOutput)) {
             $this->debug->debug(__FUNCTION__, 'Tìm thấy thông tin cột dữ liệu ' . $fieldOutput . ' -> ' . $result->$fieldOutput);
 
@@ -791,7 +791,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $db->distinct();
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
-        $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+        // $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
         return $result;
     }
@@ -1031,7 +1031,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $result = $db->get($selectField);
         // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         $totalItem = $result->count();
-        $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
+        // $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
 
         return $totalItem;
     }
