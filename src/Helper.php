@@ -39,10 +39,7 @@ trait Helper
         } else {
             $offset = $pageIndex;
         }
-        $response = array(
-            'offset' => $offset,
-            'limit'  => $pageSize
-        );
+        $response = array('offset' => $offset, 'limit' => $pageSize);
 
         return $response;
     }

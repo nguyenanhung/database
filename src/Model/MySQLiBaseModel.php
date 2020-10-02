@@ -563,6 +563,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     {
         try {
             $result = $this->db->setQueryOption(['DISTINCT'])->get($this->table, NULL, $selectField);
+
             // $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
 
             return $result;
@@ -628,6 +629,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             } else {
                 $result = $this->db->get($this->table, NULL, $selectField);
             }
+
             // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
 
             return $result;
@@ -676,6 +678,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             } else {
                 $result = $this->db->get($this->table, NULL, $selectField);
             }
+
             // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
 
             return $result;
@@ -713,7 +716,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
             } else {
                 $this->db->where($this->primaryKey, $wheres, self::OPERATOR_EQUAL_TO);
             }
-            $result = $this->db->get($this->table, NULL, $selectField);
+            $this->db->get($this->table, NULL, $selectField);
             // $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($result));
             if ($this->db->count > 0) {
                 return (int) $this->db->count;
