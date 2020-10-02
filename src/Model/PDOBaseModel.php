@@ -52,6 +52,9 @@ class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInte
      * PDOBaseModel constructor.
      *
      * @param array $database
+     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
      */
     public function __construct($database = array())
     {
