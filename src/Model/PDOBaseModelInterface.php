@@ -21,154 +21,147 @@ interface PDOBaseModelInterface
     /**
      * Function setDatabase
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 20:42
-     *
      * @param array  $database
      * @param string $name
      *
-     * @return $this
+     * @return $this|\nguyenanhung\MyDatabase\Model\PDOBaseModel
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 44:12
      */
-    public function setDatabase($database = array(), $name = 'default');
+    public function setDatabase($database = [], $name = 'default');
 
     /**
      * Function getDatabase
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 20:42
-     *
      * @return array|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 44:18
      */
     public function getDatabase();
 
     /**
      * Function setTable
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 21:54
-     *
      * @param string $table
      *
-     * @return $this
+     * @return $this|\nguyenanhung\MyDatabase\Model\PDOBaseModel
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 44:22
      */
     public function setTable($table = '');
 
     /**
      * Function getTable
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 21:54
-     *
      * @return string|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 44:26
      */
     public function getTable();
 
     /**
      * Function connection
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 20:43
-     *
-     * @return $this
+     * @return $this|\nguyenanhung\MyDatabase\Model\PDOBaseModel
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 44:31
      */
     public function connection();
 
     /**
      * Function disconnect
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 22:03
-     *
-     * @return $this
+     * @return $this|\nguyenanhung\MyDatabase\Model\PDOBaseModel
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 44:37
      */
     public function disconnect();
 
     /**
      * Function getDb
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 22:03
-     *
-     * @return object
+     * @return \FaaPz\PDO\Database|object
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 44:42
      */
     public function getDb();
 
-    /*************************** DATABASE METHOD ***************************/
     /**
-     * Hàm đếm toàn bộ bản ghi tồn tại trong bảng
+     * Function countAll - Hàm đếm toàn bộ bản ghi tồn tại trong bảng
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 22:19
-     *
-     * @param array $select
+     * @param string|array $select
      *
      * @return int
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 45:10
      */
     public function countAll($select = ['id']);
 
     /**
-     * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:45
+     * Function checkExists - Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào
      *
      * @param string|array      $whereValue Giá trị cần kiểm tra
      * @param string|null       $whereField Field tương ứng, ví dụ: ID
      * @param string|array|null $select     Bản ghi cần chọn
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/16/18 11:45
      */
     public function checkExists($whereValue = '', $whereField = 'id', $select = ['*']);
 
     /**
      * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào - Đa điều kiện
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:45
-     *
      * @param string|array      $whereValue Giá trị cần kiểm tra
      * @param string|null       $whereField Field tương ứng, ví dụ: ID
      * @param string|array|null $select     Bản ghi cần chọn
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
+     * @author    : 713uk13m <dev@nguyenanhung.com>
+     * @copyright : 713uk13m <dev@nguyenanhung.com>
+     * @time      : 10/16/18 11:45
      */
     public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id', $select = ['*']);
 
     /**
-     * Hàm lấy bản ghi mới nhất theo điều kiện
+     * Function getLatest - Hàm lấy bản ghi mới nhất theo điều kiện
      *
      * Mặc định giá trị so sánh dựa trên column created_at
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/17/18 01:06
      *
      * @param array  $selectField Danh sách các column cần lấy
      * @param string $byColumn    Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
-     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
-     *
-     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
-     *                                                                                            của bản ghi
+     * @return mixed
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 53:20
      */
-    public function getLatest($selectField = ['*'], $byColumn = 'id');
+    public function getLatest($selectField = ['*'], $byColumn = 'created_at');
 
     /**
-     * Hàm lấy bản ghi cũ nhất nhất theo điều kiện
+     * Function getOldest - Hàm lấy bản ghi cũ nhất nhất theo điều kiện
      *
      * Mặc định giá trị so sánh dựa trên column created_at
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/17/18 01:06
      *
      * @param array  $selectField Danh sách các column cần lấy
      * @param string $byColumn    Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
-     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
-     *
-     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
-     *                                                                                            của bản ghi
+     * @return mixed
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 54:15
      */
-    public function getOldest($selectField = ['*'], $byColumn = 'id');
+    public function getOldest($selectField = ['*'], $byColumn = 'created_at');
 
     /**
      * Hàm lấy thông tin bản ghi theo tham số đầu vào
@@ -177,24 +170,20 @@ interface PDOBaseModelInterface
      *
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 11:51
-     *
      * @param array|string      $value       Giá trị cần kiểm tra
      * @param null|string       $field       Field tương ứng, ví dụ: ID
      * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
      * @param null|string|array $selectField Các field cần lấy
      *
-     * @return object|array|string|null Mảng|String|Object dữ liều phụ hợp với yêu cầu
-     *                                                     map theo biến format truyền vào
+     * @return object|array|string|null Mảng|String|Object dữ liều phụ hợp với yêu cầu map theo biến format truyền vào
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/16/18 11:51
      */
     public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL);
 
     /**
      * Function getInfoWithMultipleWhere
-     *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-01 22:42
      *
      * @param string $wheres
      * @param string $field
@@ -202,162 +191,141 @@ interface PDOBaseModelInterface
      * @param null   $selectField
      *
      * @return array|false|mixed|string
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 56:15
      */
     public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = NULL, $selectField = NULL);
 
     /**
      * Function getValue
      *
-     * @author : 713uk13m <dev@nguyenanhung.com>
-     * @time   : 2018-12-01 22:45
-     *
      * @param string $value
      * @param string $field
      * @param string $fieldOutput
      *
-     * @return mixed|null
+     * @return   mixed|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 58:06
      */
     public function getValue($value = '', $field = 'id', $fieldOutput = '');
 
     /**
      * Function getValueWithMultipleWhere
      *
-     * @author : 713uk13m <dev@nguyenanhung.com>
-     * @time   : 2018-12-01 22:46
-     *
      * @param string $wheres
      * @param string $field
      * @param string $fieldOutput
      *
-     * @return mixed|null
+     * @return   mixed|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 58:54
      */
     public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '');
 
     /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi trong 1 bảng
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 13:59
-     *
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
-     * @see   https://laravel.com/docs/5.4/queries#selects
-     *
-     * @return \Illuminate\Support\Collection|object|array
+     * @return array
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 59:24
      */
     public function getDistinctResult($selectField = '');
 
     /**
-     * Hàm getResultDistinct là alias của hàm getDistinctResult
+     * Function getResultDistinct - Hàm getResultDistinct là alias của hàm getDistinctResult
      *
      * Các tham số đầu ra và đầu vào theo quy chuẩn của hàm getDistinctResult
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 23:49
-     *
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
-     * @return \Illuminate\Support\Collection|object|array
+     * @return array
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 59:37
      */
     public function getResultDistinct($selectField = '');
 
     /**
      * Function getResult
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 16:14
+     * @param array  $wheres
+     * @param string $selectField
+     * @param null   $options
      *
-     * @param array|string $wheres              Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     * @param string|array $selectField         Mảng dữ liệu danh sách các field cần so sánh
-     * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
-     *                                          example $options = [
-     *                                          'format' => null,
-     *                                          'orderBy => [
-     *                                          'id' => 'desc'
-     *                                          ]
-     *                                          ];
-     *
-     * @see   https://laravel.com/docs/5.4/queries#selects
-     *
-     * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
-     *                                                     map theo biến format truyền vào
+     * @return array
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 59:54
      */
     public function getResult($wheres = array(), $selectField = '*', $options = NULL);
 
     /**
-     * Function getResult - Đa điều kiện
+     * Function getResultWithMultipleWhere
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 16:14
+     * @param array  $wheres
+     * @param string $selectField
+     * @param null   $options
      *
-     * @param array|string $wheres              Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     * @param string|array $selectField         Mảng dữ liệu danh sách các field cần so sánh
-     * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
-     *                                          example $options = [
-     *                                          'format' => null,
-     *                                          'orderBy => [
-     *                                          'id' => 'desc'
-     *                                          ]
-     *                                          ];
-     *
-     * @see   https://laravel.com/docs/5.4/queries#selects
-     *
-     * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
-     *                                                     map theo biến format truyền vào
+     * @return array
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 47:38
      */
     public function getResultWithMultipleWhere($wheres = array(), $selectField = '*', $options = NULL);
 
     /**
      * Function countResult
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 11/25/18 14:10
-     *
      * @param array  $wheres
      * @param string $selectField
      *
      * @return int
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 48:26
      */
     public function countResult($wheres = array(), $selectField = '*');
 
     /**
-     * Hàm thêm mới bản ghi vào bảng
+     * Function add
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 14:04
+     * @param array $data
      *
-     * @param array $data Mảng chứa dữ liệu cần insert
-     *
-     * @return int Insert ID của bản ghi
+     * @return int|string
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 49:03
      */
     public function add($data = array());
 
     /**
-     * Hàm update dữ liệu
+     * Function update
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 14:10
+     * @param array $data
+     * @param array $wheres
      *
-     * @param array        $data   Mảng dữ liệu cần Update
-     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     *
-     * @see   https://laravel.com/docs/5.4/queries#updates
-     *
-     * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
+     * @return int
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 50:08
      */
     public function update($data = array(), $wheres = array());
 
     /**
-     * Hàm xóa dữ liệu
+     * Function delete
      *
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 10/16/18 14:13
+     * @param array $wheres
      *
-     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     *
-     * @see   https://laravel.com/docs/5.4/queries#deletes
-     *
-     * @return int Số bản ghi đã xóa
+     * @return int
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 10/09/2020 50:03
      */
     public function delete($wheres = array());
 }
