@@ -27,6 +27,7 @@ use nguyenanhung\MyDatabase\Helper;
 class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseModelInterface
 {
     use Version, Helper;
+
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
@@ -562,11 +563,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
     public function getDistinctResult($selectField = '*')
     {
         try {
-            $result = $this->db->setQueryOption(['DISTINCT'])->get($this->table, NULL, $selectField);
-
-            // $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
-
-            return $result;
+            return $this->db->setQueryOption(['DISTINCT'])->get($this->table, NULL, $selectField);
         }
         catch (Exception $e) {
             $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());

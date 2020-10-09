@@ -188,7 +188,7 @@ interface BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:15
      *
-     * @see   https://laravel.com/docs/5.4/queries#deletes
+     * @see   https://laravel.com/docs/5.8/queries#deletes
      *
      */
     public function truncate();
@@ -239,7 +239,7 @@ interface BaseModelInterface
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
-     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
+     * @see   https://laravel.com/docs/5.8/queries#ordering-grouping-limit-and-offset
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/17/18 01:06
@@ -271,7 +271,7 @@ interface BaseModelInterface
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
-     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
+     * @see   https://laravel.com/docs/5.8/queries#ordering-grouping-limit-and-offset
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/17/18 01:06
@@ -307,7 +307,7 @@ interface BaseModelInterface
      *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
-     * @see   https://laravel.com/docs/5.4/queries#selects
+     * @see   https://laravel.com/docs/5.8/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:51
@@ -342,7 +342,7 @@ interface BaseModelInterface
      * @param string $fieldOutput field kết quả đầu ra
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
-     * @see   https://laravel.com/docs/5.4/queries#selects
+     * @see   https://laravel.com/docs/5.8/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:51
@@ -374,7 +374,7 @@ interface BaseModelInterface
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
      * @return \Illuminate\Support\Collection|object|array
-     * @see   https://laravel.com/docs/5.4/queries#selects
+     * @see   https://laravel.com/docs/5.8/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 13:59
@@ -437,7 +437,7 @@ interface BaseModelInterface
      *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
-     * @see   https://laravel.com/docs/5.4/queries#selects
+     * @see   https://laravel.com/docs/5.8/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 16:14
@@ -460,7 +460,7 @@ interface BaseModelInterface
      *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
-     * @see   https://laravel.com/docs/5.4/queries#selects
+     * @see   https://laravel.com/docs/5.8/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 16:14
@@ -542,7 +542,7 @@ interface BaseModelInterface
      * @param array $data Mảng chứa dữ liệu cần insert
      *
      * @return int Insert ID của bản ghi
-     * @see   https://laravel.com/docs/5.4/queries#inserts
+     * @see   https://laravel.com/docs/5.8/queries#inserts
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:04
@@ -557,7 +557,7 @@ interface BaseModelInterface
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
-     * @see   https://laravel.com/docs/5.4/queries#updates
+     * @see   https://laravel.com/docs/5.8/queries#updates
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:10
@@ -572,7 +572,7 @@ interface BaseModelInterface
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
-     * @see   https://laravel.com/docs/5.4/queries#updates
+     * @see   https://laravel.com/docs/5.8/queries#updates
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:10
@@ -586,7 +586,7 @@ interface BaseModelInterface
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi đã xóa
-     * @see   https://laravel.com/docs/5.4/queries#deletes
+     * @see   https://laravel.com/docs/5.8/queries#deletes
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:13
@@ -600,7 +600,7 @@ interface BaseModelInterface
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi đã xóa
-     * @see   https://laravel.com/docs/5.4/queries#deletes
+     * @see   https://laravel.com/docs/5.8/queries#deletes
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:13

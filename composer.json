@@ -1,10 +1,9 @@
 {
     "name": "nguyenanhung/database",
     "type": "library",
-    "description": "A wrapper Database and Backup database",
+    "description": "Database Wrapper - Base Model",
     "keywords": [
         "database",
-        "backup",
         "sql",
         "mysql",
         "mysqli",
@@ -25,6 +24,8 @@
         "ext-pdo": "*",
         "ext-mysqli": "*",
         "nguyenanhung/my-debug": "^2.0",
+        "illuminate/console": "^5.8",
+        "illuminate/events": "^5.8",
         "illuminate/database": "^5.8",
         "faapz/pdo": "^2.0",
         "joshcam/mysqli-database-class": "^2.9"
