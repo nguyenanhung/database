@@ -28,6 +28,7 @@ use nguyenanhung\MyDatabase\Helper;
 class PDOUtilsModel implements ProjectInterface, ModelInterface, PDOUtilsModelInterface
 {
     use Version, Helper;
+
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
@@ -57,7 +58,7 @@ class PDOUtilsModel implements ProjectInterface, ModelInterface, PDOUtilsModelIn
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      */
-    public function __construct($database = array())
+    public function __construct($database = [])
     {
         $this->debug = new Debug();
         if ($this->debugStatus === TRUE) {
@@ -239,18 +240,14 @@ class PDOUtilsModel implements ProjectInterface, ModelInterface, PDOUtilsModelIn
         try {
             $this->connection();
             $this->db->exec($statement);
-            $result = TRUE;
+
+            return TRUE;
         }
         catch (Exception $e) {
             $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
             $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
-            if (function_exists('log_message')) {
-                log_message('error', 'Error Message: ' . $e->getMessage());
-                log_message('error', 'Error Trace As String: ' . $e->getTraceAsString());
-            }
-            $result = FALSE;
-        }
 
-        return $result;
+            return FALSE;
+        }
     }
 }

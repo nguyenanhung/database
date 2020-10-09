@@ -6,13 +6,11 @@
 
 # Database
 
-A wrapper database and backup database
+Database Wrapper - Base Model
 
 - [x] PDO Support
 - [x] MySQLi Support
 - [x] illuminate/database 5.8 Support
-- [x] CodeIgniter 3 Database Support
-
 
 ## Support
 If any question & request, please contact following information

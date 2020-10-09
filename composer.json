@@ -1,10 +1,9 @@
 {
     "name": "nguyenanhung/database",
     "type": "library",
-    "description": "A wrapper Database and Backup database",
+    "description": "Database Wrapper - Base Model",
     "keywords": [
         "database",
-        "backup",
         "sql",
         "mysql",
         "mysqli",

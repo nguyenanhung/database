@@ -27,8 +27,8 @@ use nguyenanhung\MyDatabase\Helper;
  * Class này chỉ khai báo các hàm cơ bản và thông dụng trong quá trính sử dụng
  * các cú pháp, function khác đều có thể sử dụng theo tài liệu chính thức của Illuminate Database
  *
- * @see       https://laravel.com/docs/5.4/database
- * @see       https://packagist.org/packages/illuminate/database#v5.4.36
+ * @see       https://laravel.com/docs/5.8/database
+ * @see       https://packagist.org/packages/illuminate/database#v5.8.36
  *
  * @package   nguyenanhung\MyDatabase\Model
  * @author    713uk13m <dev@nguyenanhung.com>
@@ -211,7 +211,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @time  : 10/16/18 11:43
      *
      * @see   https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php
-     * @see   https://packagist.org/packages/illuminate/database#v5.4.36
+     * @see   https://packagist.org/packages/illuminate/database#v5.8.36
      */
     public function setDatabase($database = array(), $name = 'default')
     {
@@ -365,7 +365,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:15
      *
-     * @see   https://laravel.com/docs/5.4/queries#deletes
+     * @see   https://laravel.com/docs/5.8/queries#deletes
      *
      */
     public function truncate()
@@ -459,7 +459,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
-     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
+     * @see   https://laravel.com/docs/5.8/queries#ordering-grouping-limit-and-offset
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/17/18 01:06
@@ -523,7 +523,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
-     * @see   https://laravel.com/docs/5.4/queries#ordering-grouping-limit-and-offset
+     * @see   https://laravel.com/docs/5.8/queries#ordering-grouping-limit-and-offset
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/17/18 01:06
@@ -591,7 +591,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
-     * @see   https://laravel.com/docs/5.4/queries#selects
+     * @see   https://laravel.com/docs/5.8/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:51
@@ -694,7 +694,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param string $fieldOutput field kết quả đầu ra
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
-     * @see   https://laravel.com/docs/5.4/queries#selects
+     * @see   https://laravel.com/docs/5.8/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:51
@@ -766,7 +766,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
      * @return \Illuminate\Support\Collection|object|array
-     * @see   https://laravel.com/docs/5.4/queries#selects
+     * @see   https://laravel.com/docs/5.8/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 13:59
@@ -781,11 +781,9 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $db = DB::table($this->table);
         $db->distinct();
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->get($selectField);
 
         // $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
-
-        return $result;
+        return $db->get($selectField);
     }
 
     /**
@@ -825,11 +823,9 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         }
         $db->distinct();
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->get($selectField);
 
         //$this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
-
-        return $result;
+        return $db->get($selectField);
     }
 
     /**
@@ -880,7 +876,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
-     * @see   https://laravel.com/docs/5.4/queries#selects
+     * @see   https://laravel.com/docs/5.8/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 16:14
@@ -965,7 +961,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
-     * @see   https://laravel.com/docs/5.4/queries#selects
+     * @see   https://laravel.com/docs/5.8/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 16:14
@@ -1020,11 +1016,8 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
         // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        $totalItem = $result->count();
-
         // $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
-
-        return $totalItem;
+        return $result->count();
     }
 
     /**
@@ -1154,7 +1147,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param array $data Mảng chứa dữ liệu cần insert
      *
      * @return int Insert ID của bản ghi
-     * @see   https://laravel.com/docs/5.4/queries#inserts
+     * @see   https://laravel.com/docs/5.8/queries#inserts
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:04
@@ -1179,7 +1172,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
-     * @see   https://laravel.com/docs/5.4/queries#updates
+     * @see   https://laravel.com/docs/5.8/queries#updates
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:10
@@ -1213,11 +1206,9 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             }
         }
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $resultId = $db->update($data);
 
         // $this->debug->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
-
-        return $resultId;
+        return $db->update($data);
     }
 
     /**
@@ -1227,7 +1218,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
-     * @see   https://laravel.com/docs/5.4/queries#updates
+     * @see   https://laravel.com/docs/5.8/queries#updates
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:10
@@ -1244,7 +1235,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi đã xóa
-     * @see   https://laravel.com/docs/5.4/queries#deletes
+     * @see   https://laravel.com/docs/5.8/queries#deletes
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:13
@@ -1278,11 +1269,9 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
             }
         }
         $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $resultId = $db->delete();
 
         // $this->debug->debug(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
-
-        return $resultId;
+        return $db->delete();
     }
 
     /**
@@ -1291,7 +1280,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi đã xóa
-     * @see   https://laravel.com/docs/5.4/queries#deletes
+     * @see   https://laravel.com/docs/5.8/queries#deletes
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:13
