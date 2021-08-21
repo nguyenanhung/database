@@ -119,9 +119,9 @@ interface BaseModelInterface
      * Function getSchema
      *
      * @return \Illuminate\Database\Schema\Builder
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-12 15:03
-     *
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/21/2021 17:43
      */
     public function getSchema();
 
@@ -315,19 +315,7 @@ interface BaseModelInterface
      */
     public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL);
 
-    /**
-     * Hàm lấy thông tin bản ghi theo tham số đầu vào - Đa điều kiện
-     *
-     * @param array|string      $wheres      Giá trị cần kiểm tra
-     * @param null|string       $field       Field tương ứng, ví dụ: ID
-     * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
-     * @param null|string|array $selectField Các field cần lấy
-     *
-     * @return array|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|\Illuminate\Support\Collection|null|object|string
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 11/26/18 16:40
-     *
-     */
+
     public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = NULL, $selectField = NULL);
 
     /**
