@@ -235,7 +235,7 @@ interface MySQLiBaseModelInterface
      *
      * @param string $selectField
      *
-     * @return array|\nguyenanhung\MySQLi\MysqliDb|null
+     * @return array|\MysqliDb|null
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/02/2020 36:54
@@ -247,7 +247,7 @@ interface MySQLiBaseModelInterface
      *
      * @param string $selectField
      *
-     * @return array|\nguyenanhung\MySQLi\MysqliDb|null
+     * @return array|\MysqliDb|null
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/02/2020 36:58
@@ -261,7 +261,7 @@ interface MySQLiBaseModelInterface
      * @param string $selectField
      * @param null   $options
      *
-     * @return array|\nguyenanhung\MySQLi\MysqliDb|null
+     * @return array|\MysqliDb|null
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/02/2020 37:11
@@ -275,7 +275,7 @@ interface MySQLiBaseModelInterface
      * @param string $selectField
      * @param null   $options
      *
-     * @return array|\nguyenanhung\MySQLi\MysqliDb|null
+     * @return array|\MysqliDb|null
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/02/2020 37:18

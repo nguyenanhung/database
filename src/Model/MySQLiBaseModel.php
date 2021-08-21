@@ -10,7 +10,7 @@
 namespace nguyenanhung\MyDatabase\Model;
 
 use Exception;
-use nguyenanhung\MySQLi\MysqliDb;
+use MysqliDb;
 use nguyenanhung\MyDebug\Debug;
 use nguyenanhung\MyDatabase\ProjectInterface;
 use nguyenanhung\MyDatabase\ModelInterface;
@@ -555,7 +555,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      *
      * @param string $selectField
      *
-     * @return array|\nguyenanhung\MySQLi\MysqliDb|null
+     * @return array|\MysqliDb|null
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/02/2020 36:54
@@ -578,7 +578,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      *
      * @param string $selectField
      *
-     * @return array|\nguyenanhung\MySQLi\MysqliDb|null
+     * @return array|\MysqliDb|null
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/02/2020 36:58
@@ -595,7 +595,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param string $selectField
      * @param null   $options
      *
-     * @return array|\nguyenanhung\MySQLi\MysqliDb|null
+     * @return array|\MysqliDb|null
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/02/2020 37:11
@@ -646,7 +646,7 @@ class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseMod
      * @param string $selectField
      * @param null   $options
      *
-     * @return array|\nguyenanhung\MySQLi\MysqliDb|null
+     * @return array|\MysqliDb|null
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/02/2020 37:18
