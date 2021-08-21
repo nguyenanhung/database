@@ -16,8 +16,8 @@ use Illuminate\Container\Container;
 use nguyenanhung\MyDebug\Debug;
 use nguyenanhung\MyDatabase\ProjectInterface;
 use nguyenanhung\MyDatabase\ModelInterface;
-use nguyenanhung\MyDatabase\Version;
-use nguyenanhung\MyDatabase\Helper;
+use nguyenanhung\MyDatabase\Traits\Common;
+use nguyenanhung\MyDatabase\Traits\Version;
 
 /**
  * Class BaseModel
@@ -38,7 +38,7 @@ use nguyenanhung\MyDatabase\Helper;
  */
 class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
 {
-    use Version, Helper;
+    use Version, Common;
 
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
@@ -264,10 +264,10 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
     /**
      * Function getSchema
      *
-     * @return \Illuminate\Database\Schema\Builder|void
+     * @return \Illuminate\Database\Schema\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
-     * @time     : 08/02/2020 48:25
+     * @time     : 08/21/2021 17:43
      */
     public function getSchema()
     {
@@ -672,7 +672,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
      * @param null|string|array $selectField Các field cần lấy
      *
-     * @return array|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|\Illuminate\Support\Collection|null|object|string
+     * @return array|\Illuminate\Support\Collection|object|string|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 11/26/18 16:40
      *
@@ -765,7 +765,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
-     * @return \Illuminate\Support\Collection|object|array
+     * @return \Illuminate\Support\Collection
      * @see   https://laravel.com/docs/5.8/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -835,7 +835,7 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      *
      * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
-     * @return \Illuminate\Support\Collection|object|array
+     * @return \Illuminate\Support\Collection
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 23:49
      *

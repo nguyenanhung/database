@@ -9,7 +9,6 @@
 
 namespace nguyenanhung\MyDatabase\Model;
 
-use nguyenanhung\MyDatabase\Helper;
 use PDO;
 use FaaPz\PDO\Database;
 use FaaPz\PDO\Clause\Conditional;
@@ -17,7 +16,8 @@ use FaaPz\PDO\Clause\Limit;
 use nguyenanhung\MyDebug\Debug;
 use nguyenanhung\MyDatabase\ProjectInterface;
 use nguyenanhung\MyDatabase\ModelInterface;
-use nguyenanhung\MyDatabase\Version;
+use nguyenanhung\MyDatabase\Traits\Common;
+use nguyenanhung\MyDatabase\Traits\Version;
 
 /**
  * Class PDOBaseModel
@@ -28,7 +28,7 @@ use nguyenanhung\MyDatabase\Version;
  */
 class PDOBaseModel implements ProjectInterface, ModelInterface, PDOBaseModelInterface
 {
-    use Version, Helper;
+    use Version, Common;
 
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
