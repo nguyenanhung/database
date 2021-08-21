@@ -24,9 +24,9 @@
         "ext-pdo": "*",
         "ext-mysqli": "*",
         "nguyenanhung/my-debug": "^2.0",
-        "illuminate/console": "^8.53",
-        "illuminate/events": "^8.53",
-        "illuminate/database": "^8.53",
+        "illuminate/console": "^8.55",
+        "illuminate/events": "^8.55",
+        "illuminate/database": "^8.55",
         "faapz/pdo": "^2.1",
         "joshcam/mysqli-database-class": "^2.9"
     },
