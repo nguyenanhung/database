@@ -14,8 +14,8 @@ use MysqliDb;
 use nguyenanhung\MyDebug\Debug;
 use nguyenanhung\MyDatabase\ProjectInterface;
 use nguyenanhung\MyDatabase\ModelInterface;
-use nguyenanhung\MyDatabase\Version;
-use nguyenanhung\MyDatabase\Helper;
+use nguyenanhung\MyDatabase\Traits\Common;
+use nguyenanhung\MyDatabase\Traits\Version;
 
 /**
  * Class MySQLiBaseModel
@@ -26,7 +26,7 @@ use nguyenanhung\MyDatabase\Helper;
  */
 class MySQLiBaseModel implements ProjectInterface, ModelInterface, MySQLiBaseModelInterface
 {
-    use Version, Helper;
+    use Version, Common;
 
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;

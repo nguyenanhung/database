@@ -7,16 +7,16 @@
  * Time: 10:21
  */
 
-namespace nguyenanhung\MyDatabase;
+namespace nguyenanhung\MyDatabase\Traits;
 
 /**
- * Trait Helper
+ * Trait Common
  *
- * @package   nguyenanhung\MyDatabase
+ * @package   nguyenanhung\MyDatabase\Traits
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
  */
-trait Helper
+trait Common
 {
     /**
      * Function preparePaging
@@ -27,7 +27,7 @@ trait Helper
      * @return array
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
-     * @time     : 08/02/2020 23:39
+     * @time     : 08/21/2021 23:24
      */
     public function preparePaging($pageIndex = 1, $pageSize = 10)
     {
@@ -39,8 +39,7 @@ trait Helper
         } else {
             $offset = $pageIndex;
         }
-        $response = array('offset' => $offset, 'limit' => $pageSize);
 
-        return $response;
+        return array('offset' => $offset, 'limit' => $pageSize);
     }
 }

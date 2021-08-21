@@ -7,12 +7,12 @@
  * Time: 10:08
  */
 
-namespace nguyenanhung\MyDatabase;
+namespace nguyenanhung\MyDatabase\Traits;
 
 /**
  * Trait Version
  *
- * @package   nguyenanhung\MyDatabase
+ * @package   nguyenanhung\MyDatabase\Traits
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
  */
