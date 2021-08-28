@@ -14,10 +14,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use nguyenanhung\MyDebug\Debug;
-use nguyenanhung\MyDatabase\ProjectInterface;
-use nguyenanhung\MyDatabase\ModelInterface;
-use nguyenanhung\MyDatabase\Traits\Common;
-use nguyenanhung\MyDatabase\Traits\Version;
+use nguyenanhung\MyDatabase\Environment;
 
 /**
  * Class BaseModel
@@ -36,10 +33,8 @@ use nguyenanhung\MyDatabase\Traits\Version;
  * @since     2018-10-17
  * @version   0.1.2
  */
-class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
+class BaseModel implements Environment, BaseModelInterface
 {
-    use Version, Common;
-
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
@@ -108,6 +103,74 @@ class BaseModel implements ProjectInterface, ModelInterface, BaseModelInterface
      */
     public function __destruct()
     {
+    }
+
+    /**
+     * Function getVersion
+     *
+     * @return string
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/29/2021 04:53
+     */
+    public function getVersion()
+    {
+        return self::VERSION;
+    }
+
+    /**
+     * Function getPrimaryKey
+     *
+     * @return string
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/29/2021 03:44
+     */
+    public function getPrimaryKey(): string
+    {
+        return $this->primaryKey;
+    }
+
+    /**
+     * Function setPrimaryKey
+     *
+     * @param string $primaryKey
+     *
+     * @return $this
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/29/2021 04:01
+     */
+    public function setPrimaryKey(string $primaryKey = 'id')
+    {
+        $this->primaryKey = $primaryKey;
+
+        return $this;
+    }
+
+    /**
+     * Function preparePaging
+     *
+     * @param int $pageIndex
+     * @param int $pageSize
+     *
+     * @return array
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/21/2021 23:24
+     */
+    public function preparePaging($pageIndex = 1, $pageSize = 10)
+    {
+        if ($pageIndex != 0) {
+            if (!$pageIndex || $pageIndex <= 0 || empty($pageIndex)) {
+                $pageIndex = 1;
+            }
+            $offset = ($pageIndex - 1) * $pageSize;
+        } else {
+            $offset = $pageIndex;
+        }
+
+        return array('offset' => $offset, 'limit' => $pageSize);
     }
 
     /**

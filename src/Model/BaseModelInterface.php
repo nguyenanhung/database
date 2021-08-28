@@ -17,8 +17,42 @@ namespace nguyenanhung\MyDatabase\Model;
  * @copyright 713uk13m <dev@nguyenanhung.com>
  */
 interface BaseModelInterface
-
 {
+    /**
+     * Function getPrimaryKey
+     *
+     * @return string
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/29/2021 03:44
+     */
+    public function getPrimaryKey();
+
+    /**
+     * Function setPrimaryKey
+     *
+     * @param string $primaryKey
+     *
+     * @return $this
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/29/2021 04:01
+     */
+    public function setPrimaryKey(string $primaryKey = 'id');
+
+    /**
+     * Function preparePaging
+     *
+     * @param int $pageIndex
+     * @param int $pageSize
+     *
+     * @return array
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/21/2021 23:24
+     */
+    public function preparePaging($pageIndex = 1, $pageSize = 10);
+
     /**
      * Function connection
      *
