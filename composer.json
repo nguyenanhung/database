@@ -27,8 +27,8 @@
         "nguyenanhung/my-debug": "^2.0",
         "illuminate/events": "^8.55",
         "illuminate/database": "^8.55",
-        "faapz/pdo": "^2.1",
-        "joshcam/mysqli-database-class": "^2.9"
+        "nguyenanhung/pdo": "^1.0",
+        "nguyenanhung/mysqli": "^1.0"
     },
     "require-dev": {
         "kint-php/kint": "^3.3"
