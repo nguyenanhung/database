@@ -3,21 +3,28 @@
  * Project database.
  * Created by PhpStorm.
  * User: 713uk13m <dev@nguyenanhung.com>
- * Date: 10/16/18
- * Time: 16:35
+ * Date: 2019-07-06
+ * Time: 10:21
  */
 
 namespace nguyenanhung\MyDatabase;
 
 /**
- * Interface ModelInterface
+ * Interface Environment
  *
  * @package   nguyenanhung\MyDatabase
  * @author    713uk13m <dev@nguyenanhung.com>
  * @copyright 713uk13m <dev@nguyenanhung.com>
  */
-interface ModelInterface
+interface Environment
 {
+    const VERSION       = '2.0.6';
+    const LAST_MODIFIED = '2021-08-28';
+    const AUTHOR_NAME   = 'Hung Nguyen';
+    const AUTHOR_EMAIL  = 'dev@nguyenanhung.com';
+    const PROJECT_NAME  = 'My Database';
+    const TIMEZONE      = 'Asia/Ho_Chi_Minh';
+
     const OPERATOR_EQUAL_TO                 = '=';
     const OP_EQ                             = '=';
     const OPERATOR_NOT_EQUAL_TO             = '!=';
@@ -40,4 +47,13 @@ interface ModelInterface
     const OPERATOR_IS_NOT_NULL              = 'IS NOT NULL';
     const ORDER_ASCENDING                   = 'ASC';
     const ORDER_DESCENDING                  = 'DESC';
+
+    /**
+     * Hàm lấy thông tin phiên bản Package
+     *
+     * @return string Current Project Version, VD: 0.1.0
+     * @author  : 713uk13m <dev@nguyenanhung.com>
+     * @time    : 10/13/18 15:12
+     */
+    public function getVersion();
 }
