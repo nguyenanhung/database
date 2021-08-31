@@ -10,6 +10,7 @@
 namespace nguyenanhung\MyDatabase\Model;
 
 use Exception;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
@@ -38,11 +39,11 @@ class BaseModel implements Environment, BaseModelInterface
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $debug;
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
-    protected $database = NULL;
+    protected $database = null;
     /** @var string|null Bảng cần lấy dữ liệu */
-    protected $table = NULL;
+    protected $table = null;
     /** @var object|null Đối tượng khởi tạo dùng gọi đến Class Capsule Manager \Illuminate\Database\Capsule\Manager */
-    protected $db = NULL;
+    protected $db = null;
     /** @var mixed $schema */
     protected $schema;
     /** @var string DB Name */
@@ -50,13 +51,13 @@ class BaseModel implements Environment, BaseModelInterface
     /** @var bool|null Cấu hình trạng thái select Raw */
     protected $selectRaw;
     /** @var bool Cấu hình trạng thái Debug, TRUE nếu bật, FALSE nếu tắt */
-    public $debugStatus = FALSE;
+    public $debugStatus = false;
     /** @var null|string Cấu hình Level Debug */
-    public $debugLevel = NULL;
+    public $debugLevel = null;
     /** @var null|bool|string Cấu hình thư mục lưu trữ Log, VD: /your/to/path */
-    public $debugLoggerPath = NULL;
+    public $debugLoggerPath = null;
     /** @var null|string Cấu hình File Log, VD: Log-2018-10-15.log | Log-date('Y-m-d').log */
-    public $debugLoggerFilename = NULL;
+    public $debugLoggerFilename = null;
     /** @var string Primary Key Default */
     public $primaryKey = 'id';
 
@@ -71,7 +72,7 @@ class BaseModel implements Environment, BaseModelInterface
     public function __construct($database = array())
     {
         $this->debug = new Debug();
-        if ($this->debugStatus === TRUE) {
+        if ($this->debugStatus === true) {
             $this->debug->setDebugStatus($this->debugStatus);
             if ($this->debugLevel) {
                 $this->debug->setGlobalLoggerLevel($this->debugLevel);
@@ -190,8 +191,7 @@ class BaseModel implements Environment, BaseModelInterface
                 $this->db->setEventDispatcher(new Dispatcher(new Container));
                 $this->db->setAsGlobal();
                 $this->db->bootEloquent();
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
                 $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
             }
@@ -213,8 +213,7 @@ class BaseModel implements Environment, BaseModelInterface
     {
         try {
             return $this->db->getDatabaseManager()->disconnect($this->dbName);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
             $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
         }
@@ -231,8 +230,7 @@ class BaseModel implements Environment, BaseModelInterface
     {
         try {
             return $this->db->getDatabaseManager()->disconnect($this->dbName);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
             $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
         }
@@ -325,6 +323,24 @@ class BaseModel implements Environment, BaseModelInterface
     }
 
     /**
+     * Function getTableColumns
+     *
+     * @return array
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/31/2021 37:51
+     */
+    public function getTableColumns()
+    {
+        try {
+            return Schema::getColumnListing($this->table);
+        } catch (Exception $e) {
+            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+        }
+    }
+
+    /**
      * Function getSchema
      *
      * @return \Illuminate\Database\Schema\Builder
@@ -336,8 +352,7 @@ class BaseModel implements Environment, BaseModelInterface
     {
         try {
             return DB::schema();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
             $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
         }
@@ -353,7 +368,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/07/2020 12:59
      */
-    public function setSelectRaw($selectRaw = FALSE)
+    public function setSelectRaw($selectRaw = false)
     {
         $this->selectRaw = $selectRaw;
 
@@ -660,7 +675,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 11:51
      *
      */
-    public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL)
+    public function getInfo($value = '', $field = 'id', $format = null, $selectField = null)
     {
         $this->connection();
         $format = strtolower($format);
@@ -668,7 +683,7 @@ class BaseModel implements Environment, BaseModelInterface
             if (!is_array($selectField)) {
                 $selectField = [$selectField];
             }
-            if ($this->selectRaw === TRUE) {
+            if ($this->selectRaw === true) {
                 $db = DB::table($this->table)->selectRaw($selectField['expression'], $selectField['bindingParam']);
             } else {
                 $db = DB::table($this->table)->select($selectField);
@@ -719,7 +734,7 @@ class BaseModel implements Environment, BaseModelInterface
         } else {
             if ($format == 'result') {
                 if ($result->count() <= 0) {
-                    return NULL;
+                    return null;
                 }
             }
 
@@ -740,7 +755,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 11/26/18 16:40
      *
      */
-    public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = NULL, $selectField = NULL)
+    public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = null, $selectField = null)
     {
         return $this->getInfo($wheres, $field, $format, $selectField);
     }
@@ -945,7 +960,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 16:14
      *
      */
-    public function getResult($wheres = array(), $selectField = '*', $options = NULL)
+    public function getResult($wheres = array(), $selectField = '*', $options = null)
     {
         if (!is_array($selectField)) {
             $selectField = [$selectField];
@@ -953,7 +968,7 @@ class BaseModel implements Environment, BaseModelInterface
         if (isset($options['format'])) {
             $format = strtolower($options['format']);
         } else {
-            $format = NULL;
+            $format = null;
         }
         $this->connection();
         $db = DB::table($this->table);
@@ -1030,7 +1045,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 16:14
      *
      */
-    public function getResultWithMultipleWhere($wheres = array(), $selectField = '*', $options = NULL)
+    public function getResultWithMultipleWhere($wheres = array(), $selectField = '*', $options = null)
     {
         return $this->getResult($wheres, $selectField, $options);
     }
@@ -1111,9 +1126,9 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 2018-12-03 02:03
      *
      */
-    public function getResultWithSimpleJoin($joins = array(), $select = '*', $options = NULL)
+    public function getResultWithSimpleJoin($joins = array(), $select = '*', $options = null)
     {
-        $format = isset($options['format']) ? strtolower($options['format']) : NULL;
+        $format = isset($options['format']) ? strtolower($options['format']) : null;
         $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->join($join['table'], $join['first'], $join['operator'], $join['second']);
@@ -1146,9 +1161,9 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 2018-12-03 02:05
      *
      */
-    public function getResultWithSimpleLeftJoin($joins = array(), $select = '*', $options = NULL)
+    public function getResultWithSimpleLeftJoin($joins = array(), $select = '*', $options = null)
     {
-        $format = isset($options['format']) ? strtolower($options['format']) : NULL;
+        $format = isset($options['format']) ? strtolower($options['format']) : null;
         $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->leftJoin($join['table'], $join['first'], $join['operator'], $join['second']);
@@ -1181,9 +1196,9 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 2018-12-03 02:06
      *
      */
-    public function getResultWithSimpleCrossJoin($joins = array(), $select = '*', $options = NULL)
+    public function getResultWithSimpleCrossJoin($joins = array(), $select = '*', $options = null)
     {
-        $format = isset($options['format']) ? strtolower($options['format']) : NULL;
+        $format = isset($options['format']) ? strtolower($options['format']) : null;
         $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
@@ -1399,7 +1414,7 @@ class BaseModel implements Environment, BaseModelInterface
         } else {
             $this->debug->debug(__FUNCTION__, 'Đã tồn tại bản ghi, bỏ qua không ghi nữa');
 
-            return FALSE;
+            return false;
         }
     }
 

@@ -150,6 +150,16 @@ interface BaseModelInterface
     public function getTable();
 
     /**
+     * Function getTableColumns
+     *
+     * @return array
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 08/31/2021 37:51
+     */
+    public function getTableColumns();
+
+    /**
      * Function getSchema
      *
      * @return \Illuminate\Database\Schema\Builder
@@ -169,7 +179,7 @@ interface BaseModelInterface
      * @time  : 2019-07-20 09:11
      *
      */
-    public function setSelectRaw($selectRaw = FALSE);
+    public function setSelectRaw($selectRaw = false);
 
     /**
      * Function getSelectRaw
@@ -347,10 +357,10 @@ interface BaseModelInterface
      * @time  : 10/16/18 11:51
      *
      */
-    public function getInfo($value = '', $field = 'id', $format = NULL, $selectField = NULL);
+    public function getInfo($value = '', $field = 'id', $format = null, $selectField = null);
 
 
-    public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = NULL, $selectField = NULL);
+    public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = null, $selectField = null);
 
     /**
      * Hàm lấy giá trị 1 field của bản ghi dựa trên điều kiện 1 bản ghi đầu vào
@@ -465,7 +475,7 @@ interface BaseModelInterface
      * @time  : 10/16/18 16:14
      *
      */
-    public function getResult($wheres = array(), $selectField = '*', $options = NULL);
+    public function getResult($wheres = array(), $selectField = '*', $options = null);
 
     /**
      * Function getResult - Đa điều kiện
@@ -488,7 +498,7 @@ interface BaseModelInterface
      * @time  : 10/16/18 16:14
      *
      */
-    public function getResultWithMultipleWhere($wheres = array(), $selectField = '*', $options = NULL);
+    public function getResultWithMultipleWhere($wheres = array(), $selectField = '*', $options = null);
 
     /**
      * Function countResult
@@ -528,7 +538,7 @@ interface BaseModelInterface
      * @time  : 2018-12-03 02:03
      *
      */
-    public function getResultWithSimpleJoin($joins = array(), $select = '*', $options = NULL);
+    public function getResultWithSimpleJoin($joins = array(), $select = '*', $options = null);
 
     /**
      * Function getResultWithSimpleLeftJoin
@@ -542,7 +552,7 @@ interface BaseModelInterface
      * @time  : 2018-12-03 02:05
      *
      */
-    public function getResultWithSimpleLeftJoin($joins = array(), $select = '*', $options = NULL);
+    public function getResultWithSimpleLeftJoin($joins = array(), $select = '*', $options = null);
 
     /**
      * Function getResultWithSimpleCrossJoin
@@ -556,7 +566,7 @@ interface BaseModelInterface
      * @time  : 2018-12-03 02:06
      *
      */
-    public function getResultWithSimpleCrossJoin($joins = array(), $select = '*', $options = NULL);
+    public function getResultWithSimpleCrossJoin($joins = array(), $select = '*', $options = null);
 
     /**
      * Hàm thêm mới bản ghi vào bảng
