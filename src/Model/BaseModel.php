@@ -995,15 +995,28 @@ class BaseModel implements Environment, BaseModelInterface
                 $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
             }
         }
-        if ((isset($options['limit']) && $options['limit'] > 0) && isset($options['offset'])) {
+
+        // Case có cả Limit và Offset -> active phân trang
+        if (
+            (isset($options['limit']) && $options['limit'] > 0) &&
+            isset($options['offset'])
+        ) {
             $page = $this->preparePaging($options['offset'], $options['limit']);
             $db->offset($page['offset'])->limit($page['limit']);
+        }
+        // Case chỉ có Limit
+        if (
+            (isset($options['limit']) && $options['limit'] > 0) &&
+            !isset($options['offset'])
+        ) {
+            $db->limit($options['limit']);
         }
         if (isset($options['orderBy']) && is_array($options['orderBy'])) {
             foreach ($options['orderBy'] as $column => $direction) {
                 $db->orderBy($column, $direction);
             }
         }
+
         if (isset($options['orderBy']) && $options['orderBy'] == 'random') {
             $db->inRandomOrder();
         }
