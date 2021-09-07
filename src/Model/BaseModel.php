@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
-use nguyenanhung\MyDebug\Debug;
+use nguyenanhung\MyDebug\Logger;
 use nguyenanhung\MyDatabase\Environment;
 
 /**
@@ -37,27 +37,38 @@ use nguyenanhung\MyDatabase\Environment;
 class BaseModel implements Environment, BaseModelInterface
 {
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
-    protected $debug;
+    protected $logger;
+
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
     protected $database = null;
+
     /** @var string|null Bảng cần lấy dữ liệu */
     protected $table = null;
-    /** @var object|null Đối tượng khởi tạo dùng gọi đến Class Capsule Manager \Illuminate\Database\Capsule\Manager */
+
+    /** @var \Illuminate\Database\Capsule\Manager|null $db Đối tượng khởi tạo dùng gọi đến Class Capsule Manager */
     protected $db = null;
+
     /** @var mixed $schema */
     protected $schema;
+
     /** @var string DB Name */
     protected $dbName = 'default';
+
     /** @var bool|null Cấu hình trạng thái select Raw */
     protected $selectRaw;
+
     /** @var bool Cấu hình trạng thái Debug, TRUE nếu bật, FALSE nếu tắt */
     public $debugStatus = false;
+
     /** @var null|string Cấu hình Level Debug */
     public $debugLevel = null;
+
     /** @var null|bool|string Cấu hình thư mục lưu trữ Log, VD: /your/to/path */
     public $debugLoggerPath = null;
+
     /** @var null|string Cấu hình File Log, VD: Log-2018-10-15.log | Log-date('Y-m-d').log */
     public $debugLoggerFilename = null;
+
     /** @var string Primary Key Default */
     public $primaryKey = 'id';
 
@@ -71,20 +82,20 @@ class BaseModel implements Environment, BaseModelInterface
      */
     public function __construct($database = array())
     {
-        $this->debug = new Debug();
+        $this->logger = new Logger();
         if ($this->debugStatus === true) {
-            $this->debug->setDebugStatus($this->debugStatus);
+            $this->logger->setDebugStatus($this->debugStatus);
             if ($this->debugLevel) {
-                $this->debug->setGlobalLoggerLevel($this->debugLevel);
+                $this->logger->setGlobalLoggerLevel($this->debugLevel);
             }
             if ($this->debugLoggerPath) {
-                $this->debug->setLoggerPath($this->debugLoggerPath);
+                $this->logger->setLoggerPath($this->debugLoggerPath);
             }
             if (empty($this->debugLoggerFilename)) {
                 $this->debugLoggerFilename = 'Log-' . date('Y-m-d') . '.log';
             }
-            $this->debug->setLoggerSubPath(__CLASS__);
-            $this->debug->setLoggerFilename($this->debugLoggerFilename);
+            $this->logger->setLoggerSubPath(__CLASS__);
+            $this->logger->setLoggerFilename($this->debugLoggerFilename);
         }
         // Cấu trúc kết nối Database qua __construct
         if (!empty($database)) {
@@ -192,8 +203,8 @@ class BaseModel implements Environment, BaseModelInterface
                 $this->db->setAsGlobal();
                 $this->db->bootEloquent();
             } catch (Exception $e) {
-                $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
-                $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+                $this->logger->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+                $this->logger->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
             }
         }
 
@@ -203,36 +214,34 @@ class BaseModel implements Environment, BaseModelInterface
     /**
      * Function closeConnection
      *
-     * @return void
-     *
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
-     * @time     : 08/02/2020 46:46
+     * @time     : 09/07/2021 21:40
      */
     public function closeConnection()
     {
         try {
             return $this->db->getDatabaseManager()->disconnect($this->dbName);
         } catch (Exception $e) {
-            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
-            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+            $this->logger->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->logger->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
         }
     }
 
     /**
      * Function disconnect
      *
-     * @return void
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-02 21:55
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 09/07/2021 21:44
      */
     public function disconnect()
     {
         try {
             return $this->db->getDatabaseManager()->disconnect($this->dbName);
         } catch (Exception $e) {
-            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
-            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+            $this->logger->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->logger->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
         }
     }
 
@@ -335,8 +344,8 @@ class BaseModel implements Environment, BaseModelInterface
         try {
             return Schema::getColumnListing($this->table);
         } catch (Exception $e) {
-            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
-            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+            $this->logger->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->logger->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
         }
     }
 
@@ -353,8 +362,8 @@ class BaseModel implements Environment, BaseModelInterface
         try {
             return DB::schema();
         } catch (Exception $e) {
-            $this->debug->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
-            $this->debug->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+            $this->logger->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+            $this->logger->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
         }
     }
 
@@ -463,7 +472,7 @@ class BaseModel implements Environment, BaseModelInterface
     {
         $this->connection();
         $db = DB::table($this->table);
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->count();
     }
@@ -506,7 +515,7 @@ class BaseModel implements Environment, BaseModelInterface
                 $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
             }
         }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->count();
     }
@@ -550,7 +559,7 @@ class BaseModel implements Environment, BaseModelInterface
         }
         $this->connection();
         $db = DB::table($this->table)->latest($byColumn);
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->first($selectField);
     }
@@ -586,7 +595,7 @@ class BaseModel implements Environment, BaseModelInterface
             $db->where($selectField, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $db->latest($byColumn);
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->first($selectField);
     }
@@ -614,7 +623,7 @@ class BaseModel implements Environment, BaseModelInterface
         }
         $this->connection();
         $db = DB::table($this->table)->oldest($byColumn);
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->first($selectField);
     }
@@ -650,7 +659,7 @@ class BaseModel implements Environment, BaseModelInterface
             $db->where($selectField, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $db->oldest($byColumn);
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         return $db->first($selectField);
     }
@@ -714,22 +723,22 @@ class BaseModel implements Environment, BaseModelInterface
                 $db->where($field, self::OPERATOR_EQUAL_TO, $value);
             }
         }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         if ($format == 'result') {
             $result = $db->get();
-            // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+            // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         } else {
             $result = $db->first();
-            // $this->debug->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
+            // $this->logger->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
         }
         if ($format == 'json') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Json');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
         } elseif ($format == 'array') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Array');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
         } elseif ($format == 'base') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Base');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
         } else {
             if ($format == 'result') {
@@ -805,13 +814,13 @@ class BaseModel implements Environment, BaseModelInterface
                 $db->where($field, self::OPERATOR_EQUAL_TO, $value);
             }
         }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->first();
-        // $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+        // $this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
         if (!empty($fieldOutput) && isset($result->$fieldOutput)) {
             return $result->$fieldOutput;
         } else {
-            $this->debug->error(__FUNCTION__, 'Không tìm thấy cột dữ liệu ' . $fieldOutput);
+            $this->logger->error(__FUNCTION__, 'Không tìm thấy cột dữ liệu ' . $fieldOutput);
 
             return $result;
         }
@@ -858,9 +867,9 @@ class BaseModel implements Environment, BaseModelInterface
         $this->connection();
         $db = DB::table($this->table);
         $db->distinct();
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
-        // $this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+        // $this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
         return $db->get($selectField);
     }
 
@@ -900,9 +909,9 @@ class BaseModel implements Environment, BaseModelInterface
             }
         }
         $db->distinct();
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
-        //$this->debug->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+        //$this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
         return $db->get($selectField);
     }
 
@@ -1020,17 +1029,17 @@ class BaseModel implements Environment, BaseModelInterface
         if (isset($options['orderBy']) && $options['orderBy'] == 'random') {
             $db->inRandomOrder();
         }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
-        // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Json');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
         } elseif ($format == 'array') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Array');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
         } elseif ($format == 'base') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Base');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
         } else {
             return $result;
@@ -1104,10 +1113,10 @@ class BaseModel implements Environment, BaseModelInterface
                 $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
             }
         }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
-        // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        // $this->debug->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
+        // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        // $this->logger->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
         return $result->count();
     }
 
@@ -1147,15 +1156,15 @@ class BaseModel implements Environment, BaseModelInterface
             $db->join($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $result = $db->select($select)->get();
-        // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Json');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
         } elseif ($format == 'array') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Array');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
         } elseif ($format == 'base') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Base');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
         } else {
             return $result;
@@ -1182,15 +1191,15 @@ class BaseModel implements Environment, BaseModelInterface
             $db->leftJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $result = $db->select($select)->get();
-        // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Json');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
         } elseif ($format == 'array') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Array');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
         } elseif ($format == 'base') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Base');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
         } else {
             return $result;
@@ -1217,15 +1226,15 @@ class BaseModel implements Environment, BaseModelInterface
             $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $result = $db->select($select)->get();
-        // $this->debug->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format == 'json') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Json');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
         } elseif ($format == 'array') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Array');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
         } elseif ($format == 'base') {
-            // $this->debug->debug(__FUNCTION__, 'Output Result is Base');
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
         } else {
             return $result;
@@ -1249,9 +1258,9 @@ class BaseModel implements Environment, BaseModelInterface
         $this->connection();
         $db = DB::table($this->table);
         $id = $db->insertGetId($data);
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
-        // $this->debug->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
+        // $this->logger->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
 
         return $id;
     }
@@ -1296,9 +1305,9 @@ class BaseModel implements Environment, BaseModelInterface
                 $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
             }
         }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
-        // $this->debug->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
+        // $this->logger->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
         return $db->update($data);
     }
 
@@ -1359,9 +1368,9 @@ class BaseModel implements Environment, BaseModelInterface
                 $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
             }
         }
-        $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
-        // $this->debug->debug(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
+        // $this->logger->debug(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
         return $db->delete();
     }
 
@@ -1417,15 +1426,15 @@ class BaseModel implements Environment, BaseModelInterface
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
         $checkExists = $db->count();
-        // $this->debug->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
+        // $this->logger->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
         if (!$checkExists) {
             $id = $db->insertGetId($data);
-            $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-            $this->debug->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
+            $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+            $this->logger->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
 
             return $id;
         } else {
-            $this->debug->debug(__FUNCTION__, 'Đã tồn tại bản ghi, bỏ qua không ghi nữa');
+            $this->logger->debug(__FUNCTION__, 'Đã tồn tại bản ghi, bỏ qua không ghi nữa');
 
             return false;
         }
@@ -1483,16 +1492,16 @@ class BaseModel implements Environment, BaseModelInterface
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
         }
         $checkExists = $db->count();
-        // $this->debug->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
+        // $this->logger->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
         if (!$checkExists) {
             $id = $db->insertGetId($dataInsert);
-            $this->debug->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-            $this->debug->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
+            $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+            $this->logger->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
 
             return $id;
         } else {
             $resultId = $db->update($dataUpdate);
-            $this->debug->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
+            $this->logger->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
 
             return $resultId;
         }
