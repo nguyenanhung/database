@@ -10,7 +10,7 @@ Database Wrapper - Base Model
 
 - [x] PDO Support
 - [x] MySQLi Support
-- [x] illuminate/database `^8.55` Support
+- [x] illuminate/database `^8.58` Support
 
 ## Support
 If any question & request, please contact following information
