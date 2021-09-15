@@ -1,18 +1,16 @@
-[![Latest Stable Version](https://poser.pugx.org/nguyenanhung/database/v/stable)](https://packagist.org/packages/nguyenanhung/database)
-[![Total Downloads](https://poser.pugx.org/nguyenanhung/database/downloads)](https://packagist.org/packages/nguyenanhung/database)
-[![Latest Unstable Version](https://poser.pugx.org/nguyenanhung/database/v/unstable)](https://packagist.org/packages/nguyenanhung/database)
-[![composer.lock](https://poser.pugx.org/nguyenanhung/database/composerlock)](https://packagist.org/packages/nguyenanhung/database)
-[![License](https://poser.pugx.org/nguyenanhung/database/license)](https://packagist.org/packages/nguyenanhung/database)
+[![Latest Stable Version](http://poser.pugx.org/nguyenanhung/database/v)](https://packagist.org/packages/nguyenanhung/database) [![Total Downloads](http://poser.pugx.org/nguyenanhung/database/downloads)](https://packagist.org/packages/nguyenanhung/database) [![Latest Unstable Version](http://poser.pugx.org/nguyenanhung/database/v/unstable)](https://packagist.org/packages/nguyenanhung/database) [![License](http://poser.pugx.org/nguyenanhung/database/license)](https://packagist.org/packages/nguyenanhung/database) [![PHP Version Require](http://poser.pugx.org/nguyenanhung/database/require/php)](https://packagist.org/packages/nguyenanhung/database)
 
 # Database
 
 Database Wrapper - Base Model
 
-- [x] PDO Support
-- [x] MySQLi Support
-- [x] illuminate/database `^8.58` Support
+- [x] PDO Support from package `nguyenanhung/pdo` version `^2.0`
+- [x] MySQLi Support from package `nguyenanhung/mysqli` version `^2.0`
+- [x] illuminate/events `^8.61` Support
+- [x] illuminate/database `^8.61` Support
 
 ## Support
+
 If any question & request, please contact following information
 
 | Name        | Email                | Skype            | Facebook      |
