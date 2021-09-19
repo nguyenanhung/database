@@ -20,14 +20,4 @@ use nguyenanhung\MySQLi\MySQLiBaseModel as BaseMySQLiBaseModel;
  */
 class MySQLiBaseModel extends BaseMySQLiBaseModel
 {
-    /**
-     * MySQLiBaseModel constructor.
-     *
-     * @author   : 713uk13m <dev@nguyenanhung.com>
-     * @copyright: 713uk13m <dev@nguyenanhung.com>
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 }

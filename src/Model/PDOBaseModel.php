@@ -20,16 +20,4 @@ use nguyenanhung\PDO\MySQLPDOBaseModel as BaseMySQLPDOBaseModel;
  */
 class PDOBaseModel extends BaseMySQLPDOBaseModel
 {
-    /**
-     * PDOBaseModel constructor.
-     *
-     * @param array $database
-     *
-     * @author   : 713uk13m <dev@nguyenanhung.com>
-     * @copyright: 713uk13m <dev@nguyenanhung.com>
-     */
-    public function __construct(array $database = [])
-    {
-        parent::__construct($database);
-    }
 }

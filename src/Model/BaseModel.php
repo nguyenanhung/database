@@ -10,6 +10,7 @@
 namespace nguyenanhung\MyDatabase\Model;
 
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
@@ -34,19 +35,19 @@ use nguyenanhung\MyDatabase\Environment;
  * @since     2018-10-17
  * @version   0.1.2
  */
-class BaseModel implements Environment, BaseModelInterface
+class BaseModel implements Environment
 {
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $logger;
 
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
-    protected $database = null;
+    protected $database = [];
 
     /** @var string|null Bảng cần lấy dữ liệu */
-    protected $table = null;
+    protected $table = '';
 
     /** @var \Illuminate\Database\Capsule\Manager|null $db Đối tượng khởi tạo dùng gọi đến Class Capsule Manager */
-    protected $db = null;
+    protected $db;
 
     /** @var mixed $schema */
     protected $schema;
@@ -61,13 +62,13 @@ class BaseModel implements Environment, BaseModelInterface
     public $debugStatus = false;
 
     /** @var null|string Cấu hình Level Debug */
-    public $debugLevel = null;
+    public $debugLevel = 'error';
 
     /** @var null|bool|string Cấu hình thư mục lưu trữ Log, VD: /your/to/path */
-    public $debugLoggerPath = null;
+    public $debugLoggerPath = '';
 
     /** @var null|string Cấu hình File Log, VD: Log-2018-10-15.log | Log-date('Y-m-d').log */
-    public $debugLoggerFilename = null;
+    public $debugLoggerFilename = '';
 
     /** @var string Primary Key Default */
     public $primaryKey = 'id';
@@ -125,7 +126,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/29/2021 04:53
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return self::VERSION;
     }
@@ -153,7 +154,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/29/2021 04:01
      */
-    public function setPrimaryKey(string $primaryKey = 'id')
+    public function setPrimaryKey(string $primaryKey = 'id'): self
     {
         $this->primaryKey = $primaryKey;
 
@@ -171,9 +172,9 @@ class BaseModel implements Environment, BaseModelInterface
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/21/2021 23:24
      */
-    public function preparePaging($pageIndex = 1, $pageSize = 10)
+    public function preparePaging($pageIndex = 1, $pageSize = 10): array
     {
-        if ($pageIndex != 0) {
+        if ($pageIndex !== 0) {
             if (!$pageIndex || $pageIndex <= 0 || empty($pageIndex)) {
                 $pageIndex = 1;
             }
@@ -188,12 +189,12 @@ class BaseModel implements Environment, BaseModelInterface
     /**
      * Function connection
      *
-     * @return $this|\nguyenanhung\MyDatabase\Model\BaseModelInterface
+     * @return $this
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
-     * @time     : 08/07/2020 11:53
+     * @time     : 09/20/2021 15:50
      */
-    public function connection()
+    public function connection(): self
     {
         if (!is_object($this->db)) {
             try {
@@ -264,7 +265,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 22:28
      */
-    public function getConnectionName()
+    public function getConnectionName(): string
     {
         return $this->dbName;
     }
@@ -283,7 +284,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @see   https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php
      * @see   https://packagist.org/packages/illuminate/database#v5.8.36
      */
-    public function setDatabase($database = array(), $name = 'default')
+    public function setDatabase($database = array(), $name = 'default'): self
     {
         $this->database = $database;
         $this->dbName   = $name;
@@ -312,7 +313,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:43
      */
-    public function setTable($table = '')
+    public function setTable($table = ''): self
     {
         $this->table = $table;
 
@@ -372,12 +373,12 @@ class BaseModel implements Environment, BaseModelInterface
      *
      * @param bool $selectRaw
      *
-     * @return $this|\nguyenanhung\MyDatabase\Model\BaseModelInterface
+     * @return $this
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/07/2020 12:59
      */
-    public function setSelectRaw($selectRaw = false)
+    public function setSelectRaw($selectRaw = false): self
     {
         $this->selectRaw = $selectRaw;
 
@@ -407,7 +408,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/07/2020 13:10
      */
-    public function checkExistsTable()
+    public function checkExistsTable(): bool
     {
         $this->connection();
 
@@ -423,7 +424,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-12 15:1
      */
-    public function checkExistsColumn($column = '')
+    public function checkExistsColumn($column = ''): bool
     {
         $this->connection();
 
@@ -439,7 +440,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-12 15:10
      */
-    public function checkExistsColumns($columns = array())
+    public function checkExistsColumns($columns = array()): bool
     {
         $this->connection();
 
@@ -468,7 +469,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 11:43
      *
      */
-    public function countAll()
+    public function countAll(): int
     {
         $this->connection();
         $db = DB::table($this->table);
@@ -488,32 +489,33 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 11:45
      *
      */
-    public function checkExists($whereValue = '', $whereField = 'id')
+    public function checkExists($whereValue = '', $whereField = 'id'): int
     {
         $this->connection();
         $db = DB::table($this->table);
-        if (is_array($whereValue) && count($whereValue) > 0) {
-            foreach ($whereValue as $field => $value) {
-                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
-                    if (is_array($value['value'])) {
-                        $db->whereIn($value['field'], $value['value']);
-                    } else {
-                        $db->where($value['field'], $value['operator'], $value['value']);
-                    }
-                } else {
+        if (is_array($whereValue)) {
+            if (count($whereValue) > 0) {
+                foreach ($whereValue as $field => $value) {
                     if (is_array($value)) {
-                        $db->whereIn($field, $value);
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $db->whereIn($value['field'], $value['value']);
+                            } else {
+                                $db->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $db->whereIn($field, $value);
+                        }
+
                     } else {
                         $db->where($field, self::OPERATOR_EQUAL_TO, $value);
                     }
                 }
+            } else {
+                $db->whereIn($whereField, $whereValue);
             }
         } else {
-            if (is_array($whereValue)) {
-                $db->whereIn($whereField, $whereValue);
-            } else {
-                $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
-            }
+            $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
@@ -531,7 +533,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 11:45
      *
      */
-    public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id')
+    public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id'): int
     {
         return $this->checkExists($whereValue, $whereField);
     }
@@ -671,8 +673,8 @@ class BaseModel implements Environment, BaseModelInterface
      *
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
-     * @param array|string      $value       Giá trị cần kiểm tra
-     * @param null|string       $field       Field tương ứng, ví dụ: ID
+     * @param array|string      $whereValue  Giá trị cần kiểm tra
+     * @param null|string       $whereField  Field tương ứng, ví dụ: ID
      * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
      * @param null|string|array $selectField Các field cần lấy
      *
@@ -684,7 +686,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 11:51
      *
      */
-    public function getInfo($value = '', $field = 'id', $format = null, $selectField = null)
+    public function getInfo($whereValue = '', $whereField = 'id', $format = null, $selectField = null)
     {
         $this->connection();
         $format = strtolower($format);
@@ -700,55 +702,60 @@ class BaseModel implements Environment, BaseModelInterface
         } else {
             $db = DB::table($this->table)->select();
         }
-        if (is_array($value) && count($value) > 0) {
-            foreach ($value as $f => $v) {
-                if (is_array($v) && isset($v['field']) && isset($v['value'])) {
-                    if (is_array($v['value'])) {
-                        $db->whereIn($v['field'], $v['value']);
+        if (is_array($whereValue)) {
+            if (count($whereValue) > 0) {
+                foreach ($whereValue as $field => $value) {
+                    if (is_array($value)) {
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $db->whereIn($value['field'], $value['value']);
+                            } else {
+                                $db->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $db->whereIn($field, $value);
+                        }
+
                     } else {
-                        $db->where($v['field'], $v['operator'], $v['value']);
-                    }
-                } else {
-                    if (is_array($v)) {
-                        $db->whereIn($f, $v);
-                    } else {
-                        $db->where($f, self::OPERATOR_EQUAL_TO, $v);
+                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
                     }
                 }
+            } else {
+                $db->whereIn($whereField, $whereValue);
             }
         } else {
-            if (is_array($value)) {
-                $db->whereIn($field, $value);
-            } else {
-                $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-            }
+            $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
         }
+
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        if ($format == 'result') {
+        if ($format === 'result') {
             $result = $db->get();
             // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         } else {
             $result = $db->first();
             // $this->logger->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
         }
-        if ($format == 'json') {
+
+        if ($format === 'json') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
-        } elseif ($format == 'array') {
+        }
+
+        if ($format === 'array') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
-        } elseif ($format == 'base') {
+        }
+
+        if ($format === 'base') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
-        } else {
-            if ($format == 'result') {
-                if ($result->count() <= 0) {
-                    return null;
-                }
-            }
-
-            return $result;
         }
+
+        if (($format === 'result') && $result->count() <= 0) {
+            return null;
+        }
+
+        return $result;
     }
 
     /**
@@ -776,9 +783,9 @@ class BaseModel implements Environment, BaseModelInterface
      *
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
-     * @param string $value       Giá trị cần kiểm tra
-     * @param string $field       Field tương ứng với giá tri kiểm tra, ví dụ: ID
-     * @param string $fieldOutput field kết quả đầu ra
+     * @param string|array $whereValue  Giá trị cần kiểm tra
+     * @param string       $whereField  Field tương ứng với giá tri kiểm tra, ví dụ: ID
+     * @param string       $fieldOutput field kết quả đầu ra
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
      * @see   https://laravel.com/docs/5.8/queries#selects
@@ -787,43 +794,44 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 11:51
      *
      */
-    public function getValue($value = '', $field = 'id', $fieldOutput = '')
+    public function getValue($whereValue = '', $whereField = 'id', $fieldOutput = '')
     {
         $this->connection();
         $db = DB::table($this->table);
-        if (is_array($value) && count($value) > 0) {
-            foreach ($value as $f => $v) {
-                if (is_array($v) && isset($v['field']) && isset($v['value'])) {
-                    if (is_array($v['value'])) {
-                        $db->whereIn($v['field'], $v['value']);
+        if (is_array($whereValue)) {
+            if (count($whereValue) > 0) {
+                foreach ($whereValue as $field => $value) {
+                    if (is_array($value)) {
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $db->whereIn($value['field'], $value['value']);
+                            } else {
+                                $db->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $db->whereIn($field, $value);
+                        }
+
                     } else {
-                        $db->where($v['field'], $v['operator'], $v['value']);
-                    }
-                } else {
-                    if (is_array($v)) {
-                        $db->whereIn($f, $v);
-                    } else {
-                        $db->where($f, self::OPERATOR_EQUAL_TO, $v);
+                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
                     }
                 }
+            } else {
+                $db->whereIn($whereField, $whereValue);
             }
         } else {
-            if (is_array($value)) {
-                $db->whereIn($field, $value);
-            } else {
-                $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-            }
+            $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->first();
         // $this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
-        if (!empty($fieldOutput) && isset($result->$fieldOutput)) {
+        if (!empty($fieldOutput) && $result !== null && isset($result->$fieldOutput)) {
             return $result->$fieldOutput;
-        } else {
-            $this->logger->error(__FUNCTION__, 'Không tìm thấy cột dữ liệu ' . $fieldOutput);
-
-            return $result;
         }
+
+        $this->logger->error(__FUNCTION__, 'Không tìm thấy cột dữ liệu ' . $fieldOutput);
+
+        return $result;
     }
 
     /**
@@ -850,7 +858,7 @@ class BaseModel implements Environment, BaseModelInterface
     /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi trong 1 bảng
      *
-     * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
+     * @param string|array $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
      * @return \Illuminate\Support\Collection
      * @see   https://laravel.com/docs/5.8/queries#selects
@@ -859,7 +867,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 13:59
      *
      */
-    public function getDistinctResult($selectField = '')
+    public function getDistinctResult($selectField = ''): Collection
     {
         if (!is_array($selectField)) {
             $selectField = [$selectField];
@@ -876,37 +884,35 @@ class BaseModel implements Environment, BaseModelInterface
     /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi theo điều kiện
      *
-     * @param string $selectField
-     * @param array  $whereValue
+     * @param string|array $selectField
+     * @param array|string $whereValue
      *
      * @return \Illuminate\Support\Collection
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:21
      *
      */
-    public function getDistinctResultByColumn($selectField = '', $whereValue = array())
+    public function getDistinctResultByColumn($selectField = '', $whereValue = array()): Collection
     {
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
         $this->connection();
         $db = DB::table($this->table);
-        if (is_array($whereValue) && count($whereValue) > 0) {
-            foreach ($whereValue as $column => $column_value) {
-                if (is_array($column_value)) {
-                    $db->whereIn($column, $column_value);
-                } else {
-                    $db->where($column, self::OPERATOR_EQUAL_TO, $column_value);
+        if (is_array($whereValue)) {
+            if (count($whereValue) > 0) {
+                foreach ($whereValue as $column => $column_value) {
+                    if (is_array($column_value)) {
+                        $db->whereIn($column, $column_value);
+                    } else {
+                        $db->where($column, self::OPERATOR_EQUAL_TO, $column_value);
+                    }
                 }
+            } else {
+                $db->whereIn($selectField, $whereValue);
             }
         } else {
-            if (!empty($whereValue)) {
-                if (is_array($whereValue)) {
-                    $db->whereIn($selectField, $whereValue);
-                } else {
-                    $db->where($selectField, self::OPERATOR_EQUAL_TO, $whereValue);
-                }
-            }
+            $db->where($selectField, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $db->distinct();
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
@@ -920,14 +926,14 @@ class BaseModel implements Environment, BaseModelInterface
      *
      * Các tham số đầu ra và đầu vào theo quy chuẩn của hàm getDistinctResult
      *
-     * @param string $selectField Mảng dữ liệu danh sách các field cần so sánh
+     * @param string|array $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
      * @return \Illuminate\Support\Collection
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 23:49
      *
      */
-    public function getResultDistinct($selectField = '')
+    public function getResultDistinct($selectField = ''): Collection
     {
         return $this->getDistinctResult($selectField);
     }
@@ -935,15 +941,15 @@ class BaseModel implements Environment, BaseModelInterface
     /**
      * Hàm getResultDistinctByColumn là alias của hàm getDistinctResultByColumn
      *
-     * @param string $selectField
-     * @param array  $whereValue
+     * @param string|array $selectField
+     * @param array        $whereValue
      *
      * @return \Illuminate\Support\Collection
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:22
      *
      */
-    public function getResultDistinctByColumn($selectField = '', $whereValue = array())
+    public function getResultDistinctByColumn($selectField = '', $whereValue = array()): Collection
     {
         return $this->getDistinctResultByColumn($selectField, $whereValue);
     }
@@ -951,7 +957,7 @@ class BaseModel implements Environment, BaseModelInterface
     /**
      * Function getResult
      *
-     * @param array|string $wheres              Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param array|string $whereValue          Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      * @param string|array $selectField         Mảng dữ liệu danh sách các field cần so sánh
      * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
      *                                          example $options = [
@@ -969,7 +975,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 16:14
      *
      */
-    public function getResult($wheres = array(), $selectField = '*', $options = null)
+    public function getResult($whereValue = array(), $selectField = '*', $options = null)
     {
         if (!is_array($selectField)) {
             $selectField = [$selectField];
@@ -981,34 +987,35 @@ class BaseModel implements Environment, BaseModelInterface
         }
         $this->connection();
         $db = DB::table($this->table);
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $field => $value) {
-                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
-                    if (is_array($value['value'])) {
-                        $db->whereIn($value['field'], $value['value']);
-                    } else {
-                        $db->where($value['field'], $value['operator'], $value['value']);
-                    }
-                } else {
+
+        if (is_array($whereValue)) {
+            if (count($whereValue) > 0) {
+                foreach ($whereValue as $field => $value) {
                     if (is_array($value)) {
-                        $db->whereIn($field, $value);
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $db->whereIn($value['field'], $value['value']);
+                            } else {
+                                $db->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $db->whereIn($field, $value);
+                        }
+
                     } else {
                         $db->where($field, self::OPERATOR_EQUAL_TO, $value);
                     }
                 }
+            } else {
+                $db->whereIn($this->primaryKey, $whereValue);
             }
         } else {
-            if (is_array($wheres)) {
-                $db->whereIn($this->primaryKey, $wheres);
-            } else {
-                $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
-            }
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $whereValue);
         }
 
         // Case có cả Limit và Offset -> active phân trang
         if (
-            (isset($options['limit']) && $options['limit'] > 0) &&
-            isset($options['offset'])
+            isset($options['limit'], $options['offset']) && $options['limit'] > 0
         ) {
             $page = $this->preparePaging($options['offset'], $options['limit']);
             $db->offset($page['offset'])->limit($page['limit']);
@@ -1026,24 +1033,28 @@ class BaseModel implements Environment, BaseModelInterface
             }
         }
 
-        if (isset($options['orderBy']) && $options['orderBy'] == 'random') {
+        if (isset($options['orderBy']) && $options['orderBy'] === 'random') {
             $db->inRandomOrder();
         }
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format == 'json') {
+        if ($format === 'json') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
-        } elseif ($format == 'array') {
+        }
+
+        if ($format === 'array') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
-        } elseif ($format == 'base') {
+        }
+
+        if ($format === 'base') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
-        } else {
-            return $result;
         }
+
+        return $result;
     }
 
     /**
@@ -1075,43 +1086,44 @@ class BaseModel implements Environment, BaseModelInterface
     /**
      * Function countResult
      *
-     * @param array  $wheres
-     * @param string $selectField
+     * @param array        $whereValue
+     * @param string|array $selectField
      *
      * @return int
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 11/25/18 14:10
      *
      */
-    public function countResult($wheres = array(), $selectField = '*')
+    public function countResult($whereValue = array(), $selectField = '*'): int
     {
         if (!is_array($selectField)) {
             $selectField = [$selectField];
         }
         $this->connection();
         $db = DB::table($this->table);
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $field => $value) {
-                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
-                    if (is_array($value['value'])) {
-                        $db->whereIn($value['field'], $value['value']);
-                    } else {
-                        $db->where($value['field'], $value['operator'], $value['value']);
-                    }
-                } else {
+        if (is_array($whereValue)) {
+            if (count($whereValue) > 0) {
+                foreach ($whereValue as $field => $value) {
                     if (is_array($value)) {
-                        $db->whereIn($field, $value);
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $db->whereIn($value['field'], $value['value']);
+                            } else {
+                                $db->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $db->whereIn($field, $value);
+                        }
+
                     } else {
                         $db->where($field, self::OPERATOR_EQUAL_TO, $value);
                     }
                 }
+            } else {
+                $db->whereIn($this->primaryKey, $whereValue);
             }
         } else {
-            if (is_array($wheres)) {
-                $db->whereIn($this->primaryKey, $wheres);
-            } else {
-                $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
-            }
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
         $result = $db->get($selectField);
@@ -1123,15 +1135,15 @@ class BaseModel implements Environment, BaseModelInterface
     /**
      * Function countResultWithMultipleWhere
      *
-     * @param array  $wheres
-     * @param string $selectField
+     * @param array        $wheres
+     * @param string|array $selectField
      *
      * @return int
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:29
      *
      */
-    public function countResultWithMultipleWhere($wheres = array(), $selectField = '*')
+    public function countResultWithMultipleWhere($wheres = array(), $selectField = '*'): int
     {
         return $this->countResult($wheres, $selectField);
     }
@@ -1157,18 +1169,22 @@ class BaseModel implements Environment, BaseModelInterface
         }
         $result = $db->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format == 'json') {
+        if ($format === 'json') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
-        } elseif ($format == 'array') {
+        }
+
+        if ($format === 'array') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
-        } elseif ($format == 'base') {
+        }
+
+        if ($format === 'base') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
-        } else {
-            return $result;
         }
+
+        return $result;
     }
 
     /**
@@ -1192,18 +1208,22 @@ class BaseModel implements Environment, BaseModelInterface
         }
         $result = $db->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format == 'json') {
+        if ($format === 'json') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
-        } elseif ($format == 'array') {
+        }
+
+        if ($format === 'array') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
-        } elseif ($format == 'base') {
+        }
+
+        if ($format === 'base') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
-        } else {
-            return $result;
         }
+
+        return $result;
     }
 
     /**
@@ -1227,18 +1247,22 @@ class BaseModel implements Environment, BaseModelInterface
         }
         $result = $db->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format == 'json') {
+        if ($format === 'json') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
-        } elseif ($format == 'array') {
+        }
+
+        if ($format === 'array') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
-        } elseif ($format == 'base') {
+        }
+
+        if ($format === 'base') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
-        } else {
-            return $result;
         }
+
+        return $result;
     }
 
     /**
@@ -1253,7 +1277,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 14:04
      *
      */
-    public function add($data = array())
+    public function add($data = array()): int
     {
         $this->connection();
         $db = DB::table($this->table);
@@ -1268,8 +1292,8 @@ class BaseModel implements Environment, BaseModelInterface
     /**
      * Hàm update dữ liệu
      *
-     * @param array        $data   Mảng dữ liệu cần Update
-     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param array        $data       Mảng dữ liệu cần Update
+     * @param array|string $whereValue Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
      * @see   https://laravel.com/docs/5.8/queries#updates
@@ -1278,32 +1302,33 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 14:10
      *
      */
-    public function update($data = array(), $wheres = array())
+    public function update($data = array(), $whereValue = array()): int
     {
         $this->connection();
         $db = DB::table($this->table);
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $field => $value) {
-                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
-                    if (is_array($value['value'])) {
-                        $db->whereIn($value['field'], $value['value']);
-                    } else {
-                        $db->where($value['field'], $value['operator'], $value['value']);
-                    }
-                } else {
+        if (is_array($whereValue)) {
+            if (count($whereValue) > 0) {
+                foreach ($whereValue as $field => $value) {
                     if (is_array($value)) {
-                        $db->whereIn($field, $value);
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $db->whereIn($value['field'], $value['value']);
+                            } else {
+                                $db->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $db->whereIn($field, $value);
+                        }
+
                     } else {
                         $db->where($field, self::OPERATOR_EQUAL_TO, $value);
                     }
                 }
+            } else {
+                $db->whereIn($this->primaryKey, $whereValue);
             }
         } else {
-            if (is_array($wheres)) {
-                $db->whereIn($this->primaryKey, $wheres);
-            } else {
-                $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
-            }
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
@@ -1324,7 +1349,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 14:10
      *
      */
-    public function updateWithMultipleWhere($data = array(), $wheres = array())
+    public function updateWithMultipleWhere($data = array(), $wheres = array()): int
     {
         return $this->update($data, $wheres);
     }
@@ -1332,7 +1357,7 @@ class BaseModel implements Environment, BaseModelInterface
     /**
      * Hàm xóa dữ liệu
      *
-     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param array|string $whereValue Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi đã xóa
      * @see   https://laravel.com/docs/5.8/queries#deletes
@@ -1341,32 +1366,33 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 14:13
      *
      */
-    public function delete($wheres = array())
+    public function delete($whereValue = array()): int
     {
         $this->connection();
         $db = DB::table($this->table);
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $field => $value) {
-                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
-                    if (is_array($value['value'])) {
-                        $db->whereIn($value['field'], $value['value']);
-                    } else {
-                        $db->where($value['field'], $value['operator'], $value['value']);
-                    }
-                } else {
+        if (is_array($whereValue)) {
+            if (count($whereValue) > 0) {
+                foreach ($whereValue as $field => $value) {
                     if (is_array($value)) {
-                        $db->whereIn($field, $value);
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $db->whereIn($value['field'], $value['value']);
+                            } else {
+                                $db->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $db->whereIn($field, $value);
+                        }
+
                     } else {
                         $db->where($field, self::OPERATOR_EQUAL_TO, $value);
                     }
                 }
+            } else {
+                $db->whereIn($this->primaryKey, $whereValue);
             }
         } else {
-            if (is_array($wheres)) {
-                $db->whereIn($this->primaryKey, $wheres);
-            } else {
-                $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
-            }
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
@@ -1386,7 +1412,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 10/16/18 14:13
      *
      */
-    public function deleteWithMultipleWhere($wheres = array())
+    public function deleteWithMultipleWhere($wheres = array()): int
     {
         return $this->delete($wheres);
     }
@@ -1394,36 +1420,41 @@ class BaseModel implements Environment, BaseModelInterface
     /**
      * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới
      *
-     * @param array $data
-     * @param array $wheres
+     * @param array        $data
+     * @param array|string $whereValue
      *
      * @return bool|int
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 03:58
      *
      */
-    public function checkExistsAndInsertData($data = array(), $wheres = array())
+    public function checkExistsAndInsertData($data = array(), $whereValue = array())
     {
         $this->connection();
         $db = DB::table($this->table);
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $field => $value) {
-                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
-                    if (is_array($value['value'])) {
-                        $db->whereIn($value['field'], $value['value']);
-                    } else {
-                        $db->where($value['field'], $value['operator'], $value['value']);
-                    }
-                } else {
+        if (is_array($whereValue)) {
+            if (count($whereValue) > 0) {
+                foreach ($whereValue as $field => $value) {
                     if (is_array($value)) {
-                        $db->whereIn($field, $value);
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $db->whereIn($value['field'], $value['value']);
+                            } else {
+                                $db->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $db->whereIn($field, $value);
+                        }
+
                     } else {
                         $db->where($field, self::OPERATOR_EQUAL_TO, $value);
                     }
                 }
+            } else {
+                $db->whereIn($this->primaryKey, $whereValue);
             }
         } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $checkExists = $db->count();
         // $this->logger->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
@@ -1433,11 +1464,11 @@ class BaseModel implements Environment, BaseModelInterface
             $this->logger->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
 
             return $id;
-        } else {
-            $this->logger->debug(__FUNCTION__, 'Đã tồn tại bản ghi, bỏ qua không ghi nữa');
-
-            return false;
         }
+
+        $this->logger->debug(__FUNCTION__, 'Đã tồn tại bản ghi, bỏ qua không ghi nữa');
+
+        return false;
     }
 
     /**
@@ -1459,37 +1490,42 @@ class BaseModel implements Environment, BaseModelInterface
     /**
      * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới, nếu tồn tại sẵn sẽ update
      *
-     * @param array $dataInsert
-     * @param array $dataUpdate
-     * @param array $wheres
+     * @param array        $dataInsert
+     * @param array        $dataUpdate
+     * @param array|string $whereValue
      *
      * @return int
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:01
      *
      */
-    public function checkExistsAndInsertOrUpdateData($dataInsert = array(), $dataUpdate = array(), $wheres = array())
+    public function checkExistsAndInsertOrUpdateData($dataInsert = array(), $dataUpdate = array(), $whereValue = array()): int
     {
         $this->connection();
         $db = DB::table($this->table);
-        if (is_array($wheres) && count($wheres) > 0) {
-            foreach ($wheres as $field => $value) {
-                if (is_array($value) && isset($value['field']) && isset($value['value'])) {
-                    if (is_array($value['value'])) {
-                        $db->whereIn($value['field'], $value['value']);
-                    } else {
-                        $db->where($value['field'], $value['operator'], $value['value']);
-                    }
-                } else {
+        if (is_array($whereValue)) {
+            if (count($whereValue) > 0) {
+                foreach ($whereValue as $field => $value) {
                     if (is_array($value)) {
-                        $db->whereIn($field, $value);
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $db->whereIn($value['field'], $value['value']);
+                            } else {
+                                $db->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $db->whereIn($field, $value);
+                        }
+
                     } else {
                         $db->where($field, self::OPERATOR_EQUAL_TO, $value);
                     }
                 }
+            } else {
+                $db->whereIn($this->primaryKey, $whereValue);
             }
         } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $checkExists = $db->count();
         // $this->logger->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
@@ -1499,12 +1535,12 @@ class BaseModel implements Environment, BaseModelInterface
             $this->logger->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
 
             return $id;
-        } else {
-            $resultId = $db->update($dataUpdate);
-            $this->logger->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
-
-            return $resultId;
         }
+
+        $resultId = $db->update($dataUpdate);
+        $this->logger->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
+
+        return $resultId;
     }
 
     /**
@@ -1519,7 +1555,7 @@ class BaseModel implements Environment, BaseModelInterface
      * @time  : 2019-04-07 04:01
      *
      */
-    public function checkExistsAndInsertOrUpdateDataWithMultipleWhere($dataInsert = array(), $dataUpdate = array(), $wheres = array())
+    public function checkExistsAndInsertOrUpdateDataWithMultipleWhere($dataInsert = array(), $dataUpdate = array(), $wheres = array()): int
     {
         return $this->checkExistsAndInsertOrUpdateData($dataInsert, $dataUpdate, $wheres);
     }
