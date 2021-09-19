@@ -12,6 +12,7 @@ namespace nguyenanhung\MyDatabase\Model;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Builder;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
@@ -219,10 +220,10 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/07/2021 21:40
      */
-    public function closeConnection()
+    public function closeConnection(): void
     {
         try {
-            return $this->db->getDatabaseManager()->disconnect($this->dbName);
+            $this->db->getDatabaseManager()->disconnect($this->dbName);
         } catch (Exception $e) {
             $this->logger->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
             $this->logger->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
@@ -236,10 +237,10 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/07/2021 21:44
      */
-    public function disconnect()
+    public function disconnect(): void
     {
         try {
-            return $this->db->getDatabaseManager()->disconnect($this->dbName);
+            $this->db->getDatabaseManager()->disconnect($this->dbName);
         } catch (Exception $e) {
             $this->logger->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
             $this->logger->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
@@ -299,7 +300,7 @@ class BaseModel implements Environment
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 23:07
      */
-    public function getDatabase()
+    public function getDatabase(): ?array
     {
         return $this->database;
     }
@@ -327,7 +328,7 @@ class BaseModel implements Environment
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 23:07
      */
-    public function getTable()
+    public function getTable(): ?string
     {
         return $this->table;
     }
@@ -340,7 +341,7 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/31/2021 37:51
      */
-    public function getTableColumns()
+    public function getTableColumns(): ?array
     {
         try {
             return Schema::getColumnListing($this->table);
@@ -353,18 +354,20 @@ class BaseModel implements Environment
     /**
      * Function getSchema
      *
-     * @return \Illuminate\Database\Schema\Builder
+     * @return \Illuminate\Database\Schema\Builder|null
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
-     * @time     : 08/21/2021 17:43
+     * @time     : 09/20/2021 40:36
      */
-    public function getSchema()
+    public function getSchema(): ?Builder
     {
         try {
             return DB::schema();
         } catch (Exception $e) {
             $this->logger->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
             $this->logger->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+            return null;
         }
     }
 
@@ -393,7 +396,7 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/07/2020 13:05
      */
-    public function getSelectRaw()
+    public function getSelectRaw(): ?bool
     {
         return $this->selectRaw;
     }
@@ -411,8 +414,11 @@ class BaseModel implements Environment
     public function checkExistsTable(): bool
     {
         $this->connection();
+        if ($this->getSchema() !== null) {
+            return $this->getSchema()->hasTable($this->table);
+        }
 
-        return $this->getSchema()->hasTable($this->table);
+        return false;
     }
 
     /**
@@ -427,8 +433,12 @@ class BaseModel implements Environment
     public function checkExistsColumn($column = ''): bool
     {
         $this->connection();
+        if ($this->getSchema() !== null) {
+            return $this->getSchema()->hasColumn($this->table, $column);
+        }
 
-        return $this->getSchema()->hasColumn($this->table, $column);
+        return false;
+
     }
 
     /**
@@ -444,7 +454,12 @@ class BaseModel implements Environment
     {
         $this->connection();
 
-        return $this->getSchema()->hasColumns($this->table, $columns);
+        if ($this->getSchema() !== null) {
+            return $this->getSchema()->hasColumns($this->table, $columns);
+        }
+
+        return false;
+
     }
 
     /**
@@ -456,7 +471,7 @@ class BaseModel implements Environment
      * @see   https://laravel.com/docs/5.8/queries#deletes
      *
      */
-    public function truncate()
+    public function truncate(): void
     {
         DB::table($this->table)->truncate();
     }

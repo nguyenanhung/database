@@ -18,35 +18,35 @@ namespace nguyenanhung\MyDatabase;
  */
 interface Environment
 {
-    const VERSION       = '3.0.2';
-    const LAST_MODIFIED = '2021-09-20';
-    const AUTHOR_NAME   = 'Hung Nguyen';
-    const AUTHOR_EMAIL  = 'dev@nguyenanhung.com';
-    const PROJECT_NAME  = 'My Database';
-    const TIMEZONE      = 'Asia/Ho_Chi_Minh';
+    public const VERSION       = '3.0.2';
+    public const LAST_MODIFIED = '2021-09-20';
+    public const AUTHOR_NAME   = 'Hung Nguyen';
+    public const AUTHOR_EMAIL  = 'dev@nguyenanhung.com';
+    public const PROJECT_NAME  = 'My Database';
+    public const TIMEZONE      = 'Asia/Ho_Chi_Minh';
 
-    const OPERATOR_EQUAL_TO                 = '=';
-    const OP_EQ                             = '=';
-    const OPERATOR_NOT_EQUAL_TO             = '!=';
-    const OP_NE                             = '!=';
-    const OPERATOR_LESS_THAN                = '<';
-    const OP_LT                             = '<';
-    const OPERATOR_LESS_THAN_OR_EQUAL_TO    = '<=';
-    const OP_LTE                            = '<=';
-    const OPERATOR_GREATER_THAN             = '>';
-    const OP_GT                             = '>';
-    const OPERATOR_GREATER_THAN_OR_EQUAL_TO = '>=';
-    const OP_GTE                            = '>=';
-    const OPERATOR_IS_SPACESHIP             = '<=>';
-    const OPERATOR_IS_IN                    = 'IN';
-    const OPERATOR_IS_LIKE                  = 'LIKE';
-    const OPERATOR_IS_LIKE_BINARY           = 'LIKE BINARY';
-    const OPERATOR_IS_ILIKE                 = 'ilike';
-    const OPERATOR_IS_NOT_LIKE              = 'NOT LIKE';
-    const OPERATOR_IS_NULL                  = 'IS NULL';
-    const OPERATOR_IS_NOT_NULL              = 'IS NOT NULL';
-    const ORDER_ASCENDING                   = 'ASC';
-    const ORDER_DESCENDING                  = 'DESC';
+    public const OPERATOR_EQUAL_TO                 = '=';
+    public const OP_EQ                             = '=';
+    public const OPERATOR_NOT_EQUAL_TO             = '!=';
+    public const OP_NE                             = '!=';
+    public const OPERATOR_LESS_THAN                = '<';
+    public const OP_LT                             = '<';
+    public const OPERATOR_LESS_THAN_OR_EQUAL_TO    = '<=';
+    public const OP_LTE                            = '<=';
+    public const OPERATOR_GREATER_THAN             = '>';
+    public const OP_GT                             = '>';
+    public const OPERATOR_GREATER_THAN_OR_EQUAL_TO = '>=';
+    public const OP_GTE                            = '>=';
+    public const OPERATOR_IS_SPACESHIP             = '<=>';
+    public const OPERATOR_IS_IN                    = 'IN';
+    public const OPERATOR_IS_LIKE                  = 'LIKE';
+    public const OPERATOR_IS_LIKE_BINARY           = 'LIKE BINARY';
+    public const OPERATOR_IS_ILIKE                 = 'ilike';
+    public const OPERATOR_IS_NOT_LIKE              = 'NOT LIKE';
+    public const OPERATOR_IS_NULL                  = 'IS NULL';
+    public const OPERATOR_IS_NOT_NULL              = 'IS NOT NULL';
+    public const ORDER_ASCENDING                   = 'ASC';
+    public const ORDER_DESCENDING                  = 'DESC';
 
     /**
      * Hàm lấy thông tin phiên bản Package
