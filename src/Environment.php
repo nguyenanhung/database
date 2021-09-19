@@ -18,8 +18,8 @@ namespace nguyenanhung\MyDatabase;
  */
 interface Environment
 {
-    const VERSION       = '3.0.0';
-    const LAST_MODIFIED = '2021-09-07';
+    const VERSION       = '3.0.2';
+    const LAST_MODIFIED = '2021-09-20';
     const AUTHOR_NAME   = 'Hung Nguyen';
     const AUTHOR_EMAIL  = 'dev@nguyenanhung.com';
     const PROJECT_NAME  = 'My Database';
@@ -52,8 +52,9 @@ interface Environment
      * Hàm lấy thông tin phiên bản Package
      *
      * @return string Current Project Version, VD: 0.1.0
+     *
      * @author  : 713uk13m <dev@nguyenanhung.com>
      * @time    : 10/13/18 15:12
      */
-    public function getVersion();
+    public function getVersion(): string;
 }

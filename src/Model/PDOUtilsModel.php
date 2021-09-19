@@ -20,16 +20,4 @@ use nguyenanhung\PDO\MySQLPDOUtilsModel as BaseMySQLPDOUtilsModel;
  */
 class PDOUtilsModel extends BaseMySQLPDOUtilsModel
 {
-    /**
-     * PDOUtilsModel constructor.
-     *
-     * @param array $database
-     *
-     * @author   : 713uk13m <dev@nguyenanhung.com>
-     * @copyright: 713uk13m <dev@nguyenanhung.com>
-     */
-    public function __construct(array $database = [])
-    {
-        parent::__construct($database);
-    }
 }
