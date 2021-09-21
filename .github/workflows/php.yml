@@ -17,6 +17,11 @@ jobs:
                     php-version: ${{ matrix.php-versions }}
                     extensions: mbstring, intl, curl, json, openssl, iconv, mysqli, pdo, pdo_mysql, pdo_mysqli
                     coverage: xdebug #optional
+            -   name: Setup MariaDB Database
+                uses: ankane/setup-mariadb@v1
+                with:
+                    mariadb-version: 10.5
+                    database: test_database
             -   name: Get composer cache directory
                 id: composercache
                 run: echo "::set-output name=dir::$(composer config cache-files-dir)"
