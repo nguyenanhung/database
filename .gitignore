@@ -125,3 +125,4 @@ composer.lock
 tmp/*
 !tmp/.gitkeep
 !tmp/README.md
+!tmp/test_database.sql
