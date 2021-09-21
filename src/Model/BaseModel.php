@@ -24,17 +24,20 @@ use nguyenanhung\MyDatabase\Environment;
  *
  * Class Base Model sử dụng Query Builder của Illuminate Database
  *
- * Class này chỉ khai báo các hàm cơ bản và thông dụng trong quá trính sử dụng
- * các cú pháp, function khác đều có thể sử dụng theo tài liệu chính thức của Illuminate Database
+ * Class này chỉ khai báo các hàm cơ bản và thông dụng trong quá trình sử dụng.
  *
- * @see       https://laravel.com/docs/6.x/database
- * @see       https://packagist.org/packages/illuminate/database#v5.8.36
+ * Các cú pháp, function khác đều có thể sử dụng theo tài liệu chính thức của Illuminate Database
  *
- * @package   nguyenanhung\MyDatabase\Model
- * @author    713uk13m <dev@nguyenanhung.com>
- * @copyright 713uk13m <dev@nguyenanhung.com>
- * @since     2018-10-17
- * @version   0.1.2
+ * @see               https://laravel.com/docs/6.x/database
+ * @see               https://laravel.com/docs/6.x/queries
+ * @see               https://packagist.org/packages/illuminate/database#v8.61
+ *
+ * @package           nguyenanhung\MyDatabase\Model
+ * @author            713uk13m <dev@nguyenanhung.com>
+ * @copyright         713uk13m <dev@nguyenanhung.com>
+ * @since             2018-10-17
+ * @last_updated      2021-09-22
+ * @version           3.0.4
  */
 class BaseModel implements Environment
 {
@@ -536,36 +539,25 @@ class BaseModel implements Environment
     /**
      * Hàm lấy bản ghi mới nhất theo điều kiện đầu vào
      *
-     * @param string|array $whereValue  Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
-     * @param string|array $selectField Danh sách cột cần lấy dữ liệu ra
-     * @param string       $byColumn    Tên cột cần order theo điều kiện
+     * @param string|array $wheres Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
+     * @param string|array $select Danh sách cột cần lấy dữ liệu ra
+     * @param string       $column Tên cột cần order theo điều kiện
+     * @param string|null  $fields Field tương ứng cần kiểm tra đối chiếu
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:16
      */
-    public function getLatestByColumn($whereValue = array(), $selectField = array('*'), $byColumn = 'created_at')
+    public function getLatestByColumn($wheres = array(), $select = array('*'), $column = 'created_at', $fields = 'id')
     {
-        $selectField = $this->prepareFormatSelectField($selectField);
+        $select = $this->prepareFormatSelectField($select);
         $this->connection();
-        $db = DB::table($this->table);
+        $db    = DB::table($this->table);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
+        $query->latest($column);
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 
-        if (is_array($whereValue) && count($whereValue) > 0) {
-            foreach ($whereValue as $column => $value) {
-                if (is_array($value)) {
-                    $db->whereIn($column, $value);
-                } else {
-                    $db->where($column, self::OPERATOR_EQUAL_TO, $value);
-                }
-            }
-        } else {
-            $db->where($selectField, self::OPERATOR_EQUAL_TO, $whereValue);
-        }
-
-        $db->latest($byColumn);
-        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-
-        return $db->first($selectField);
+        return $query->first($select);
     }
 
     /**
@@ -597,35 +589,26 @@ class BaseModel implements Environment
     /**
      * Hàm lấy bản ghi cũ nhất nhất theo điều kiện đầu vào
      *
-     * @param string|array $whereValue  Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
-     * @param string|array $selectField Danh sách cột cần lấy dữ liệu ra
-     * @param string       $byColumn    Tên cột cần order theo điều kiện
+     * @param string|array $wheres Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
+     * @param string|array $select Danh sách cột cần lấy dữ liệu ra
+     * @param string       $column Tên cột cần order theo điều kiện
+     * @param string|null  $fields Field tương ứng cần kiểm tra đối chiếu
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:17
      *
      */
-    public function getOldestByColumn($whereValue = array(), $selectField = array('*'), $byColumn = 'created_at')
+    public function getOldestByColumn($wheres = array(), $select = array('*'), $column = 'created_at', $fields = 'id')
     {
-        $selectField = $this->prepareFormatSelectField($selectField);
+        $select = $this->prepareFormatSelectField($select);
         $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($whereValue) && count($whereValue) > 0) {
-            foreach ($whereValue as $column => $column_value) {
-                if (is_array($column_value)) {
-                    $db->whereIn($column, $column_value);
-                } else {
-                    $db->where($column, self::OPERATOR_EQUAL_TO, $column_value);
-                }
-            }
-        } else {
-            $db->where($selectField, self::OPERATOR_EQUAL_TO, $whereValue);
-        }
-        $db->oldest($byColumn);
-        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $db    = DB::table($this->table);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
+        $query->oldest($column);
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 
-        return $db->first($selectField);
+        return $query->first($select);
     }
 
     /**
@@ -776,7 +759,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 13:59
      *
      */
-    public function getDistinctResult($select = ''): Collection
+    public function getDistinctResult($select = array('*')): Collection
     {
         $selectField = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -791,41 +774,24 @@ class BaseModel implements Environment
     /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi theo điều kiện
      *
-     * @param string|array $select     Danh sách các cột dữ liệu cần lấy ra
-     * @param array|string $whereValue Điều kiện kiểm tra đầu vào của dữ liệu
+     * @param string|array $select Danh sách các cột dữ liệu cần lấy ra
+     * @param array|string $wheres Điều kiện kiểm tra đầu vào của dữ liệu
      *
      * @return \Illuminate\Support\Collection
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:21
      *
      */
-    public function getDistinctResultByColumn($select = '', $whereValue = array()): Collection
+    public function getDistinctResultByColumn($select = '*', $wheres = array()): Collection
     {
-        if (!is_array($select)) {
-            $select = [$select];
-        }
         $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($whereValue)) {
-            if (count($whereValue) > 0) {
-                foreach ($whereValue as $column => $column_value) {
-                    if (is_array($column_value)) {
-                        $db->whereIn($column, $column_value);
-                    } else {
-                        $db->where($column, self::OPERATOR_EQUAL_TO, $column_value);
-                    }
-                }
-            } else {
-                $db->whereIn($select, $whereValue);
-            }
-        } else {
-            $db->where($select, self::OPERATOR_EQUAL_TO, $whereValue);
-        }
-        $db->distinct();
-        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $db    = DB::table($this->table);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $select);
+        $query->distinct();
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 
         //$this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
-        return $db->get($select);
+        return $query->get($select);
     }
 
     /**
@@ -856,7 +822,7 @@ class BaseModel implements Environment
      * @time  : 2019-04-07 04:22
      *
      */
-    public function getResultDistinctByColumn($select = '', $wheres = array()): Collection
+    public function getResultDistinctByColumn($select = array('*'), $wheres = array()): Collection
     {
         return $this->getDistinctResultByColumn($select, $wheres);
     }
@@ -882,7 +848,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 16:14
      *
      */
-    public function getResult($wheres = array(), $select = '*', $options = null)
+    public function getResult($wheres = array(), $select = array('*'), $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
@@ -934,7 +900,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 16:14
      *
      */
-    public function getResultWithMultipleWhere($wheres = array(), $select = '*', $options = null)
+    public function getResultWithMultipleWhere($wheres = array(), $select = array('*'), $options = null)
     {
         return $this->getResult($wheres, $select, $options);
     }
@@ -950,7 +916,7 @@ class BaseModel implements Environment
      * @time  : 11/25/18 14:10
      *
      */
-    public function countResult($wheres = array(), $select = '*'): int
+    public function countResult($wheres = array(), $select = array('*')): int
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -974,7 +940,7 @@ class BaseModel implements Environment
      * @time  : 2019-04-07 04:29
      *
      */
-    public function countResultWithMultipleWhere($wheres = array(), $select = '*'): int
+    public function countResultWithMultipleWhere($wheres = array(), $select = array('*')): int
     {
         return $this->countResult($wheres, $select);
     }
@@ -1004,7 +970,7 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:03
      *
      */
-    public function getResultWithSimpleJoin($joins = array(), $select = '*', $options = null)
+    public function getResultWithSimpleJoin($joins = array(), $select = array('*'), $options = null)
     {
         return $this->getResultWithSimpleInnerJoin($joins, $select, $options);
     }
@@ -1034,7 +1000,7 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:03
      *
      */
-    public function getResultWithSimpleInnerJoin($joins = array(), $select = '*', $options = null)
+    public function getResultWithSimpleInnerJoin($joins = array(), $select = array('*'), $options = null)
     {
         $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
@@ -1091,7 +1057,7 @@ class BaseModel implements Environment
      * @time     : 09/21/2021 51:55
      *
      */
-    public function getResultWithInnerJoinAndWheres($joins = array(), $wheres = array(), $select = '*', $options = null)
+    public function getResultWithInnerJoinAndWheres($joins = array(), $wheres = array(), $select = array('*'), $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
@@ -1145,7 +1111,7 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:06
      *
      */
-    public function getResultWithSimpleCrossJoin($joins = array(), $select = '*', $options = null)
+    public function getResultWithSimpleCrossJoin($joins = array(), $select = array('*'), $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
@@ -1254,7 +1220,7 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:05
      *
      */
-    public function getResultWithSimpleLeftJoin($joins = array(), $select = '*', $options = null)
+    public function getResultWithSimpleLeftJoin($joins = array(), $select = array('*'), $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
@@ -1308,7 +1274,7 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:05
      *
      */
-    public function getResultWithLeftJoinAndWheres($joins = array(), $wheres = array(), $select = '*', $options = null)
+    public function getResultWithLeftJoinAndWheres($joins = array(), $wheres = array(), $select = array('*'), $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
@@ -1362,7 +1328,7 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:05
      *
      */
-    public function getResultWithSimpleRightJoin($joins = array(), $select = '*', $options = null)
+    public function getResultWithSimpleRightJoin($joins = array(), $select = array('*'), $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
@@ -1416,7 +1382,7 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:05
      *
      */
-    public function getResultWithRightJoinAndWheres($joins = array(), $wheres = array(), $select = '*', $options = null)
+    public function getResultWithRightJoinAndWheres($joins = array(), $wheres = array(), $select = array('*'), $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);

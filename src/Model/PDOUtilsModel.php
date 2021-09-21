@@ -14,9 +14,12 @@ use nguyenanhung\PDO\MySQLPDOUtilsModel as BaseMySQLPDOUtilsModel;
 /**
  * Class PDOUtilsModel
  *
- * @package   nguyenanhung\MyDatabase\Model
- * @author    713uk13m <dev@nguyenanhung.com>
- * @copyright 713uk13m <dev@nguyenanhung.com>
+ * @package           nguyenanhung\MyDatabase\Model
+ * @author            713uk13m <dev@nguyenanhung.com>
+ * @copyright         713uk13m <dev@nguyenanhung.com>
+ * @since             2021-09-22
+ * @last_updated      2021-09-22
+ * @version           3.0.4
  */
 class PDOUtilsModel extends BaseMySQLPDOUtilsModel
 {

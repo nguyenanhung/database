@@ -15,9 +15,12 @@ use Illuminate\Database\Query\Builder;
 /**
  * Trait Helper
  *
- * @package   nguyenanhung\MyDatabase\Model
- * @author    713uk13m <dev@nguyenanhung.com>
- * @copyright 713uk13m <dev@nguyenanhung.com>
+ * @package           nguyenanhung\MyDatabase\Model
+ * @author            713uk13m <dev@nguyenanhung.com>
+ * @copyright         713uk13m <dev@nguyenanhung.com>
+ * @since             2021-09-22
+ * @last_updated      2021-09-22
+ * @version           3.0.4
  */
 trait Helper
 {
@@ -26,6 +29,9 @@ trait Helper
      *
      * @param int $pageIndex
      * @param int $pageSize
+     *
+     * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
+     * @see      https://laravel.com/docs/6.x/queries#ordering-grouping-limit-and-offset
      *
      * @return array
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -51,6 +57,8 @@ trait Helper
      *
      * @param array $options
      *
+     * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
+     *
      * @return string|null
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
@@ -73,6 +81,7 @@ trait Helper
      * @param string $selectField String danh sác các cột cần lấy ra
      *
      * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
+     * @see      https://laravel.com/docs/6.x/queries#selects
      *
      * @return array|string|string[]
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -109,6 +118,7 @@ trait Helper
      * @param array|string|null $selectField Mảng hoặc string danh sác các cột cần lấy ra
      *
      * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
+     * @see      https://laravel.com/docs/6.x/queries#selects
      *
      * @return array|string[]
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -158,6 +168,7 @@ trait Helper
      *                                                    ];
      *
      * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
+     * @see      https://laravel.com/docs/6.x/queries
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -191,7 +202,7 @@ trait Helper
         }
 
         if ($options !== null) {
-            // Case có cả Limit và Offset -> active phân trang
+            // Case có cả Limit   và Offset -> active phân trang
             if (isset($options['limit'], $options['offset']) && $options['limit'] > 0) {
                 $page = $this->preparePaging($options['offset'], $options['limit']);
                 $builder->offset($page['offset'])->limit($page['limit']);
@@ -213,49 +224,13 @@ trait Helper
             if (isset($options['orderBy']) && strtolower($options['orderBy']) === 'random') {
                 $builder->inRandomOrder();
             }
-        }
 
-
-        return $builder;
-    }
-
-    /**
-     * Function prepareWhereStatement
-     *
-     * @param \Illuminate\Database\Query\Builder $builder Class Query Builder
-     * @param string|array                       $wheres  Mảng hoặc giá trị dữ liệu cần so sánh
-     * @param string                             $fields  Column cần so sánh
-     *
-     * @return \Illuminate\Database\Query\Builder
-     * @author   : 713uk13m <dev@nguyenanhung.com>
-     * @copyright: 713uk13m <dev@nguyenanhung.com>
-     * @time     : 09/22/2021 49:17
-     */
-    protected function prepareWhereStatement(Builder $builder, $wheres, $fields): Builder
-    {
-        if (is_array($wheres)) {
-            if (count($wheres) > 0) {
-                foreach ($wheres as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $builder->whereIn($value['field'], $value['value']);
-                            } else {
-                                $builder->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $builder->whereIn($field, $value);
-                        }
-                    } else {
-                        $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $builder->whereIn($fields, $wheres);
+            // Group Query
+            if (isset($options['groupBy']) && !empty($options['groupBy'])) {
+                $builder->groupBy($options['groupBy']);
             }
-        } else {
-            $builder->where($fields, self::OPERATOR_EQUAL_TO, $wheres);
         }
+
 
         return $builder;
     }
