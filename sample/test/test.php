@@ -10,6 +10,7 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use nguyenanhung\Bear\Database\Console;
+use nguyenanhung\Bear\Database\Support;
 use nguyenanhung\MyDatabase\Model\BaseModel;
 
 $database = [
@@ -36,3 +37,5 @@ Console::writeLn(date('Y-m-d H:i:s') . ' SDK Version: -> ' . $model->getVersion(
 Console::writeLn(date('Y-m-d H:i:s') . ' Default Primary Key: -> ' . $model->getPrimaryKey());
 Console::writeLn(date('Y-m-d H:i:s') . ' Table Info: -> ' . $model->getTable());
 Console::writeLn(date('Y-m-d H:i:s') . ' Database Info -> ' . json_encode($model->getDatabase()));
+Support::phpTelnet('localhost', 3306);
+Support::checkConnectDatabase('127.0.0.1', 3306, 'test_database', 'root');
