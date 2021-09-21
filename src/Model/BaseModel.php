@@ -635,10 +635,10 @@ class BaseModel implements Environment
      *
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
-     * @param array|string      $whereValue  Giá trị cần kiểm tra
-     * @param null|string       $whereField  Field tương ứng, ví dụ: ID
-     * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
-     * @param null|string|array $selectField Các field cần lấy
+     * @param array|string      $wheres Giá trị cần kiểm tra
+     * @param null|string       $fields Field tương ứng, ví dụ: ID
+     * @param null|string       $format Format dữ liệu đầu ra: null, json, array, base, result
+     * @param null|string|array $select Các field cần lấy
      *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
@@ -648,27 +648,22 @@ class BaseModel implements Environment
      * @time  : 10/16/18 11:51
      *
      */
-    public function getInfo($whereValue = '', $whereField = 'id', $format = null, $selectField = null)
+    public function getInfo($wheres = '', $fields = 'id', $format = null, $select = null)
     {
-        $this->connection();
         $format = strtolower($format);
-
-        if (!empty($selectField)) {
-            $selectField = $this->prepareFormatSelectField($selectField);
-            if (isset($selectField['expression'], $selectField['bindingParam']) && is_array($selectField) && $this->selectRaw === true) {
-                $db = DB::table($this->table)->selectRaw($selectField['expression'], $selectField['bindingParam']);
+        $this->connection();
+        if (!empty($select)) {
+            $select = $this->prepareFormatSelectField($select);
+            if (isset($select['expression'], $select['bindingParam']) && is_array($select) && $this->selectRaw === true) {
+                $db = DB::table($this->table)->selectRaw($select['expression'], $select['bindingParam']);
             } else {
-                $db = DB::table($this->table)->select($selectField);
+                $db = DB::table($this->table)->select($select);
             }
         } else {
             $db = DB::table($this->table)->select();
         }
-
-        $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $whereField);
-
-
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
-
         if ($format === 'result') {
             $result = $query->get();
             // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
@@ -676,23 +671,19 @@ class BaseModel implements Environment
             $result = $query->first();
             // $this->logger->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
         }
-
         if ($format === 'json') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
         }
-
         if ($format === 'array') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
         }
-
         if ($format === 'base') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
         }
-
-        if (($format === 'result') && $result->count() <= 0) {
+        if (($format === 'result') && ($result->count() <= 0)) {
             return null;
         }
 
@@ -702,19 +693,19 @@ class BaseModel implements Environment
     /**
      * Hàm lấy thông tin bản ghi theo tham số đầu vào - Đa điều kiện
      *
-     * @param array|string      $wheres      Giá trị cần kiểm tra
-     * @param null|string       $field       Field tương ứng, ví dụ: ID
-     * @param null|string       $format      Format dữ liệu đầu ra: null, json, array, base, result
-     * @param null|string|array $selectField Các field cần lấy
+     * @param array|string      $wheres Giá trị cần kiểm tra
+     * @param null|string       $fields Field tương ứng, ví dụ: ID
+     * @param null|string       $format Format dữ liệu đầu ra: null, json, array, base, result
+     * @param null|string|array $select Các field cần lấy
      *
      * @return array|\Illuminate\Support\Collection|object|string|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 11/26/18 16:40
      *
      */
-    public function getInfoWithMultipleWhere($wheres = '', $field = 'id', $format = null, $selectField = null)
+    public function getInfoWithMultipleWhere($wheres = '', $fields = 'id', $format = null, $select = null)
     {
-        return $this->getInfo($wheres, $field, $format, $selectField);
+        return $this->getInfo($wheres, $fields, $format, $select);
     }
 
     /**
@@ -724,8 +715,8 @@ class BaseModel implements Environment
      *
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
-     * @param string|array $whereValue  Giá trị cần kiểm tra
-     * @param string       $whereField  Field tương ứng với giá tri kiểm tra, ví dụ: ID
+     * @param string|array $wheres      Giá trị cần kiểm tra
+     * @param string       $fields      Field tương ứng với giá tri kiểm tra, ví dụ: ID
      * @param string       $fieldOutput field kết quả đầu ra
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
@@ -735,15 +726,15 @@ class BaseModel implements Environment
      * @time  : 10/16/18 11:51
      *
      */
-    public function getValue($whereValue = '', $whereField = 'id', $fieldOutput = '')
+    public function getValue($wheres = '', $fields = 'id', $fieldOutput = '')
     {
         $this->connection();
         $db    = DB::table($this->table);
-        $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $whereField);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
         $result = $query->first();
         // $this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
-        if (!empty($fieldOutput) && $result !== null && isset($result->$fieldOutput)) {
+        if (!empty($fieldOutput) && ($result !== null) && isset($result->$fieldOutput)) {
             return $result->$fieldOutput;
         }
 
@@ -760,7 +751,7 @@ class BaseModel implements Environment
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
      * @param string $wheres      Giá trị cần kiểm tra
-     * @param string $field       Field tương ứng với giá tri kiểm tra, ví dụ: ID
+     * @param string $fields      Field tương ứng với giá tri kiểm tra, ví dụ: ID
      * @param string $fieldOutput field kết quả đầu ra
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
@@ -768,15 +759,15 @@ class BaseModel implements Environment
      * @time  : 11/26/18 16:41
      *
      */
-    public function getValueWithMultipleWhere($wheres = '', $field = 'id', $fieldOutput = '')
+    public function getValueWithMultipleWhere($wheres = '', $fields = 'id', $fieldOutput = '')
     {
-        return $this->getValue($wheres, $field, $fieldOutput);
+        return $this->getValue($wheres, $fields, $fieldOutput);
     }
 
     /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi trong 1 bảng
      *
-     * @param string|array $selectField Mảng dữ liệu danh sách các field cần so sánh
+     * @param string|array $select Mảng dữ liệu danh sách các field cần so sánh
      *
      * @return \Illuminate\Support\Collection
      * @see   https://laravel.com/docs/6.x/queries#selects
@@ -785,33 +776,33 @@ class BaseModel implements Environment
      * @time  : 10/16/18 13:59
      *
      */
-    public function getDistinctResult($selectField = ''): Collection
+    public function getDistinctResult($select = ''): Collection
     {
-        $selectField = $this->prepareFormatSelectField($selectField);
+        $selectField = $this->prepareFormatSelectField($select);
         $this->connection();
         $db = DB::table($this->table);
         $db->distinct();
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         // $this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
-        return $db->get($selectField);
+        return $db->get($select);
     }
 
     /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi theo điều kiện
      *
-     * @param string|array $selectField Danh sách các cột dữ liệu cần lấy ra
-     * @param array|string $whereValue  Điều kiện kiểm tra đầu vào của dữ liệu
+     * @param string|array $select     Danh sách các cột dữ liệu cần lấy ra
+     * @param array|string $whereValue Điều kiện kiểm tra đầu vào của dữ liệu
      *
      * @return \Illuminate\Support\Collection
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:21
      *
      */
-    public function getDistinctResultByColumn($selectField = '', $whereValue = array()): Collection
+    public function getDistinctResultByColumn($select = '', $whereValue = array()): Collection
     {
-        if (!is_array($selectField)) {
-            $selectField = [$selectField];
+        if (!is_array($select)) {
+            $select = [$select];
         }
         $this->connection();
         $db = DB::table($this->table);
@@ -825,16 +816,16 @@ class BaseModel implements Environment
                     }
                 }
             } else {
-                $db->whereIn($selectField, $whereValue);
+                $db->whereIn($select, $whereValue);
             }
         } else {
-            $db->where($selectField, self::OPERATOR_EQUAL_TO, $whereValue);
+            $db->where($select, self::OPERATOR_EQUAL_TO, $whereValue);
         }
         $db->distinct();
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
         //$this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
-        return $db->get($selectField);
+        return $db->get($select);
     }
 
     /**
@@ -842,39 +833,39 @@ class BaseModel implements Environment
      *
      * Các tham số đầu ra và đầu vào theo quy chuẩn của hàm getDistinctResult
      *
-     * @param string|array $selectField Mảng dữ liệu danh sách các field cần so sánh
+     * @param string|array $select Mảng dữ liệu danh sách các field cần so sánh
      *
      * @return \Illuminate\Support\Collection
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 23:49
      *
      */
-    public function getResultDistinct($selectField = ''): Collection
+    public function getResultDistinct($select = ''): Collection
     {
-        return $this->getDistinctResult($selectField);
+        return $this->getDistinctResult($select);
     }
 
     /**
      * Hàm getResultDistinctByColumn là alias của hàm getDistinctResultByColumn
      *
-     * @param string|array $selectField
-     * @param array        $whereValue
+     * @param string|array $select Danh sách các cột dữ liệu cần lấy ra
+     * @param array|string $wheres Điều kiện kiểm tra đầu vào của dữ liệu
      *
      * @return \Illuminate\Support\Collection
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:22
      *
      */
-    public function getResultDistinctByColumn($selectField = '', $whereValue = array()): Collection
+    public function getResultDistinctByColumn($select = '', $wheres = array()): Collection
     {
-        return $this->getDistinctResultByColumn($selectField, $whereValue);
+        return $this->getDistinctResultByColumn($select, $wheres);
     }
 
     /**
      * Function getResult
      *
-     * @param array|string      $whereValue     Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     * @param string|array      $selectField    Mảng dữ liệu danh sách các field cần so sánh
+     * @param array|string      $wheres         Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param string|array      $select         Mảng dữ liệu danh sách các field cần so sánh
      * @param null|string|array $options        Mảng dữ liệu các cấu hình tùy chọn
      *                                          example $options = [
      *                                          'format' => null,
@@ -891,31 +882,29 @@ class BaseModel implements Environment
      * @time  : 10/16/18 16:14
      *
      */
-    public function getResult($whereValue = array(), $selectField = '*', $options = null)
+    public function getResult($wheres = array(), $select = '*', $options = null)
     {
-        $selectField = $this->prepareFormatSelectField($selectField);
-        $format      = $this->prepareOptionFormat($options);
+        $select = $this->prepareFormatSelectField($select);
+        $format = $this->prepareOptionFormat($options);
 
         $this->connection();
         $db = DB::table($this->table);
 
-        $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $this->primaryKey, $options);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
 
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 
-        $result = $query->get($selectField);
+        $result = $query->get($select);
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
 
         if ($format === 'json') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
         }
-
         if ($format === 'array') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
             return $result->toArray();
         }
-
         if ($format === 'base') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
             return $result->toBase();
@@ -928,7 +917,7 @@ class BaseModel implements Environment
      * Function getResult - Đa điều kiện
      *
      * @param array|string      $wheres         Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     * @param string|array      $selectField    Mảng dữ liệu danh sách các field cần so sánh
+     * @param string|array      $select         Mảng dữ liệu danh sách các field cần so sánh
      * @param null|string|array $options        Mảng dữ liệu các cấu hình tùy chọn
      *                                          example $options = [
      *                                          'format' => null,
@@ -945,33 +934,30 @@ class BaseModel implements Environment
      * @time  : 10/16/18 16:14
      *
      */
-    public function getResultWithMultipleWhere($wheres = array(), $selectField = '*', $options = null)
+    public function getResultWithMultipleWhere($wheres = array(), $select = '*', $options = null)
     {
-        return $this->getResult($wheres, $selectField, $options);
+        return $this->getResult($wheres, $select, $options);
     }
 
     /**
      * Function countResult
      *
-     * @param string|array $whereValue  Điều kiện cần thực thi đối với các cột (queries)
-     * @param string|array $selectField Danh sách các cột cần lấy ra. Mặc định sẽ là select *
+     * @param string|array $wheres Điều kiện cần thực thi đối với các cột (queries)
+     * @param string|array $select Danh sách các cột cần lấy ra. Mặc định sẽ là select *
      *
      * @return int
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 11/25/18 14:10
      *
      */
-    public function countResult($whereValue = array(), $selectField = '*'): int
+    public function countResult($wheres = array(), $select = '*'): int
     {
-        $selectField = $this->prepareFormatSelectField($selectField);
-
+        $select = $this->prepareFormatSelectField($select);
         $this->connection();
-        $db = DB::table($this->table);
-
-        $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $this->primaryKey);
-
+        $db    = DB::table($this->table);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
-        $result = $query->get($selectField);
+        $result = $query->get($select);
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         // $this->logger->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
         return $result->count();
@@ -980,17 +966,17 @@ class BaseModel implements Environment
     /**
      * Function countResultWithMultipleWhere
      *
-     * @param string|array $wheres      Điều kiện cần thực thi đối với các cột (queries)
-     * @param string|array $selectField Danh sách các cột cần lấy ra. Mặc định sẽ là select *
+     * @param string|array $wheres Điều kiện cần thực thi đối với các cột (queries)
+     * @param string|array $select Danh sách các cột cần lấy ra. Mặc định sẽ là select *
      *
      * @return int
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:29
      *
      */
-    public function countResultWithMultipleWhere($wheres = array(), $selectField = '*'): int
+    public function countResultWithMultipleWhere($wheres = array(), $select = '*'): int
     {
-        return $this->countResult($wheres, $selectField);
+        return $this->countResult($wheres, $select);
     }
 
     /**
@@ -1486,8 +1472,8 @@ class BaseModel implements Environment
     /**
      * Hàm update dữ liệu
      *
-     * @param array        $data       Mảng dữ liệu cần Update
-     * @param array|string $whereValue Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param array        $data   Mảng dữ liệu cần Update
+     * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
      * @see   https://laravel.com/docs/6.x/queries#updates
@@ -1496,11 +1482,11 @@ class BaseModel implements Environment
      * @time  : 10/16/18 14:10
      *
      */
-    public function update($data = array(), $whereValue = array()): int
+    public function update($data = array(), $wheres = array()): int
     {
         $this->connection();
         $db    = DB::table($this->table);
-        $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $this->table . '.' . $this->primaryKey);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 
         // $this->logger->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
@@ -1568,19 +1554,19 @@ class BaseModel implements Environment
     /**
      * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới
      *
-     * @param array        $data       Mảng dữ liệu cần ghi mới hoặc update
-     * @param array|string $whereValue Điều kiện để kiểm tra và xác định bản ghi là ghi mới hay update
+     * @param array        $data   Mảng dữ liệu cần ghi mới hoặc update
+     * @param array|string $wheres Điều kiện để kiểm tra và xác định bản ghi là ghi mới hay update
      *
      * @return bool|int
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 03:58
      *
      */
-    public function checkExistsAndInsertData($data = array(), $whereValue = array())
+    public function checkExistsAndInsertData($data = array(), $wheres = array())
     {
         $this->connection();
         $db          = DB::table($this->table);
-        $query       = $this->prepareWhereAndFieldStatement($db, $whereValue, $this->table . '.' . $this->primaryKey);
+        $query       = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
         $checkExists = $query->count();
         // $this->logger->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
         if (!$checkExists) {
@@ -1615,34 +1601,32 @@ class BaseModel implements Environment
     /**
      * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới, nếu tồn tại sẵn sẽ update
      *
-     * @param array        $dataInsert Mảng dữ liệu cần ghi mới
-     * @param array        $dataUpdate Mảng dữ liệu cần update
-     * @param array|string $whereValue Mảng / điều kiện để xác định query là update hay insert
+     * @param array        $insert Mảng dữ liệu cần ghi mới
+     * @param array        $update Mảng dữ liệu cần update
+     * @param array|string $wheres Mảng / điều kiện để xác định query là update hay insert
      *
      * @return int
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:01
      *
      */
-    public function checkExistsAndInsertOrUpdateData($dataInsert = array(), $dataUpdate = array(), $whereValue = array()): int
+    public function checkExistsAndInsertOrUpdateData($insert = array(), $update = array(), $wheres = array()): int
     {
         $this->connection();
-        $db = DB::table($this->table);
-
-        $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $this->table . '.' . $this->primaryKey);
-
+        $db          = DB::table($this->table);
+        $query       = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
         $checkExists = $query->count();
         // $this->logger->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
 
         if (!$checkExists) {
-            $id = $db->insertGetId($dataInsert);
+            $id = $db->insertGetId($insert);
             $this->logger->debug(__FUNCTION__, 'SQL Queries Insert Data: ' . $db->toSql());
             $this->logger->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
 
             return $id;
         }
 
-        $resultId = $query->update($dataUpdate);
+        $resultId = $query->update($update);
         $this->logger->debug(__FUNCTION__, 'SQL Queries Update Data: ' . $query->toSql());
         $this->logger->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
 
@@ -1652,17 +1636,17 @@ class BaseModel implements Environment
     /**
      * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới, nếu tồn tại sẵn sẽ update - Đa điều kiện
      *
-     * @param array        $dataInsert Mảng dữ liệu cần ghi mới
-     * @param array        $dataUpdate Mảng dữ liệu cần update
-     * @param array|string $wheres     Mảng / điều kiện để xác định query là update hay insert
+     * @param array        $insert Mảng dữ liệu cần ghi mới
+     * @param array        $update Mảng dữ liệu cần update
+     * @param array|string $wheres Mảng / điều kiện để xác định query là update hay insert
      *
      * @return int
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:01
      *
      */
-    public function checkExistsAndInsertOrUpdateDataWithMultipleWhere($dataInsert = array(), $dataUpdate = array(), $wheres = array()): int
+    public function checkExistsAndInsertOrUpdateDataWithMultipleWhere($insert = array(), $update = array(), $wheres = array()): int
     {
-        return $this->checkExistsAndInsertOrUpdateData($dataInsert, $dataUpdate, $wheres);
+        return $this->checkExistsAndInsertOrUpdateData($insert, $update, $wheres);
     }
 }
