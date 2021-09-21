@@ -83,7 +83,7 @@ trait Helper
     {
         if (is_string($selectField)) {
             if ($selectField === '*') {
-                return ['*'];
+                return array('*');
             }
             $listSelectField = explode(',', $selectField);
             $select          = array();
@@ -94,7 +94,7 @@ trait Helper
                 }
             }
             if (empty($select)) {
-                return ['*'];
+                return array('*');
             }
 
             return $select;
@@ -118,7 +118,7 @@ trait Helper
     protected function prepareFormatSelectField($selectField = array()): array
     {
         if ($selectField === null) {
-            return ['*'];
+            return array('*');
         }
 
         // Format: If Select Field is String

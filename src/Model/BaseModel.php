@@ -512,8 +512,8 @@ class BaseModel implements Environment
      *
      * Mặc định giá trị so sánh dựa trên column created_at
      *
-     * @param array  $selectField Danh sách các column cần lấy
-     * @param string $byColumn    Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+     * @param array  $select Danh sách các column cần lấy
+     * @param string $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
@@ -523,14 +523,14 @@ class BaseModel implements Environment
      * @time  : 10/17/18 01:06
      *
      */
-    public function getLatest($selectField = ['*'], $byColumn = 'created_at')
+    public function getLatest($select = array('*'), $column = 'created_at')
     {
-        $selectField = $this->prepareFormatSelectField($selectField);
+        $select = $this->prepareFormatSelectField($select);
         $this->connection();
-        $db = DB::table($this->table)->latest($byColumn);
+        $db = DB::table($this->table)->latest($column);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
-        return $db->first($selectField);
+        return $db->first($select);
     }
 
     /**
@@ -573,8 +573,8 @@ class BaseModel implements Environment
      *
      * Mặc định giá trị so sánh dựa trên column created_at
      *
-     * @param array  $selectField Danh sách các column cần lấy
-     * @param string $byColumn    Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+     * @param array  $select Danh sách các column cần lấy
+     * @param string $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
@@ -584,14 +584,14 @@ class BaseModel implements Environment
      * @time  : 10/17/18 01:06
      *
      */
-    public function getOldest($selectField = ['*'], $byColumn = 'created_at')
+    public function getOldest($select = array('*'), $column = 'created_at')
     {
-        $selectField = $this->prepareFormatSelectField($selectField);
+        $select = $this->prepareFormatSelectField($select);
         $this->connection();
-        $db = DB::table($this->table)->oldest($byColumn);
+        $db = DB::table($this->table)->oldest($column);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
-        return $db->first($selectField);
+        return $db->first($select);
     }
 
     /**
@@ -606,7 +606,7 @@ class BaseModel implements Environment
      * @time  : 2019-04-07 04:17
      *
      */
-    public function getOldestByColumn($whereValue = array(), $selectField = ['*'], $byColumn = 'created_at')
+    public function getOldestByColumn($whereValue = array(), $selectField = array('*'), $byColumn = 'created_at')
     {
         $selectField = $this->prepareFormatSelectField($selectField);
         $this->connection();
