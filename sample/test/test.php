@@ -8,3 +8,30 @@
  * Time: 01:09
  */
 require_once __DIR__ . '/../../vendor/autoload.php';
+
+use nguyenanhung\Bear\Database\Console;
+use nguyenanhung\MyDatabase\Model\BaseModel;
+
+$database = [
+    'driver'    => 'mysql',
+    'host'      => 'localhost',
+    'database'  => 'database',
+    'username'  => 'root',
+    'password'  => 'password',
+    'charset'   => 'utf8',
+    'collation' => 'utf8_unicode_ci',
+    'prefix'    => '',
+];
+
+$model                  = new BaseModel($database);
+$model->debugStatus     = true;
+$model->debugLevel      = 'info';
+$model->debugLoggerPath = __DIR__ . '/../../tmp';
+$model->__construct();
+$model->setTable('test_table');
+
+Console::writeLn(date('Y-m-d H:i:s') . ' -> Testing PHP Package Database Base Model Class by HungNG');
+Console::writeLn(date('Y-m-d H:i:s') . ' SDK Version: -> ' . $model->getVersion());
+Console::writeLn(date('Y-m-d H:i:s') . ' Default Primary Key: -> ' . $model->getPrimaryKey());
+Console::writeLn(date('Y-m-d H:i:s') . ' Table Info: -> ' . $model->getTable());
+Console::writeLn(date('Y-m-d H:i:s') . ' Database Info -> ' . json_encode($model->getDatabase()));
