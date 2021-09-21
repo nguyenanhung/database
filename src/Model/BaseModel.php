@@ -374,7 +374,7 @@ class BaseModel implements Environment
     /**
      * Function setSelectRaw
      *
-     * @param bool $selectRaw
+     * @param bool $selectRaw TRUE nếu lấy Select Raw Queries
      *
      * @return $this
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -404,7 +404,7 @@ class BaseModel implements Environment
     /*************************** DATABASE METHOD ***************************/
 
     /**
-     * Function checkExistsTable
+     * Function checkExistsTable - Hàm kiểm tra sự tồn tại của 1 bảng
      *
      * @return bool
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -422,7 +422,7 @@ class BaseModel implements Environment
     }
 
     /**
-     * Function checkExistsColumn
+     * Function checkExistsColumn - Hàm kiểm tra 1 column có tồn tại trong bảng hay không?
      *
      * @param string $column
      *
@@ -442,7 +442,7 @@ class BaseModel implements Environment
     }
 
     /**
-     * Function checkExistsColumns
+     * Function checkExistsColumns - Hàm kiểm tra 1 mảng nhiều cột có tồn tại trong bảng hay không?
      *
      * @param array $columns
      *
@@ -496,8 +496,8 @@ class BaseModel implements Environment
     /**
      * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào
      *
-     * @param string|array $whereValue Giá trị cần kiểm tra
-     * @param string|null  $whereField Field tương ứng, ví dụ: ID
+     * @param string|array $whereValue Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
+     * @param string|null  $whereField Field tương ứng cần kiểm tra đối chiếu
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -584,16 +584,15 @@ class BaseModel implements Environment
     /**
      * Hàm lấy bản ghi mới nhất theo điều kiện đầu vào
      *
-     * @param array  $whereValue
-     * @param array  $selectField
-     * @param string $byColumn
+     * @param string|array $whereValue  Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
+     * @param string|array $selectField Danh sách cột cần lấy dữ liệu ra
+     * @param string       $byColumn    Tên cột cần order theo điều kiện
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:16
-     *
      */
-    public function getLatestByColumn($whereValue = array(), $selectField = ['*'], $byColumn = 'created_at')
+    public function getLatestByColumn($whereValue = array(), $selectField = array('*'), $byColumn = 'created_at')
     {
         if (!is_array($selectField)) {
             $selectField = [$selectField];
@@ -648,9 +647,9 @@ class BaseModel implements Environment
     /**
      * Hàm lấy bản ghi cũ nhất nhất theo điều kiện đầu vào
      *
-     * @param array  $whereValue
-     * @param array  $selectField
-     * @param string $byColumn
+     * @param string|array $whereValue  Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
+     * @param string|array $selectField Danh sách cột cần lấy dữ liệu ra
+     * @param string       $byColumn    Tên cột cần order theo điều kiện
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -899,8 +898,8 @@ class BaseModel implements Environment
     /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi theo điều kiện
      *
-     * @param string|array $selectField
-     * @param array|string $whereValue
+     * @param string|array $selectField Danh sách các cột dữ liệu cần lấy ra
+     * @param array|string $whereValue  Điều kiện kiểm tra đầu vào của dữ liệu
      *
      * @return \Illuminate\Support\Collection
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -972,9 +971,9 @@ class BaseModel implements Environment
     /**
      * Function getResult
      *
-     * @param array|string $whereValue          Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     * @param string|array $selectField         Mảng dữ liệu danh sách các field cần so sánh
-     * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
+     * @param array|string      $whereValue     Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param string|array      $selectField    Mảng dữ liệu danh sách các field cần so sánh
+     * @param null|string|array $options        Mảng dữ liệu các cấu hình tùy chọn
      *                                          example $options = [
      *                                          'format' => null,
      *                                          'orderBy => [
@@ -1075,9 +1074,9 @@ class BaseModel implements Environment
     /**
      * Function getResult - Đa điều kiện
      *
-     * @param array|string $wheres              Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-     * @param string|array $selectField         Mảng dữ liệu danh sách các field cần so sánh
-     * @param null|string  $options             Mảng dữ liệu các cấu hình tùy chọn
+     * @param array|string      $wheres         Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+     * @param string|array      $selectField    Mảng dữ liệu danh sách các field cần so sánh
+     * @param null|string|array $options        Mảng dữ liệu các cấu hình tùy chọn
      *                                          example $options = [
      *                                          'format' => null,
      *                                          'orderBy => [
@@ -1101,8 +1100,8 @@ class BaseModel implements Environment
     /**
      * Function countResult
      *
-     * @param array        $whereValue
-     * @param string|array $selectField
+     * @param string|array $whereValue  Điều kiện cần thực thi đối với các cột (queries)
+     * @param string|array $selectField Danh sách các cột cần lấy ra. Mặc định sẽ là select *
      *
      * @return int
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1150,8 +1149,8 @@ class BaseModel implements Environment
     /**
      * Function countResultWithMultipleWhere
      *
-     * @param array        $wheres
-     * @param string|array $selectField
+     * @param string|array $wheres      Điều kiện cần thực thi đối với các cột (queries)
+     * @param string|array $selectField Danh sách các cột cần lấy ra. Mặc định sẽ là select *
      *
      * @return int
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1166,9 +1165,22 @@ class BaseModel implements Environment
     /**
      * Function getResultWithSimpleJoin
      *
-     * @param array  $joins
-     * @param string $select
-     * @param null   $options
+     * @param array             $joins          Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+     *                                          'tableA' => [
+     *                                          'table' => 'tableA',
+     *                                          'first' => 'tableAID',
+     *                                          'operator' => '=',
+     *                                          'second' => 'CurrentTableNameID'
+     *                                          ]
+     *                                          ]
+     * @param string|array      $select         Danh sách các cột cần lấy dữ liệu ra
+     * @param null|string|array $options        Mảng dữ liệu các cấu hình tùy chọn
+     *                                          example $options = [
+     *                                          'format' => null,
+     *                                          'orderBy => [
+     *                                          'id' => 'desc'
+     *                                          ]
+     *                                          ];
      *
      * @return object|array|\Illuminate\Support\Collection|string
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1177,10 +1189,43 @@ class BaseModel implements Environment
      */
     public function getResultWithSimpleJoin($joins = array(), $select = '*', $options = null)
     {
+        return $this->getResultWithSimpleInnerJoin($joins, $select, $options);
+    }
+
+    /**
+     * Function getResultWithSimpleInnerJoin
+     *
+     * @param array             $joins          Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+     *                                          'tableA' => [
+     *                                          'table' => 'tableA',
+     *                                          'first' => 'tableAID',
+     *                                          'operator' => '=',
+     *                                          'second' => 'CurrentTableNameID'
+     *                                          ]
+     *                                          ]
+     * @param string|array      $select         Danh sách các cột cần lấy dữ liệu ra
+     * @param null|string|array $options        Mảng dữ liệu các cấu hình tùy chọn
+     *                                          example $options = [
+     *                                          'format' => null,
+     *                                          'orderBy => [
+     *                                          'id' => 'desc'
+     *                                          ]
+     *                                          ];
+     *
+     * @return object|array|\Illuminate\Support\Collection|string
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:03
+     *
+     */
+    public function getResultWithSimpleInnerJoin($joins = array(), $select = '*', $options = null)
+    {
         $format = isset($options['format']) ? strtolower($options['format']) : null;
         $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->join($join['table'], $join['first'], $join['operator'], $join['second']);
+        }
+        if (!is_array($select)) {
+            $select = [$select];
         }
         $result = $db->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
@@ -1203,23 +1248,65 @@ class BaseModel implements Environment
     }
 
     /**
-     * Function getResultWithSimpleLeftJoin
+     * Function getResultWithInnerJoinAndWheres
      *
-     * @param array  $joins
-     * @param string $select
-     * @param null   $options
+     * @param array             $joins          Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+     *                                          'tableA' => [
+     *                                          'table' => 'tableA',
+     *                                          'first' => 'tableAID',
+     *                                          'operator' => '=',
+     *                                          'second' => 'CurrentTableNameID'
+     *                                          ]
+     *                                          ]
+     * @param string|array      $wheres         Mảng chứa danh sách các điều kiện để lấy ra dữ liệu, cần map với tất cả các bảng joins
+     * @param string|array      $select         Danh sách các cột cần lấy dữ liệu ra
+     * @param null|string|array $options        Mảng dữ liệu các cấu hình tùy chọn
+     *                                          example $options = [
+     *                                          'format' => null,
+     *                                          'orderBy => [
+     *                                          'id' => 'desc'
+     *                                          ]
+     *                                          ];
      *
      * @return object|array|\Illuminate\Support\Collection|string
-     * @author: 713uk13m <dev@nguyenanhung.com>
-     * @time  : 2018-12-03 02:05
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 09/21/2021 51:55
      *
      */
-    public function getResultWithSimpleLeftJoin($joins = array(), $select = '*', $options = null)
+    public function getResultWithInnerJoinAndWheres($joins = array(), $wheres = array(), $select = '*', $options = null)
     {
         $format = isset($options['format']) ? strtolower($options['format']) : null;
         $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
-            $db->leftJoin($join['table'], $join['first'], $join['operator'], $join['second']);
+            $db->joinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
+        }
+        if (is_array($wheres)) {
+            if (count($wheres) > 0) {
+                foreach ($wheres as $field => $value) {
+                    if (is_array($value)) {
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $db->whereIn($value['field'], $value['value']);
+                            } else {
+                                $db->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $db->whereIn($field, $value);
+                        }
+
+                    } else {
+                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    }
+                }
+            } else {
+                $db->whereIn($this->table . '.' . $this->primaryKey, $wheres);
+            }
+        } else {
+            $db->where($this->table . '.' . $this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+        if (!is_array($select)) {
+            $select = [$select];
         }
         $result = $db->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
@@ -1244,9 +1331,22 @@ class BaseModel implements Environment
     /**
      * Function getResultWithSimpleCrossJoin
      *
-     * @param array  $joins
-     * @param string $select
-     * @param null   $options
+     * @param array             $joins          Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+     *                                          'tableA' => [
+     *                                          'table' => 'tableA',
+     *                                          'first' => 'tableAID',
+     *                                          'operator' => '=',
+     *                                          'second' => 'CurrentTableNameID'
+     *                                          ]
+     *                                          ]
+     * @param string|array      $select         Danh sách các cột cần lấy dữ liệu ra
+     * @param null|string|array $options        Mảng dữ liệu các cấu hình tùy chọn
+     *                                          example $options = [
+     *                                          'format' => null,
+     *                                          'orderBy => [
+     *                                          'id' => 'desc'
+     *                                          ]
+     *                                          ];
      *
      * @return object|array|\Illuminate\Support\Collection|string
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1259,6 +1359,359 @@ class BaseModel implements Environment
         $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
+        }
+        if (!is_array($select)) {
+            $select = [$select];
+        }
+        $result = $db->select($select)->get();
+        // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        if ($format === 'json') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
+            return $result->toJson();
+        }
+
+        if ($format === 'array') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
+            return $result->toArray();
+        }
+
+        if ($format === 'base') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
+            return $result->toBase();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Function getResultWithCrossJoinAndWheres
+     *
+     * @param array             $joins          Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+     *                                          'tableA' => [
+     *                                          'table' => 'tableA',
+     *                                          'first' => 'tableAID',
+     *                                          'operator' => '=',
+     *                                          'second' => 'CurrentTableNameID'
+     *                                          ]
+     *                                          ]
+     * @param string|array      $wheres         Mảng chứa danh sách các điều kiện để lấy ra dữ liệu, cần map với tất cả các bảng joins
+     * @param string|array      $select         Danh sách các cột cần lấy dữ liệu ra
+     * @param null|string|array $options        Mảng dữ liệu các cấu hình tùy chọn
+     *                                          example $options = [
+     *                                          'format' => null,
+     *                                          'orderBy => [
+     *                                          'id' => 'desc'
+     *                                          ]
+     *                                          ];
+     *
+     * @return object|array|\Illuminate\Support\Collection|string
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:06
+     *
+     */
+    public function getResultWithCrossJoinAndWheres($joins = array(), $wheres = array(), $select = '*', $options = null)
+    {
+        $format = isset($options['format']) ? strtolower($options['format']) : null;
+        $db     = DB::table($this->table);
+        foreach ($joins as $key => $join) {
+            $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
+        }
+        if (is_array($wheres)) {
+            if (count($wheres) > 0) {
+                foreach ($wheres as $field => $value) {
+                    if (is_array($value)) {
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $db->whereIn($value['field'], $value['value']);
+                            } else {
+                                $db->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $db->whereIn($field, $value);
+                        }
+
+                    } else {
+                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    }
+                }
+            } else {
+                $db->whereIn($this->table . '.' . $this->primaryKey, $wheres);
+            }
+        } else {
+            $db->where($this->table . '.' . $this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+        if (!is_array($select)) {
+            $select = [$select];
+        }
+        $result = $db->select($select)->get();
+        // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        if ($format === 'json') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
+            return $result->toJson();
+        }
+
+        if ($format === 'array') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
+            return $result->toArray();
+        }
+
+        if ($format === 'base') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
+            return $result->toBase();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Function getResultWithSimpleLeftJoin
+     *
+     * @param array             $joins          Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+     *                                          'tableA' => [
+     *                                          'table' => 'tableA',
+     *                                          'first' => 'tableAID',
+     *                                          'operator' => '=',
+     *                                          'second' => 'CurrentTableNameID'
+     *                                          ]
+     *                                          ]
+     * @param string|array      $select         Danh sách các cột cần lấy dữ liệu ra
+     * @param null|string|array $options        Mảng dữ liệu các cấu hình tùy chọn
+     *                                          example $options = [
+     *                                          'format' => null,
+     *                                          'orderBy => [
+     *                                          'id' => 'desc'
+     *                                          ]
+     *                                          ];
+     *
+     * @return object|array|\Illuminate\Support\Collection|string
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:05
+     *
+     */
+    public function getResultWithSimpleLeftJoin($joins = array(), $select = '*', $options = null)
+    {
+        $format = isset($options['format']) ? strtolower($options['format']) : null;
+        $db     = DB::table($this->table);
+        foreach ($joins as $key => $join) {
+            $db->leftJoin($join['table'], $join['first'], $join['operator'], $join['second']);
+        }
+        if (!is_array($select)) {
+            $select = [$select];
+        }
+        $result = $db->select($select)->get();
+        // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        if ($format === 'json') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
+            return $result->toJson();
+        }
+
+        if ($format === 'array') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
+            return $result->toArray();
+        }
+
+        if ($format === 'base') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
+            return $result->toBase();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Function getResultWithLeftJoinAndWheres
+     *
+     * @param array             $joins          Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+     *                                          'tableA' => [
+     *                                          'table' => 'tableA',
+     *                                          'first' => 'tableAID',
+     *                                          'operator' => '=',
+     *                                          'second' => 'CurrentTableNameID'
+     *                                          ]
+     *                                          ]
+     * @param string|array      $wheres         Mảng chứa danh sách các điều kiện để lấy ra dữ liệu, cần map với tất cả các bảng joins
+     * @param string|array      $select         Danh sách các cột cần lấy dữ liệu ra
+     * @param null|string|array $options        Mảng dữ liệu các cấu hình tùy chọn
+     *                                          example $options = [
+     *                                          'format' => null,
+     *                                          'orderBy => [
+     *                                          'id' => 'desc'
+     *                                          ]
+     *                                          ];
+     *
+     * @return object|array|\Illuminate\Support\Collection|string
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:05
+     *
+     */
+    public function getResultWithLeftJoinAndWheres($joins = array(), $wheres = array(), $select = '*', $options = null)
+    {
+        $format = isset($options['format']) ? strtolower($options['format']) : null;
+        $db     = DB::table($this->table);
+        foreach ($joins as $key => $join) {
+            $db->leftJoinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
+        }
+        if (is_array($wheres)) {
+            if (count($wheres) > 0) {
+                foreach ($wheres as $field => $value) {
+                    if (is_array($value)) {
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $db->whereIn($value['field'], $value['value']);
+                            } else {
+                                $db->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $db->whereIn($field, $value);
+                        }
+
+                    } else {
+                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    }
+                }
+            } else {
+                $db->whereIn($this->table . '.' . $this->primaryKey, $wheres);
+            }
+        } else {
+            $db->where($this->table . '.' . $this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+        if (!is_array($select)) {
+            $select = [$select];
+        }
+        $result = $db->select($select)->get();
+        // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        if ($format === 'json') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
+            return $result->toJson();
+        }
+
+        if ($format === 'array') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
+            return $result->toArray();
+        }
+
+        if ($format === 'base') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
+            return $result->toBase();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Function getResultWithSimpleRightJoin
+     *
+     * @param array             $joins          Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+     *                                          'tableA' => [
+     *                                          'table' => 'tableA',
+     *                                          'first' => 'tableAID',
+     *                                          'operator' => '=',
+     *                                          'second' => 'CurrentTableNameID'
+     *                                          ]
+     *                                          ]
+     * @param string|array      $select         Danh sách các cột cần lấy dữ liệu ra
+     * @param null|string|array $options        Mảng dữ liệu các cấu hình tùy chọn
+     *                                          example $options = [
+     *                                          'format' => null,
+     *                                          'orderBy => [
+     *                                          'id' => 'desc'
+     *                                          ]
+     *                                          ];
+     *
+     * @return object|array|\Illuminate\Support\Collection|string
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:05
+     *
+     */
+    public function getResultWithSimpleRightJoin($joins = array(), $select = '*', $options = null)
+    {
+        $format = isset($options['format']) ? strtolower($options['format']) : null;
+        $db     = DB::table($this->table);
+        foreach ($joins as $key => $join) {
+            $db->rightJoin($join['table'], $join['first'], $join['operator'], $join['second']);
+        }
+        if (!is_array($select)) {
+            $select = [$select];
+        }
+        $result = $db->select($select)->get();
+        // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        if ($format === 'json') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
+            return $result->toJson();
+        }
+
+        if ($format === 'array') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
+            return $result->toArray();
+        }
+
+        if ($format === 'base') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
+            return $result->toBase();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Function getResultWithRightJoinAndWheres
+     *
+     * @param array             $joins          Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+     *                                          'tableA' => [
+     *                                          'table' => 'tableA',
+     *                                          'first' => 'tableAID',
+     *                                          'operator' => '=',
+     *                                          'second' => 'CurrentTableNameID'
+     *                                          ]
+     *                                          ]
+     * @param string|array      $wheres         Mảng chứa danh sách các điều kiện để lấy ra dữ liệu, cần map với tất cả các bảng joins
+     * @param string|array      $select         Danh sách các cột cần lấy dữ liệu ra
+     * @param null|string|array $options        Mảng dữ liệu các cấu hình tùy chọn
+     *                                          example $options = [
+     *                                          'format' => null,
+     *                                          'orderBy => [
+     *                                          'id' => 'desc'
+     *                                          ]
+     *                                          ];
+     *
+     * @return object|array|\Illuminate\Support\Collection|string
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 02:05
+     *
+     */
+    public function getResultWithRightJoinAndWheres($joins = array(), $wheres = array(), $select = '*', $options = null)
+    {
+        $format = isset($options['format']) ? strtolower($options['format']) : null;
+        $db     = DB::table($this->table);
+        foreach ($joins as $key => $join) {
+            $db->rightJoinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
+        }
+        if (is_array($wheres)) {
+            if (count($wheres) > 0) {
+                foreach ($wheres as $field => $value) {
+                    if (is_array($value)) {
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $db->whereIn($value['field'], $value['value']);
+                            } else {
+                                $db->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $db->whereIn($field, $value);
+                        }
+
+                    } else {
+                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    }
+                }
+            } else {
+                $db->whereIn($this->table . '.' . $this->primaryKey, $wheres);
+            }
+        } else {
+            $db->where($this->table . '.' . $this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+        if (!is_array($select)) {
+            $select = [$select];
         }
         $result = $db->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
@@ -1435,8 +1888,8 @@ class BaseModel implements Environment
     /**
      * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới
      *
-     * @param array        $data
-     * @param array|string $whereValue
+     * @param array        $data       Mảng dữ liệu cần ghi mới hoặc update
+     * @param array|string $whereValue Điều kiện để kiểm tra và xác định bản ghi là ghi mới hay update
      *
      * @return bool|int
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1489,8 +1942,8 @@ class BaseModel implements Environment
     /**
      * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới - Đa điều kiện
      *
-     * @param array $data
-     * @param array $wheres
+     * @param array        $data   Mảng dữ liệu cần ghi mới hoặc update
+     * @param array|string $wheres Điều kiện để kiểm tra và xác định bản ghi là ghi mới hay update
      *
      * @return bool|int
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1505,9 +1958,9 @@ class BaseModel implements Environment
     /**
      * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới, nếu tồn tại sẵn sẽ update
      *
-     * @param array        $dataInsert
-     * @param array        $dataUpdate
-     * @param array|string $whereValue
+     * @param array        $dataInsert Mảng dữ liệu cần ghi mới
+     * @param array        $dataUpdate Mảng dữ liệu cần update
+     * @param array|string $whereValue Mảng / điều kiện để xác định query là update hay insert
      *
      * @return int
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1561,9 +2014,9 @@ class BaseModel implements Environment
     /**
      * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới, nếu tồn tại sẵn sẽ update - Đa điều kiện
      *
-     * @param array $dataInsert
-     * @param array $dataUpdate
-     * @param array $wheres
+     * @param array        $dataInsert Mảng dữ liệu cần ghi mới
+     * @param array        $dataUpdate Mảng dữ liệu cần update
+     * @param array|string $wheres     Mảng / điều kiện để xác định query là update hay insert
      *
      * @return int
      * @author: 713uk13m <dev@nguyenanhung.com>

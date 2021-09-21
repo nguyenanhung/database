@@ -7,7 +7,9 @@
         "sql",
         "mysql",
         "mysqli",
-        "pdo"
+        "pdo",
+        "active record",
+        "query buillder"
     ],
     "homepage": "https://github.com/nguyenanhung/database",
     "license": "GPL-3.0",
