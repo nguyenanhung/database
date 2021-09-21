@@ -38,6 +38,9 @@
     "autoload": {
         "psr-4": {
             "nguyenanhung\\MyDatabase\\": "src/"
-        }
+        },
+        "files": [
+            "helpers/helpers.php"
+        ]
     }
 }
