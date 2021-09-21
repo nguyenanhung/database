@@ -221,7 +221,7 @@ trait Helper
             }
 
             // Sắp xếp dữ liệu đổ ra ngẫu nhiên nếu như Option Order By ghi nhận giá trị random
-            if (isset($options['orderBy']) && strtolower($options['orderBy']) === 'random') {
+            if (isset($options['orderBy']) && is_string($options['orderBy']) && strtolower($options['orderBy']) === 'random') {
                 $builder->inRandomOrder();
             }
 

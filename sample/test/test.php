@@ -34,6 +34,7 @@ $model->setTable('test_table');
 
 Console::writeLn(date('Y-m-d H:i:s') . ' -> Testing PHP Package Database Base Model Class by HungNG');
 Console::writeLn(date('Y-m-d H:i:s') . ' SDK Version: -> ' . $model->getVersion());
+Console::writeLn(date('Y-m-d H:i:s') . ' SDK Infomation: -> ' . $model->getSDKPropertiesInfo(true));
 Console::writeLn(date('Y-m-d H:i:s') . ' Default Primary Key: -> ' . $model->getPrimaryKey());
 Console::writeLn(date('Y-m-d H:i:s') . ' Table Info: -> ' . $model->getTable());
 Console::writeLn(date('Y-m-d H:i:s') . ' Database Info -> ' . json_encode($model->getDatabase()));

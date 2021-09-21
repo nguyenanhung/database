@@ -18,11 +18,14 @@ namespace nguyenanhung\MyDatabase;
  */
 interface Environment
 {
-    public const VERSION       = '3.0.4';
+    public const PROJECT_NAME  = 'My Database by HungNG';
+    public const VERSION       = '3.0.4.1';
     public const LAST_MODIFIED = '2021-09-22';
     public const AUTHOR_NAME   = 'Hung Nguyen';
     public const AUTHOR_EMAIL  = 'dev@nguyenanhung.com';
-    public const PROJECT_NAME  = 'My Database';
+    public const AUTHOR_URL    = 'https://nguyenanhung.com';
+    public const GITHUB_URL    = 'https://github.com/nguyenanhung/database';
+    public const PACKAGES_URL  = 'https://packagist.org/packages/nguyenanhung/database';
     public const TIMEZONE      = 'Asia/Ho_Chi_Minh';
 
     public const OPERATOR_EQUAL_TO                 = '=';

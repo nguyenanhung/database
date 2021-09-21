@@ -16,6 +16,7 @@ use Illuminate\Database\Schema\Builder;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
+use nguyenanhung\MyDatabase\Version;
 use nguyenanhung\MyDebug\Logger;
 use nguyenanhung\MyDatabase\Environment;
 
@@ -41,7 +42,7 @@ use nguyenanhung\MyDatabase\Environment;
  */
 class BaseModel implements Environment
 {
-    use Helper;
+    use Version, Helper;
 
     /** @var \nguyenanhung\MyDebug\Logger $logger */
     protected $logger;
@@ -122,19 +123,6 @@ class BaseModel implements Environment
      */
     public function __destruct()
     {
-    }
-
-    /**
-     * Function getVersion
-     *
-     * @return string
-     * @author   : 713uk13m <dev@nguyenanhung.com>
-     * @copyright: 713uk13m <dev@nguyenanhung.com>
-     * @time     : 08/29/2021 04:53
-     */
-    public function getVersion(): string
-    {
-        return self::VERSION;
     }
 
     /**
@@ -633,7 +621,7 @@ class BaseModel implements Environment
      */
     public function getInfo($wheres = '', $fields = 'id', $format = null, $select = null)
     {
-        $format = strtolower($format);
+        $format = $this->prepareOptionFormat($format);
         $this->connection();
         if (!empty($select)) {
             $select = $this->prepareFormatSelectField($select);
