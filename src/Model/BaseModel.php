@@ -509,34 +509,11 @@ class BaseModel implements Environment
     public function checkExists($whereValue = '', $whereField = 'id'): int
     {
         $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($whereValue)) {
-            if (count($whereValue) > 0) {
-                foreach ($whereValue as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $db->whereIn($value['field'], $value['value']);
-                            } else {
-                                $db->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $db->whereIn($field, $value);
-                        }
+        $db    = DB::table($this->table);
+        $query = $this->prepareWhereFieldStatement($db, $whereValue, $whereField);
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 
-                    } else {
-                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $db->whereIn($whereField, $whereValue);
-            }
-        } else {
-            $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
-        }
-        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-
-        return $db->count();
+        return $query->count();
     }
 
     /**
@@ -573,9 +550,7 @@ class BaseModel implements Environment
      */
     public function getLatest($selectField = ['*'], $byColumn = 'created_at')
     {
-        if (!is_array($selectField)) {
-            $selectField = [$selectField];
-        }
+        $selectField = $this->prepareFormatSelectField($selectField);
         $this->connection();
         $db = DB::table($this->table)->latest($byColumn);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
@@ -599,17 +574,19 @@ class BaseModel implements Environment
         $selectField = $this->prepareFormatSelectField($selectField);
         $this->connection();
         $db = DB::table($this->table);
+
         if (is_array($whereValue) && count($whereValue) > 0) {
-            foreach ($whereValue as $column => $column_value) {
-                if (is_array($column_value)) {
-                    $db->whereIn($column, $column_value);
+            foreach ($whereValue as $column => $value) {
+                if (is_array($value)) {
+                    $db->whereIn($column, $value);
                 } else {
-                    $db->where($column, self::OPERATOR_EQUAL_TO, $column_value);
+                    $db->where($column, self::OPERATOR_EQUAL_TO, $value);
                 }
             }
         } else {
             $db->where($selectField, self::OPERATOR_EQUAL_TO, $whereValue);
         }
+
         $db->latest($byColumn);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
@@ -710,37 +687,17 @@ class BaseModel implements Environment
         } else {
             $db = DB::table($this->table)->select();
         }
-        if (is_array($whereValue)) {
-            if (count($whereValue) > 0) {
-                foreach ($whereValue as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $db->whereIn($value['field'], $value['value']);
-                            } else {
-                                $db->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $db->whereIn($field, $value);
-                        }
 
-                    } else {
-                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $db->whereIn($whereField, $whereValue);
-            }
-        } else {
-            $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
-        }
+        $query = $this->prepareWhereFieldStatement($db, $whereValue, $whereField);
 
-        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
+
         if ($format === 'result') {
-            $result = $db->get();
+            $result = $query->get();
             // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         } else {
-            $result = $db->first();
+            $result = $query->first();
             // $this->logger->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
         }
 
@@ -805,33 +762,10 @@ class BaseModel implements Environment
     public function getValue($whereValue = '', $whereField = 'id', $fieldOutput = '')
     {
         $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($whereValue)) {
-            if (count($whereValue) > 0) {
-                foreach ($whereValue as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $db->whereIn($value['field'], $value['value']);
-                            } else {
-                                $db->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $db->whereIn($field, $value);
-                        }
-
-                    } else {
-                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $db->whereIn($whereField, $whereValue);
-            }
-        } else {
-            $db->where($whereField, self::OPERATOR_EQUAL_TO, $whereValue);
-        }
-        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->first();
+        $db    = DB::table($this->table);
+        $query = $this->prepareWhereFieldStatement($db, $whereValue, $whereField);
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
+        $result = $query->first();
         // $this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
         if (!empty($fieldOutput) && $result !== null && isset($result->$fieldOutput)) {
             return $result->$fieldOutput;
@@ -1965,6 +1899,7 @@ class BaseModel implements Environment
     {
         $this->connection();
         $db = DB::table($this->table);
+
         if (is_array($whereValue)) {
             if (count($whereValue) > 0) {
                 foreach ($whereValue as $field => $value) {
@@ -1989,6 +1924,7 @@ class BaseModel implements Environment
         } else {
             $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $whereValue);
         }
+
         $checkExists = $db->count();
         // $this->logger->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
         if (!$checkExists) {

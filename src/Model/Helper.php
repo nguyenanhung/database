@@ -10,6 +10,8 @@
 
 namespace nguyenanhung\MyDatabase\Model;
 
+use Illuminate\Database\Query\Builder;
+
 /**
  * Trait Helper
  *
@@ -22,7 +24,7 @@ trait Helper
     /**
      * Function formatSelectFieldStringToArray
      *
-     * @param string $selectField
+     * @param string $selectField String danh sác các cột cần lấy ra
      *
      * @return array|string|string[]
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -56,7 +58,7 @@ trait Helper
     /**
      * Function prepareFormatSelectField
      *
-     * @param array|string|null $selectField
+     * @param array|string|null $selectField Mảng hoặc string danh sác các cột cần lấy ra
      *
      * @return array|string[]
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -90,4 +92,47 @@ trait Helper
 
         return $selectField;
     }
+
+    /**
+     * Function prepareWhereFieldStatement
+     *
+     * @param \Illuminate\Database\Query\Builder $builder Class Query Builder
+     * @param string|array                       $wheres  Mảng hoặc giá trị dữ liệu cần so sánh
+     * @param string                             $fields  Column cần so sánh
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 09/22/2021 02:38
+     */
+    protected function prepareWhereFieldStatement(Builder $builder, $wheres, $fields): Builder
+    {
+        if (is_array($wheres)) {
+            if (count($wheres) > 0) {
+                foreach ($wheres as $field => $value) {
+                    if (is_array($value)) {
+                        if (isset($value['field'], $value['value'])) {
+                            if (is_array($value['value'])) {
+                                $builder->whereIn($value['field'], $value['value']);
+                            } else {
+                                $builder->where($value['field'], $value['operator'], $value['value']);
+                            }
+                        } else {
+                            $builder->whereIn($field, $value);
+                        }
+                    } else {
+                        $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
+                    }
+                }
+            } else {
+                $builder->whereIn($fields, $wheres);
+            }
+        } else {
+            $builder->where($fields, self::OPERATOR_EQUAL_TO, $wheres);
+        }
+
+        return $builder;
+    }
+
+
 }
