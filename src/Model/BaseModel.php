@@ -27,7 +27,7 @@ use nguyenanhung\MyDatabase\Environment;
  * Class này chỉ khai báo các hàm cơ bản và thông dụng trong quá trính sử dụng
  * các cú pháp, function khác đều có thể sử dụng theo tài liệu chính thức của Illuminate Database
  *
- * @see       https://laravel.com/docs/5.8/database
+ * @see       https://laravel.com/docs/6.x/database
  * @see       https://packagist.org/packages/illuminate/database#v5.8.36
  *
  * @package   nguyenanhung\MyDatabase\Model
@@ -40,7 +40,7 @@ class BaseModel implements Environment
 {
     use Helper;
 
-    /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
+    /** @var \nguyenanhung\MyDebug\Logger $logger */
     protected $logger;
 
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
@@ -162,31 +162,6 @@ class BaseModel implements Environment
         $this->primaryKey = $primaryKey;
 
         return $this;
-    }
-
-    /**
-     * Function preparePaging
-     *
-     * @param int $pageIndex
-     * @param int $pageSize
-     *
-     * @return array
-     * @author   : 713uk13m <dev@nguyenanhung.com>
-     * @copyright: 713uk13m <dev@nguyenanhung.com>
-     * @time     : 08/21/2021 23:24
-     */
-    public function preparePaging($pageIndex = 1, $pageSize = 10): array
-    {
-        if ($pageIndex !== 0) {
-            if (!$pageIndex || $pageIndex <= 0 || empty($pageIndex)) {
-                $pageIndex = 1;
-            }
-            $offset = ($pageIndex - 1) * $pageSize;
-        } else {
-            $offset = $pageIndex;
-        }
-
-        return array('offset' => $offset, 'limit' => $pageSize);
     }
 
     /**
@@ -470,7 +445,7 @@ class BaseModel implements Environment
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:15
      *
-     * @see   https://laravel.com/docs/5.8/queries#deletes
+     * @see   https://laravel.com/docs/6.x/queries#deletes
      *
      */
     public function truncate(): void
@@ -498,19 +473,19 @@ class BaseModel implements Environment
     /**
      * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào
      *
-     * @param string|array $whereValue Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
-     * @param string|null  $whereField Field tương ứng cần kiểm tra đối chiếu
+     * @param string|array $wheres Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
+     * @param string|null  $fields Field tương ứng cần kiểm tra đối chiếu
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:45
      *
      */
-    public function checkExists($whereValue = '', $whereField = 'id'): int
+    public function checkExists($wheres = '', $fields = 'id'): int
     {
         $this->connection();
         $db    = DB::table($this->table);
-        $query = $this->prepareWhereFieldStatement($db, $whereValue, $whereField);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 
         return $query->count();
@@ -519,17 +494,17 @@ class BaseModel implements Environment
     /**
      * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào - Đa điều kiện
      *
-     * @param string|array $whereValue Giá trị cần kiểm tra
-     * @param string|null  $whereField Field tương ứng, ví dụ: ID
+     * @param string|array $wheres Giá trị cần kiểm tra
+     * @param string|null  $fields Field tương ứng, ví dụ: ID
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:45
      *
      */
-    public function checkExistsWithMultipleWhere($whereValue = '', $whereField = 'id'): int
+    public function checkExistsWithMultipleWhere($wheres = '', $fields = 'id'): int
     {
-        return $this->checkExists($whereValue, $whereField);
+        return $this->checkExists($wheres, $fields);
     }
 
     /**
@@ -542,7 +517,7 @@ class BaseModel implements Environment
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
-     * @see   https://laravel.com/docs/5.8/queries#ordering-grouping-limit-and-offset
+     * @see   https://laravel.com/docs/6.x/queries#ordering-grouping-limit-and-offset
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/17/18 01:06
@@ -603,7 +578,7 @@ class BaseModel implements Environment
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
-     * @see   https://laravel.com/docs/5.8/queries#ordering-grouping-limit-and-offset
+     * @see   https://laravel.com/docs/6.x/queries#ordering-grouping-limit-and-offset
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/17/18 01:06
@@ -667,7 +642,7 @@ class BaseModel implements Environment
      *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
-     * @see   https://laravel.com/docs/5.8/queries#selects
+     * @see   https://laravel.com/docs/6.x/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:51
@@ -677,6 +652,7 @@ class BaseModel implements Environment
     {
         $this->connection();
         $format = strtolower($format);
+
         if (!empty($selectField)) {
             $selectField = $this->prepareFormatSelectField($selectField);
             if (isset($selectField['expression'], $selectField['bindingParam']) && is_array($selectField) && $this->selectRaw === true) {
@@ -688,7 +664,7 @@ class BaseModel implements Environment
             $db = DB::table($this->table)->select();
         }
 
-        $query = $this->prepareWhereFieldStatement($db, $whereValue, $whereField);
+        $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $whereField);
 
 
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
@@ -753,7 +729,7 @@ class BaseModel implements Environment
      * @param string       $fieldOutput field kết quả đầu ra
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
-     * @see   https://laravel.com/docs/5.8/queries#selects
+     * @see   https://laravel.com/docs/6.x/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:51
@@ -763,7 +739,7 @@ class BaseModel implements Environment
     {
         $this->connection();
         $db    = DB::table($this->table);
-        $query = $this->prepareWhereFieldStatement($db, $whereValue, $whereField);
+        $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $whereField);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
         $result = $query->first();
         // $this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
@@ -803,7 +779,7 @@ class BaseModel implements Environment
      * @param string|array $selectField Mảng dữ liệu danh sách các field cần so sánh
      *
      * @return \Illuminate\Support\Collection
-     * @see   https://laravel.com/docs/5.8/queries#selects
+     * @see   https://laravel.com/docs/6.x/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 13:59
@@ -811,9 +787,7 @@ class BaseModel implements Environment
      */
     public function getDistinctResult($selectField = ''): Collection
     {
-        if (!is_array($selectField)) {
-            $selectField = [$selectField];
-        }
+        $selectField = $this->prepareFormatSelectField($selectField);
         $this->connection();
         $db = DB::table($this->table);
         $db->distinct();
@@ -911,7 +885,7 @@ class BaseModel implements Environment
      *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
-     * @see   https://laravel.com/docs/5.8/queries#selects
+     * @see   https://laravel.com/docs/6.x/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 16:14
@@ -919,68 +893,19 @@ class BaseModel implements Environment
      */
     public function getResult($whereValue = array(), $selectField = '*', $options = null)
     {
-        if (!is_array($selectField)) {
-            $selectField = [$selectField];
-        }
-        if (isset($options['format'])) {
-            $format = strtolower($options['format']);
-        } else {
-            $format = null;
-        }
+        $selectField = $this->prepareFormatSelectField($selectField);
+        $format      = $this->prepareOptionFormat($options);
+
         $this->connection();
         $db = DB::table($this->table);
 
-        if (is_array($whereValue)) {
-            if (count($whereValue) > 0) {
-                foreach ($whereValue as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $db->whereIn($value['field'], $value['value']);
-                            } else {
-                                $db->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $db->whereIn($field, $value);
-                        }
+        $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $this->primaryKey, $options);
 
-                    } else {
-                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $db->whereIn($this->primaryKey, $whereValue);
-            }
-        } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $whereValue);
-        }
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 
-        // Case có cả Limit và Offset -> active phân trang
-        if (
-            isset($options['limit'], $options['offset']) && $options['limit'] > 0
-        ) {
-            $page = $this->preparePaging($options['offset'], $options['limit']);
-            $db->offset($page['offset'])->limit($page['limit']);
-        }
-        // Case chỉ có Limit
-        if (
-            (isset($options['limit']) && $options['limit'] > 0) &&
-            !isset($options['offset'])
-        ) {
-            $db->limit($options['limit']);
-        }
-        if (isset($options['orderBy']) && is_array($options['orderBy'])) {
-            foreach ($options['orderBy'] as $column => $direction) {
-                $db->orderBy($column, $direction);
-            }
-        }
-
-        if (isset($options['orderBy']) && $options['orderBy'] === 'random') {
-            $db->inRandomOrder();
-        }
-        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->get($selectField);
+        $result = $query->get($selectField);
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+
         if ($format === 'json') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
             return $result->toJson();
@@ -1014,7 +939,7 @@ class BaseModel implements Environment
      *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
-     * @see   https://laravel.com/docs/5.8/queries#selects
+     * @see   https://laravel.com/docs/6.x/queries#selects
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 16:14
@@ -1038,37 +963,15 @@ class BaseModel implements Environment
      */
     public function countResult($whereValue = array(), $selectField = '*'): int
     {
-        if (!is_array($selectField)) {
-            $selectField = [$selectField];
-        }
+        $selectField = $this->prepareFormatSelectField($selectField);
+
         $this->connection();
         $db = DB::table($this->table);
-        if (is_array($whereValue)) {
-            if (count($whereValue) > 0) {
-                foreach ($whereValue as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $db->whereIn($value['field'], $value['value']);
-                            } else {
-                                $db->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $db->whereIn($field, $value);
-                        }
 
-                    } else {
-                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $db->whereIn($this->primaryKey, $whereValue);
-            }
-        } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $whereValue);
-        }
-        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
-        $result = $db->get($selectField);
+        $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $this->primaryKey);
+
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
+        $result = $query->get($selectField);
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         // $this->logger->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
         return $result->count();
@@ -1147,14 +1050,14 @@ class BaseModel implements Environment
      */
     public function getResultWithSimpleInnerJoin($joins = array(), $select = '*', $options = null)
     {
-        $format = isset($options['format']) ? strtolower($options['format']) : null;
+        $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
+
         foreach ($joins as $key => $join) {
             $db->join($join['table'], $join['first'], $join['operator'], $join['second']);
         }
-        if (!is_array($select)) {
-            $select = [$select];
-        }
+
+        $select = $this->prepareFormatSelectField($select);
         $result = $db->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format === 'json') {
@@ -1204,39 +1107,14 @@ class BaseModel implements Environment
      */
     public function getResultWithInnerJoinAndWheres($joins = array(), $wheres = array(), $select = '*', $options = null)
     {
-        $format = isset($options['format']) ? strtolower($options['format']) : null;
+        $select = $this->prepareFormatSelectField($select);
+        $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->joinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
         }
-        if (is_array($wheres)) {
-            if (count($wheres) > 0) {
-                foreach ($wheres as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $db->whereIn($value['field'], $value['value']);
-                            } else {
-                                $db->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $db->whereIn($field, $value);
-                        }
-
-                    } else {
-                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $db->whereIn($this->table . '.' . $this->primaryKey, $wheres);
-            }
-        } else {
-            $db->where($this->table . '.' . $this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
-        }
-        if (!is_array($select)) {
-            $select = [$select];
-        }
-        $result = $db->select($select)->get();
+        $query  = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
+        $result = $query->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format === 'json') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
@@ -1283,14 +1161,13 @@ class BaseModel implements Environment
      */
     public function getResultWithSimpleCrossJoin($joins = array(), $select = '*', $options = null)
     {
-        $format = isset($options['format']) ? strtolower($options['format']) : null;
+        $select = $this->prepareFormatSelectField($select);
+        $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
-        if (!is_array($select)) {
-            $select = [$select];
-        }
+
         $result = $db->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format === 'json') {
@@ -1339,39 +1216,14 @@ class BaseModel implements Environment
      */
     public function getResultWithCrossJoinAndWheres($joins = array(), $wheres = array(), $select = '*', $options = null)
     {
-        $format = isset($options['format']) ? strtolower($options['format']) : null;
+        $select = $this->prepareFormatSelectField($select);
+        $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
-        if (is_array($wheres)) {
-            if (count($wheres) > 0) {
-                foreach ($wheres as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $db->whereIn($value['field'], $value['value']);
-                            } else {
-                                $db->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $db->whereIn($field, $value);
-                        }
-
-                    } else {
-                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $db->whereIn($this->table . '.' . $this->primaryKey, $wheres);
-            }
-        } else {
-            $db->where($this->table . '.' . $this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
-        }
-        if (!is_array($select)) {
-            $select = [$select];
-        }
-        $result = $db->select($select)->get();
+        $query  = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
+        $result = $query->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format === 'json') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
@@ -1418,13 +1270,11 @@ class BaseModel implements Environment
      */
     public function getResultWithSimpleLeftJoin($joins = array(), $select = '*', $options = null)
     {
-        $format = isset($options['format']) ? strtolower($options['format']) : null;
+        $select = $this->prepareFormatSelectField($select);
+        $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->leftJoin($join['table'], $join['first'], $join['operator'], $join['second']);
-        }
-        if (!is_array($select)) {
-            $select = [$select];
         }
         $result = $db->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
@@ -1474,39 +1324,14 @@ class BaseModel implements Environment
      */
     public function getResultWithLeftJoinAndWheres($joins = array(), $wheres = array(), $select = '*', $options = null)
     {
-        $format = isset($options['format']) ? strtolower($options['format']) : null;
+        $select = $this->prepareFormatSelectField($select);
+        $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->leftJoinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
         }
-        if (is_array($wheres)) {
-            if (count($wheres) > 0) {
-                foreach ($wheres as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $db->whereIn($value['field'], $value['value']);
-                            } else {
-                                $db->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $db->whereIn($field, $value);
-                        }
-
-                    } else {
-                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $db->whereIn($this->table . '.' . $this->primaryKey, $wheres);
-            }
-        } else {
-            $db->where($this->table . '.' . $this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
-        }
-        if (!is_array($select)) {
-            $select = [$select];
-        }
-        $result = $db->select($select)->get();
+        $query  = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
+        $result = $query->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format === 'json') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
@@ -1553,13 +1378,11 @@ class BaseModel implements Environment
      */
     public function getResultWithSimpleRightJoin($joins = array(), $select = '*', $options = null)
     {
-        $format = isset($options['format']) ? strtolower($options['format']) : null;
+        $select = $this->prepareFormatSelectField($select);
+        $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->rightJoin($join['table'], $join['first'], $join['operator'], $join['second']);
-        }
-        if (!is_array($select)) {
-            $select = [$select];
         }
         $result = $db->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
@@ -1609,39 +1432,14 @@ class BaseModel implements Environment
      */
     public function getResultWithRightJoinAndWheres($joins = array(), $wheres = array(), $select = '*', $options = null)
     {
-        $format = isset($options['format']) ? strtolower($options['format']) : null;
+        $select = $this->prepareFormatSelectField($select);
+        $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
         foreach ($joins as $key => $join) {
             $db->rightJoinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
         }
-        if (is_array($wheres)) {
-            if (count($wheres) > 0) {
-                foreach ($wheres as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $db->whereIn($value['field'], $value['value']);
-                            } else {
-                                $db->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $db->whereIn($field, $value);
-                        }
-
-                    } else {
-                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $db->whereIn($this->table . '.' . $this->primaryKey, $wheres);
-            }
-        } else {
-            $db->where($this->table . '.' . $this->primaryKey, self::OPERATOR_EQUAL_TO, $wheres);
-        }
-        if (!is_array($select)) {
-            $select = [$select];
-        }
-        $result = $db->select($select)->get();
+        $query  = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
+        $result = $query->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format === 'json') {
             // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
@@ -1667,7 +1465,7 @@ class BaseModel implements Environment
      * @param array $data Mảng chứa dữ liệu cần insert
      *
      * @return int Insert ID của bản ghi
-     * @see   https://laravel.com/docs/5.8/queries#inserts
+     * @see   https://laravel.com/docs/6.x/queries#inserts
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:04
@@ -1692,7 +1490,7 @@ class BaseModel implements Environment
      * @param array|string $whereValue Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
-     * @see   https://laravel.com/docs/5.8/queries#updates
+     * @see   https://laravel.com/docs/6.x/queries#updates
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:10
@@ -1701,35 +1499,12 @@ class BaseModel implements Environment
     public function update($data = array(), $whereValue = array()): int
     {
         $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($whereValue)) {
-            if (count($whereValue) > 0) {
-                foreach ($whereValue as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $db->whereIn($value['field'], $value['value']);
-                            } else {
-                                $db->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $db->whereIn($field, $value);
-                        }
-
-                    } else {
-                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $db->whereIn($this->primaryKey, $whereValue);
-            }
-        } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $whereValue);
-        }
-        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $db    = DB::table($this->table);
+        $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $this->table . '.' . $this->primaryKey);
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 
         // $this->logger->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
-        return $db->update($data);
+        return $query->update($data);
     }
 
     /**
@@ -1739,7 +1514,7 @@ class BaseModel implements Environment
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
-     * @see   https://laravel.com/docs/5.8/queries#updates
+     * @see   https://laravel.com/docs/6.x/queries#updates
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:10
@@ -1756,7 +1531,7 @@ class BaseModel implements Environment
      * @param array|string $whereValue Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi đã xóa
-     * @see   https://laravel.com/docs/5.8/queries#deletes
+     * @see   https://laravel.com/docs/6.x/queries#deletes
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:13
@@ -1765,35 +1540,12 @@ class BaseModel implements Environment
     public function delete($whereValue = array()): int
     {
         $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($whereValue)) {
-            if (count($whereValue) > 0) {
-                foreach ($whereValue as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $db->whereIn($value['field'], $value['value']);
-                            } else {
-                                $db->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $db->whereIn($field, $value);
-                        }
-
-                    } else {
-                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $db->whereIn($this->primaryKey, $whereValue);
-            }
-        } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $whereValue);
-        }
-        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $db    = DB::table($this->table);
+        $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $this->table . '.' . $this->primaryKey);
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 
         // $this->logger->debug(__FUNCTION__, 'Result Delete Rows: ' . $resultId);
-        return $db->delete();
+        return $query->delete();
     }
 
     /**
@@ -1802,7 +1554,7 @@ class BaseModel implements Environment
      * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
      *
      * @return int Số bản ghi đã xóa
-     * @see   https://laravel.com/docs/5.8/queries#deletes
+     * @see   https://laravel.com/docs/6.x/queries#deletes
      *
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 14:13
@@ -1827,32 +1579,9 @@ class BaseModel implements Environment
     public function checkExistsAndInsertData($data = array(), $whereValue = array())
     {
         $this->connection();
-        $db = DB::table($this->table);
-        if (is_array($whereValue)) {
-            if (count($whereValue) > 0) {
-                foreach ($whereValue as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $db->whereIn($value['field'], $value['value']);
-                            } else {
-                                $db->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $db->whereIn($field, $value);
-                        }
-
-                    } else {
-                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $db->whereIn($this->primaryKey, $whereValue);
-            }
-        } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $whereValue);
-        }
-        $checkExists = $db->count();
+        $db          = DB::table($this->table);
+        $query       = $this->prepareWhereAndFieldStatement($db, $whereValue, $this->table . '.' . $this->primaryKey);
+        $checkExists = $query->count();
         // $this->logger->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
         if (!$checkExists) {
             $id = $db->insertGetId($data);
@@ -1900,42 +1629,21 @@ class BaseModel implements Environment
         $this->connection();
         $db = DB::table($this->table);
 
-        if (is_array($whereValue)) {
-            if (count($whereValue) > 0) {
-                foreach ($whereValue as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $db->whereIn($value['field'], $value['value']);
-                            } else {
-                                $db->where($value['field'], $value['operator'], $value['value']);
-                            }
-                        } else {
-                            $db->whereIn($field, $value);
-                        }
+        $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $this->table . '.' . $this->primaryKey);
 
-                    } else {
-                        $db->where($field, self::OPERATOR_EQUAL_TO, $value);
-                    }
-                }
-            } else {
-                $db->whereIn($this->primaryKey, $whereValue);
-            }
-        } else {
-            $db->where($this->primaryKey, self::OPERATOR_EQUAL_TO, $whereValue);
-        }
-
-        $checkExists = $db->count();
+        $checkExists = $query->count();
         // $this->logger->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
+
         if (!$checkExists) {
             $id = $db->insertGetId($dataInsert);
-            $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+            $this->logger->debug(__FUNCTION__, 'SQL Queries Insert Data: ' . $db->toSql());
             $this->logger->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
 
             return $id;
         }
 
-        $resultId = $db->update($dataUpdate);
+        $resultId = $query->update($dataUpdate);
+        $this->logger->debug(__FUNCTION__, 'SQL Queries Update Data: ' . $query->toSql());
         $this->logger->debug(__FUNCTION__, 'Result Update Rows: ' . $resultId);
 
         return $resultId;
