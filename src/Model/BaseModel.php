@@ -38,6 +38,8 @@ use nguyenanhung\MyDatabase\Environment;
  */
 class BaseModel implements Environment
 {
+    use Helper;
+
     /** @var object Đối tượng khởi tạo dùng gọi đến Class Debug \nguyenanhung\MyDebug\Debug */
     protected $logger;
 
@@ -594,9 +596,7 @@ class BaseModel implements Environment
      */
     public function getLatestByColumn($whereValue = array(), $selectField = array('*'), $byColumn = 'created_at')
     {
-        if (!is_array($selectField)) {
-            $selectField = [$selectField];
-        }
+        $selectField = $this->prepareFormatSelectField($selectField);
         $this->connection();
         $db = DB::table($this->table);
         if (is_array($whereValue) && count($whereValue) > 0) {
@@ -634,9 +634,7 @@ class BaseModel implements Environment
      */
     public function getOldest($selectField = ['*'], $byColumn = 'created_at')
     {
-        if (!is_array($selectField)) {
-            $selectField = [$selectField];
-        }
+        $selectField = $this->prepareFormatSelectField($selectField);
         $this->connection();
         $db = DB::table($this->table)->oldest($byColumn);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
@@ -658,9 +656,7 @@ class BaseModel implements Environment
      */
     public function getOldestByColumn($whereValue = array(), $selectField = ['*'], $byColumn = 'created_at')
     {
-        if (!is_array($selectField)) {
-            $selectField = [$selectField];
-        }
+        $selectField = $this->prepareFormatSelectField($selectField);
         $this->connection();
         $db = DB::table($this->table);
         if (is_array($whereValue) && count($whereValue) > 0) {
@@ -705,10 +701,8 @@ class BaseModel implements Environment
         $this->connection();
         $format = strtolower($format);
         if (!empty($selectField)) {
-            if (!is_array($selectField)) {
-                $selectField = [$selectField];
-            }
-            if ($this->selectRaw === true) {
+            $selectField = $this->prepareFormatSelectField($selectField);
+            if (isset($selectField['expression'], $selectField['bindingParam']) && is_array($selectField) && $this->selectRaw === true) {
                 $db = DB::table($this->table)->selectRaw($selectField['expression'], $selectField['bindingParam']);
             } else {
                 $db = DB::table($this->table)->select($selectField);
