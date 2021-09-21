@@ -23,11 +23,12 @@ $database = [
     'prefix'    => '',
 ];
 
-$model                  = new BaseModel($database);
+$model                  = new BaseModel();
 $model->debugStatus     = true;
 $model->debugLevel      = 'info';
 $model->debugLoggerPath = __DIR__ . '/../../tmp';
 $model->__construct();
+$model->setDatabase($database, 'connectionTest');
 $model->setTable('test_table');
 
 Console::writeLn(date('Y-m-d H:i:s') . ' -> Testing PHP Package Database Base Model Class by HungNG');
