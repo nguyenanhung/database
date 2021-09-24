@@ -27,14 +27,14 @@
         "ext-pdo": "*",
         "ext-mysqli": "*",
         "nguyenanhung/my-debug": "^3.0",
-        "nguyenanhung/pdo": "^2.0",
-        "nguyenanhung/mysqli": "^2.0",
-        "nguyenanhung/database-helper": "^1.0",
+        "nguyenanhung/pdo": "^3.0",
+        "nguyenanhung/mysqli": "^3.0",
+        "nguyenanhung/database-helper": "^2.0",
         "illuminate/events": "^8.61",
         "illuminate/database": "^8.61"
     },
     "require-dev": {
-        "kint-php/kint": "^3.3"
+        "kint-php/kint": "^3.0"
     },
     "autoload": {
         "psr-4": {
