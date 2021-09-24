@@ -38,7 +38,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/21/2021 23:24
      */
-    public function preparePaging($pageIndex = 1, $pageSize = 10): array
+    public function preparePaging(int $pageIndex = 1, int $pageSize = 10): array
     {
         if ($pageIndex !== 0) {
             if (!$pageIndex || $pageIndex <= 0 || empty($pageIndex)) {
@@ -55,7 +55,7 @@ trait Helper
     /**
      * Function prepareOptionFormat
      *
-     * @param array $options
+     * @param mixed $options
      *
      * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
      *
@@ -159,7 +159,7 @@ trait Helper
      * @param \Illuminate\Database\Query\Builder $builder Class Query Builder
      * @param string|array                       $wheres  Mảng hoặc giá trị dữ liệu cần so sánh
      * @param string                             $fields  Column cần so sánh
-     * @param null|string|array                  $options Mảng dữ liệu các cấu hình tùy chọn
+     * @param mixed                              $options Mảng dữ liệu các cấu hình tùy chọn
      *                                                    example $options = [
      *                                                    'format' => null,
      *                                                    'orderBy => [
@@ -175,7 +175,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/22/2021 02:38
      */
-    protected function prepareWhereAndFieldStatement(Builder $builder, $wheres, $fields, $options = null): Builder
+    protected function prepareWhereAndFieldStatement(Builder $builder, $wheres, string $fields, $options = null): Builder
     {
         if (is_array($wheres)) {
             if (count($wheres) > 0) {

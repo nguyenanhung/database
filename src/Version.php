@@ -35,14 +35,14 @@ trait Version
     /**
      * Function getSDKPropertiesInfo
      *
-     * @param false $json
+     * @param bool $json
      *
      * @return array|false|string
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/22/2021 04:23
      */
-    public function getSDKPropertiesInfo($json = false)
+    public function getSDKPropertiesInfo(bool $json = false)
     {
         $properties = array(
             'name'          => self::PROJECT_NAME,

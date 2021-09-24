@@ -9,6 +9,11 @@ Database Wrapper - Base Model
 - [x] illuminate/events `^8.61` Support
 - [x] illuminate/database `^8.61` Support
 
+## Version
+
+- [x] V1.x, V2.x support all PHP version `>=5.6`
+- [x] V3.x support all PHP version `>=7.1`
+
 ## Support
 
 If any question & request, please contact following information

@@ -88,7 +88,7 @@ class BaseModel implements Environment
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      */
-    public function __construct($database = array())
+    public function __construct(array $database = array())
     {
         $this->logger = new Logger();
         if ($this->debugStatus === true) {
@@ -253,7 +253,7 @@ class BaseModel implements Environment
      * @see   https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php
      * @see   https://packagist.org/packages/illuminate/database#v5.8.36
      */
-    public function setDatabase($database = array(), $name = 'default'): self
+    public function setDatabase(array $database = array(), string $name = 'default'): self
     {
         $this->database = $database;
         $this->dbName   = $name;
@@ -282,7 +282,7 @@ class BaseModel implements Environment
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:43
      */
-    public function setTable($table = ''): self
+    public function setTable(string $table = ''): self
     {
         $this->table = $table;
 
@@ -316,6 +316,8 @@ class BaseModel implements Environment
         } catch (Exception $e) {
             $this->logger->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
             $this->logger->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+            return array();
         }
     }
 
@@ -349,7 +351,7 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/07/2020 12:59
      */
-    public function setSelectRaw($selectRaw = false): self
+    public function setSelectRaw(bool $selectRaw = false): self
     {
         $this->selectRaw = $selectRaw;
 
@@ -398,7 +400,7 @@ class BaseModel implements Environment
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-12 15:1
      */
-    public function checkExistsColumn($column = ''): bool
+    public function checkExistsColumn(string $column = ''): bool
     {
         $this->connection();
         if ($this->getSchema() !== null) {
@@ -418,7 +420,7 @@ class BaseModel implements Environment
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-12 15:10
      */
-    public function checkExistsColumns($columns = array()): bool
+    public function checkExistsColumns(array $columns = array()): bool
     {
         $this->connection();
 
@@ -465,14 +467,14 @@ class BaseModel implements Environment
      * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào
      *
      * @param string|array $wheres Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
-     * @param string|null  $fields Field tương ứng cần kiểm tra đối chiếu
+     * @param string       $fields Field tương ứng cần kiểm tra đối chiếu
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:45
      *
      */
-    public function checkExists($wheres = '', $fields = 'id'): int
+    public function checkExists($wheres = '', string $fields = 'id'): int
     {
         $this->connection();
         $db    = DB::table($this->table);
@@ -486,14 +488,14 @@ class BaseModel implements Environment
      * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào - Đa điều kiện
      *
      * @param string|array $wheres Giá trị cần kiểm tra
-     * @param string|null  $fields Field tương ứng, ví dụ: ID
+     * @param string       $fields Field tương ứng, ví dụ: ID
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:45
      *
      */
-    public function checkExistsWithMultipleWhere($wheres = '', $fields = 'id'): int
+    public function checkExistsWithMultipleWhere($wheres = '', string $fields = 'id'): int
     {
         return $this->checkExists($wheres, $fields);
     }
@@ -514,7 +516,7 @@ class BaseModel implements Environment
      * @time  : 10/17/18 01:06
      *
      */
-    public function getLatest($select = array('*'), $column = 'created_at')
+    public function getLatest(array $select = array('*'), string $column = 'created_at')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -530,13 +532,13 @@ class BaseModel implements Environment
      * @param string|array $wheres Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
      * @param string|array $select Danh sách cột cần lấy dữ liệu ra
      * @param string       $column Tên cột cần order theo điều kiện
-     * @param string|null  $fields Field tương ứng cần kiểm tra đối chiếu
+     * @param string       $fields Field tương ứng cần kiểm tra đối chiếu
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:16
      */
-    public function getLatestByColumn($wheres = array(), $select = array('*'), $column = 'created_at', $fields = 'id')
+    public function getLatestByColumn($wheres = array(), $select = array('*'), string $column = 'created_at', string $fields = 'id')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -564,7 +566,7 @@ class BaseModel implements Environment
      * @time  : 10/17/18 01:06
      *
      */
-    public function getOldest($select = array('*'), $column = 'created_at')
+    public function getOldest(array $select = array('*'), string $column = 'created_at')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -580,14 +582,14 @@ class BaseModel implements Environment
      * @param string|array $wheres Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
      * @param string|array $select Danh sách cột cần lấy dữ liệu ra
      * @param string       $column Tên cột cần order theo điều kiện
-     * @param string|null  $fields Field tương ứng cần kiểm tra đối chiếu
+     * @param string       $fields Field tương ứng cần kiểm tra đối chiếu
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:17
      *
      */
-    public function getOldestByColumn($wheres = array(), $select = array('*'), $column = 'created_at', $fields = 'id')
+    public function getOldestByColumn($wheres = array(), $select = array('*'), string $column = 'created_at', string $fields = 'id')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -607,8 +609,8 @@ class BaseModel implements Environment
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
      * @param array|string      $wheres Giá trị cần kiểm tra
-     * @param null|string       $fields Field tương ứng, ví dụ: ID
-     * @param null|string       $format Format dữ liệu đầu ra: null, json, array, base, result
+     * @param string|null       $fields Field tương ứng, ví dụ: ID
+     * @param string|null       $format Format dữ liệu đầu ra: null, json, array, base, result
      * @param null|string|array $select Các field cần lấy
      *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
@@ -619,7 +621,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 11:51
      *
      */
-    public function getInfo($wheres = '', $fields = 'id', $format = null, $select = null)
+    public function getInfo($wheres = '', string $fields = 'id', string $format = null, $select = null)
     {
         $format = $this->prepareOptionFormat($format);
         $this->connection();
@@ -665,8 +667,8 @@ class BaseModel implements Environment
      * Hàm lấy thông tin bản ghi theo tham số đầu vào - Đa điều kiện
      *
      * @param array|string      $wheres Giá trị cần kiểm tra
-     * @param null|string       $fields Field tương ứng, ví dụ: ID
-     * @param null|string       $format Format dữ liệu đầu ra: null, json, array, base, result
+     * @param string|null       $fields Field tương ứng, ví dụ: ID
+     * @param string|null       $format Format dữ liệu đầu ra: null, json, array, base, result
      * @param null|string|array $select Các field cần lấy
      *
      * @return array|\Illuminate\Support\Collection|object|string|null
@@ -674,7 +676,7 @@ class BaseModel implements Environment
      * @time  : 11/26/18 16:40
      *
      */
-    public function getInfoWithMultipleWhere($wheres = '', $fields = 'id', $format = null, $select = null)
+    public function getInfoWithMultipleWhere($wheres = '', string $fields = 'id', string $format = null, $select = null)
     {
         return $this->getInfo($wheres, $fields, $format, $select);
     }
@@ -697,7 +699,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 11:51
      *
      */
-    public function getValue($wheres = '', $fields = 'id', $fieldOutput = '')
+    public function getValue($wheres = '', string $fields = 'id', string $fieldOutput = '')
     {
         $this->connection();
         $db    = DB::table($this->table);
@@ -730,7 +732,7 @@ class BaseModel implements Environment
      * @time  : 11/26/18 16:41
      *
      */
-    public function getValueWithMultipleWhere($wheres = '', $fields = 'id', $fieldOutput = '')
+    public function getValueWithMultipleWhere(string $wheres = '', string $fields = 'id', string $fieldOutput = '')
     {
         return $this->getValue($wheres, $fields, $fieldOutput);
     }
@@ -749,7 +751,7 @@ class BaseModel implements Environment
      */
     public function getDistinctResult($select = array('*')): Collection
     {
-        $selectField = $this->prepareFormatSelectField($select);
+        $select = $this->prepareFormatSelectField($select);
         $this->connection();
         $db = DB::table($this->table);
         $db->distinct();
@@ -958,7 +960,7 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:03
      *
      */
-    public function getResultWithSimpleJoin($joins = array(), $select = array('*'), $options = null)
+    public function getResultWithSimpleJoin(array $joins = array(), $select = array('*'), $options = null)
     {
         return $this->getResultWithSimpleInnerJoin($joins, $select, $options);
     }
@@ -988,12 +990,12 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:03
      *
      */
-    public function getResultWithSimpleInnerJoin($joins = array(), $select = array('*'), $options = null)
+    public function getResultWithSimpleInnerJoin(array $joins = array(), $select = array('*'), $options = null)
     {
         $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
 
-        foreach ($joins as $key => $join) {
+        foreach ($joins as $join) {
             $db->join($join['table'], $join['first'], $join['operator'], $join['second']);
         }
 
@@ -1045,12 +1047,12 @@ class BaseModel implements Environment
      * @time     : 09/21/2021 51:55
      *
      */
-    public function getResultWithInnerJoinAndWheres($joins = array(), $wheres = array(), $select = array('*'), $options = null)
+    public function getResultWithInnerJoinAndWheres(array $joins = array(), $wheres = array(), $select = array('*'), $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
-        foreach ($joins as $key => $join) {
+        foreach ($joins as $join) {
             $db->joinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $query  = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
@@ -1099,12 +1101,12 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:06
      *
      */
-    public function getResultWithSimpleCrossJoin($joins = array(), $select = array('*'), $options = null)
+    public function getResultWithSimpleCrossJoin(array $joins = array(), $select = array('*'), $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
-        foreach ($joins as $key => $join) {
+        foreach ($joins as $join) {
             $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
 
@@ -1154,12 +1156,12 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:06
      *
      */
-    public function getResultWithCrossJoinAndWheres($joins = array(), $wheres = array(), $select = '*', $options = null)
+    public function getResultWithCrossJoinAndWheres(array $joins = array(), $wheres = array(), $select = '*', $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
-        foreach ($joins as $key => $join) {
+        foreach ($joins as $join) {
             $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $query  = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
@@ -1208,12 +1210,12 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:05
      *
      */
-    public function getResultWithSimpleLeftJoin($joins = array(), $select = array('*'), $options = null)
+    public function getResultWithSimpleLeftJoin(array $joins = array(), $select = array('*'), $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
-        foreach ($joins as $key => $join) {
+        foreach ($joins as $join) {
             $db->leftJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $result = $db->select($select)->get();
@@ -1262,12 +1264,12 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:05
      *
      */
-    public function getResultWithLeftJoinAndWheres($joins = array(), $wheres = array(), $select = array('*'), $options = null)
+    public function getResultWithLeftJoinAndWheres(array $joins = array(), $wheres = array(), $select = array('*'), $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
-        foreach ($joins as $key => $join) {
+        foreach ($joins as $join) {
             $db->leftJoinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $query  = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
@@ -1316,12 +1318,12 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:05
      *
      */
-    public function getResultWithSimpleRightJoin($joins = array(), $select = array('*'), $options = null)
+    public function getResultWithSimpleRightJoin(array $joins = array(), $select = array('*'), $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
-        foreach ($joins as $key => $join) {
+        foreach ($joins as $join) {
             $db->rightJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $result = $db->select($select)->get();
@@ -1370,12 +1372,12 @@ class BaseModel implements Environment
      * @time  : 2018-12-03 02:05
      *
      */
-    public function getResultWithRightJoinAndWheres($joins = array(), $wheres = array(), $select = array('*'), $options = null)
+    public function getResultWithRightJoinAndWheres(array $joins = array(), $wheres = array(), $select = array('*'), $options = null)
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
-        foreach ($joins as $key => $join) {
+        foreach ($joins as $join) {
             $db->rightJoinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $query  = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
@@ -1411,7 +1413,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 14:04
      *
      */
-    public function add($data = array()): int
+    public function add(array $data = array()): int
     {
         $this->connection();
         $db = DB::table($this->table);
@@ -1436,7 +1438,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 14:10
      *
      */
-    public function update($data = array(), $wheres = array()): int
+    public function update(array $data = array(), $wheres = array()): int
     {
         $this->connection();
         $db    = DB::table($this->table);
@@ -1460,7 +1462,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 14:10
      *
      */
-    public function updateWithMultipleWhere($data = array(), $wheres = array()): int
+    public function updateWithMultipleWhere(array $data = array(), $wheres = array()): int
     {
         return $this->update($data, $wheres);
     }
@@ -1516,7 +1518,7 @@ class BaseModel implements Environment
      * @time  : 2019-04-07 03:58
      *
      */
-    public function checkExistsAndInsertData($data = array(), $wheres = array())
+    public function checkExistsAndInsertData(array $data = array(), $wheres = array())
     {
         $this->connection();
         $db          = DB::table($this->table);
@@ -1547,7 +1549,7 @@ class BaseModel implements Environment
      * @time  : 2019-04-07 03:58
      *
      */
-    public function checkExistsAndInsertDataWithMultipleWhere($data = array(), $wheres = array())
+    public function checkExistsAndInsertDataWithMultipleWhere(array $data = array(), $wheres = array())
     {
         return $this->checkExistsAndInsertData($data, $wheres);
     }
@@ -1564,7 +1566,7 @@ class BaseModel implements Environment
      * @time  : 2019-04-07 04:01
      *
      */
-    public function checkExistsAndInsertOrUpdateData($insert = array(), $update = array(), $wheres = array()): int
+    public function checkExistsAndInsertOrUpdateData(array $insert = array(), array $update = array(), $wheres = array()): int
     {
         $this->connection();
         $db          = DB::table($this->table);
@@ -1599,7 +1601,7 @@ class BaseModel implements Environment
      * @time  : 2019-04-07 04:01
      *
      */
-    public function checkExistsAndInsertOrUpdateDataWithMultipleWhere($insert = array(), $update = array(), $wheres = array()): int
+    public function checkExistsAndInsertOrUpdateDataWithMultipleWhere(array $insert = array(), array $update = array(), $wheres = array()): int
     {
         return $this->checkExistsAndInsertOrUpdateData($insert, $update, $wheres);
     }
