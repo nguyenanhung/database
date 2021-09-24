@@ -30,8 +30,8 @@
         "nguyenanhung/pdo": "^2.0",
         "nguyenanhung/mysqli": "^2.0",
         "nguyenanhung/database-helper": "^1.0",
-        "illuminate/events": "^5",
-        "illuminate/database": "^5"
+        "illuminate/events": "^6 || ^5",
+        "illuminate/database": "^6 || ^5"
     },
     "require-dev": {
         "kint-php/kint": "^3.0"
