@@ -27,7 +27,7 @@ trait Version
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/29/2021 04:53
      */
-    public function getVersion(): string
+    public function getVersion()
     {
         return self::VERSION;
     }
@@ -42,7 +42,7 @@ trait Version
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/22/2021 04:23
      */
-    public function getSDKPropertiesInfo(bool $json = false)
+    public function getSDKPropertiesInfo($json = false)
     {
         $properties = array(
             'name'          => self::PROJECT_NAME,

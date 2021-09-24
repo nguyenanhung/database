@@ -10,9 +10,7 @@
 namespace nguyenanhung\MyDatabase\Model;
 
 use Exception;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Builder;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
@@ -38,7 +36,7 @@ use nguyenanhung\MyDatabase\Environment;
  * @copyright         713uk13m <dev@nguyenanhung.com>
  * @since             2018-10-17
  * @last_updated      2021-09-22
- * @version           3.0.4
+ * @version           2.1.0
  */
 class BaseModel implements Environment
 {
@@ -133,7 +131,7 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/29/2021 03:44
      */
-    public function getPrimaryKey(): string
+    public function getPrimaryKey()
     {
         return $this->primaryKey;
     }
@@ -148,7 +146,7 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/29/2021 04:01
      */
-    public function setPrimaryKey(string $primaryKey = 'id'): self
+    public function setPrimaryKey($primaryKey = 'id')
     {
         $this->primaryKey = $primaryKey;
 
@@ -163,7 +161,7 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/20/2021 15:50
      */
-    public function connection(): self
+    public function connection()
     {
         if (!is_object($this->db)) {
             try {
@@ -188,7 +186,7 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/07/2021 21:40
      */
-    public function closeConnection(): void
+    public function closeConnection()
     {
         try {
             $this->db->getDatabaseManager()->disconnect($this->dbName);
@@ -205,7 +203,7 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/07/2021 21:44
      */
-    public function disconnect(): void
+    public function disconnect()
     {
         try {
             $this->db->getDatabaseManager()->disconnect($this->dbName);
@@ -234,7 +232,7 @@ class BaseModel implements Environment
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 22:28
      */
-    public function getConnectionName(): string
+    public function getConnectionName()
     {
         return $this->dbName;
     }
@@ -253,7 +251,7 @@ class BaseModel implements Environment
      * @see   https://github.com/nguyenanhung/database/tree/master/src/Repository/config/example_db.php
      * @see   https://packagist.org/packages/illuminate/database#v5.8.36
      */
-    public function setDatabase(array $database = array(), string $name = 'default'): self
+    public function setDatabase($database = array(), $name = 'default')
     {
         $this->database = $database;
         $this->dbName   = $name;
@@ -268,7 +266,7 @@ class BaseModel implements Environment
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 23:07
      */
-    public function getDatabase(): ?array
+    public function getDatabase()
     {
         return $this->database;
     }
@@ -282,7 +280,7 @@ class BaseModel implements Environment
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:43
      */
-    public function setTable(string $table = ''): self
+    public function setTable($table = '')
     {
         $this->table = $table;
 
@@ -296,7 +294,7 @@ class BaseModel implements Environment
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-01 23:07
      */
-    public function getTable(): ?string
+    public function getTable()
     {
         return $this->table;
     }
@@ -309,7 +307,7 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/31/2021 37:51
      */
-    public function getTableColumns(): ?array
+    public function getTableColumns()
     {
         try {
             return Schema::getColumnListing($this->table);
@@ -329,7 +327,7 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/20/2021 40:36
      */
-    public function getSchema(): ?Builder
+    public function getSchema()
     {
         try {
             return DB::schema();
@@ -351,7 +349,7 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/07/2020 12:59
      */
-    public function setSelectRaw(bool $selectRaw = false): self
+    public function setSelectRaw($selectRaw = false)
     {
         $this->selectRaw = $selectRaw;
 
@@ -366,7 +364,7 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/07/2020 13:05
      */
-    public function getSelectRaw(): ?bool
+    public function getSelectRaw()
     {
         return $this->selectRaw;
     }
@@ -381,7 +379,7 @@ class BaseModel implements Environment
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/07/2020 13:10
      */
-    public function checkExistsTable(): bool
+    public function checkExistsTable()
     {
         $this->connection();
         if ($this->getSchema() !== null) {
@@ -400,7 +398,7 @@ class BaseModel implements Environment
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-12 15:1
      */
-    public function checkExistsColumn(string $column = ''): bool
+    public function checkExistsColumn($column = '')
     {
         $this->connection();
         if ($this->getSchema() !== null) {
@@ -420,7 +418,7 @@ class BaseModel implements Environment
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2018-12-12 15:10
      */
-    public function checkExistsColumns(array $columns = array()): bool
+    public function checkExistsColumns($columns = array())
     {
         $this->connection();
 
@@ -441,7 +439,7 @@ class BaseModel implements Environment
      * @see   https://laravel.com/docs/6.x/queries#deletes
      *
      */
-    public function truncate(): void
+    public function truncate()
     {
         DB::table($this->table)->truncate();
     }
@@ -454,7 +452,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 11:43
      *
      */
-    public function countAll(): int
+    public function countAll()
     {
         $this->connection();
         $db = DB::table($this->table);
@@ -474,7 +472,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 11:45
      *
      */
-    public function checkExists($wheres = '', string $fields = 'id'): int
+    public function checkExists($wheres = '', $fields = 'id')
     {
         $this->connection();
         $db    = DB::table($this->table);
@@ -495,7 +493,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 11:45
      *
      */
-    public function checkExistsWithMultipleWhere($wheres = '', string $fields = 'id'): int
+    public function checkExistsWithMultipleWhere($wheres = '', $fields = 'id')
     {
         return $this->checkExists($wheres, $fields);
     }
@@ -516,7 +514,7 @@ class BaseModel implements Environment
      * @time  : 10/17/18 01:06
      *
      */
-    public function getLatest(array $select = array('*'), string $column = 'created_at')
+    public function getLatest($select = array('*'), $column = 'created_at')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -538,7 +536,7 @@ class BaseModel implements Environment
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:16
      */
-    public function getLatestByColumn($wheres = array(), $select = array('*'), string $column = 'created_at', string $fields = 'id')
+    public function getLatestByColumn($wheres = array(), $select = array('*'), $column = 'created_at', $fields = 'id')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -566,7 +564,7 @@ class BaseModel implements Environment
      * @time  : 10/17/18 01:06
      *
      */
-    public function getOldest(array $select = array('*'), string $column = 'created_at')
+    public function getOldest($select = array('*'), $column = 'created_at')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -589,7 +587,7 @@ class BaseModel implements Environment
      * @time  : 2019-04-07 04:17
      *
      */
-    public function getOldestByColumn($wheres = array(), $select = array('*'), string $column = 'created_at', string $fields = 'id')
+    public function getOldestByColumn($wheres = array(), $select = array('*'), $column = 'created_at', $fields = 'id')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -621,7 +619,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 11:51
      *
      */
-    public function getInfo($wheres = '', string $fields = 'id', string $format = null, $select = null)
+    public function getInfo($wheres = '', $fields = 'id', $format = null, $select = null)
     {
         $format = $this->prepareOptionFormat($format);
         $this->connection();
@@ -676,7 +674,7 @@ class BaseModel implements Environment
      * @time  : 11/26/18 16:40
      *
      */
-    public function getInfoWithMultipleWhere($wheres = '', string $fields = 'id', string $format = null, $select = null)
+    public function getInfoWithMultipleWhere($wheres = '', $fields = 'id', $format = null, $select = null)
     {
         return $this->getInfo($wheres, $fields, $format, $select);
     }
@@ -699,7 +697,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 11:51
      *
      */
-    public function getValue($wheres = '', string $fields = 'id', string $fieldOutput = '')
+    public function getValue($wheres = '', $fields = 'id', $fieldOutput = '')
     {
         $this->connection();
         $db    = DB::table($this->table);
@@ -732,7 +730,7 @@ class BaseModel implements Environment
      * @time  : 11/26/18 16:41
      *
      */
-    public function getValueWithMultipleWhere(string $wheres = '', string $fields = 'id', string $fieldOutput = '')
+    public function getValueWithMultipleWhere($wheres = '', $fields = 'id', $fieldOutput = '')
     {
         return $this->getValue($wheres, $fields, $fieldOutput);
     }
@@ -749,7 +747,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 13:59
      *
      */
-    public function getDistinctResult($select = array('*')): Collection
+    public function getDistinctResult($select = array('*'))
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -772,7 +770,7 @@ class BaseModel implements Environment
      * @time  : 2019-04-07 04:21
      *
      */
-    public function getDistinctResultByColumn($select = '*', $wheres = array()): Collection
+    public function getDistinctResultByColumn($select = '*', $wheres = array())
     {
         $this->connection();
         $db    = DB::table($this->table);
@@ -796,7 +794,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 23:49
      *
      */
-    public function getResultDistinct($select = ''): Collection
+    public function getResultDistinct($select = '')
     {
         return $this->getDistinctResult($select);
     }
@@ -812,7 +810,7 @@ class BaseModel implements Environment
      * @time  : 2019-04-07 04:22
      *
      */
-    public function getResultDistinctByColumn($select = array('*'), $wheres = array()): Collection
+    public function getResultDistinctByColumn($select = array('*'), $wheres = array())
     {
         return $this->getDistinctResultByColumn($select, $wheres);
     }
@@ -906,7 +904,7 @@ class BaseModel implements Environment
      * @time  : 11/25/18 14:10
      *
      */
-    public function countResult($wheres = array(), $select = array('*')): int
+    public function countResult($wheres = array(), $select = array('*'))
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -930,7 +928,7 @@ class BaseModel implements Environment
      * @time  : 2019-04-07 04:29
      *
      */
-    public function countResultWithMultipleWhere($wheres = array(), $select = array('*')): int
+    public function countResultWithMultipleWhere($wheres = array(), $select = array('*'))
     {
         return $this->countResult($wheres, $select);
     }
@@ -1413,7 +1411,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 14:04
      *
      */
-    public function add(array $data = array()): int
+    public function add(array $data = array())
     {
         $this->connection();
         $db = DB::table($this->table);
@@ -1438,7 +1436,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 14:10
      *
      */
-    public function update(array $data = array(), $wheres = array()): int
+    public function update(array $data = array(), $wheres = array())
     {
         $this->connection();
         $db    = DB::table($this->table);
@@ -1462,7 +1460,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 14:10
      *
      */
-    public function updateWithMultipleWhere(array $data = array(), $wheres = array()): int
+    public function updateWithMultipleWhere(array $data = array(), $wheres = array())
     {
         return $this->update($data, $wheres);
     }
@@ -1479,7 +1477,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 14:13
      *
      */
-    public function delete($whereValue = array()): int
+    public function delete($whereValue = array())
     {
         $this->connection();
         $db    = DB::table($this->table);
@@ -1502,7 +1500,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 14:13
      *
      */
-    public function deleteWithMultipleWhere($wheres = array()): int
+    public function deleteWithMultipleWhere($wheres = array())
     {
         return $this->delete($wheres);
     }
@@ -1566,7 +1564,7 @@ class BaseModel implements Environment
      * @time  : 2019-04-07 04:01
      *
      */
-    public function checkExistsAndInsertOrUpdateData(array $insert = array(), array $update = array(), $wheres = array()): int
+    public function checkExistsAndInsertOrUpdateData(array $insert = array(), array $update = array(), $wheres = array())
     {
         $this->connection();
         $db          = DB::table($this->table);
@@ -1601,7 +1599,7 @@ class BaseModel implements Environment
      * @time  : 2019-04-07 04:01
      *
      */
-    public function checkExistsAndInsertOrUpdateDataWithMultipleWhere(array $insert = array(), array $update = array(), $wheres = array()): int
+    public function checkExistsAndInsertOrUpdateDataWithMultipleWhere(array $insert = array(), array $update = array(), $wheres = array())
     {
         return $this->checkExistsAndInsertOrUpdateData($insert, $update, $wheres);
     }

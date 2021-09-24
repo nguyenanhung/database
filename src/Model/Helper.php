@@ -38,7 +38,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/21/2021 23:24
      */
-    public function preparePaging(int $pageIndex = 1, int $pageSize = 10): array
+    public function preparePaging($pageIndex = 1, $pageSize = 10)
     {
         if ($pageIndex !== 0) {
             if (!$pageIndex || $pageIndex <= 0 || empty($pageIndex)) {
@@ -64,7 +64,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/22/2021 22:22
      */
-    protected function prepareOptionFormat($options = array()): ?string
+    protected function prepareOptionFormat($options = array())
     {
         if (isset($options['format']) && is_string($options['format'])) {
             $format = strtolower($options['format']);
@@ -83,12 +83,12 @@ trait Helper
      * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
      * @see      https://laravel.com/docs/6.x/queries#selects
      *
-     * @return array|string|string[]
+     * @return array|string
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/21/2021 10:57
      */
-    protected function formatSelectFieldStringToArray(string $selectField = '')
+    protected function formatSelectFieldStringToArray($selectField = '')
     {
         if (is_string($selectField)) {
             if ($selectField === '*') {
@@ -120,12 +120,12 @@ trait Helper
      * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
      * @see      https://laravel.com/docs/6.x/queries#selects
      *
-     * @return array|string[]
+     * @return array
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/21/2021 12:12
      */
-    protected function prepareFormatSelectField($selectField = array()): array
+    protected function prepareFormatSelectField($selectField = array())
     {
         if ($selectField === null) {
             return array('*');
@@ -175,7 +175,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/22/2021 02:38
      */
-    protected function prepareWhereAndFieldStatement(Builder $builder, $wheres, string $fields, $options = null): Builder
+    protected function prepareWhereAndFieldStatement(Builder $builder, $wheres, $fields, $options = null)
     {
         if (is_array($wheres)) {
             if (count($wheres) > 0) {

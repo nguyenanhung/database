@@ -19,7 +19,7 @@ use nguyenanhung\PDO\MySQLPDOBaseModel as BaseMySQLPDOBaseModel;
  * @copyright         713uk13m <dev@nguyenanhung.com>
  * @since             2021-09-24
  * @last_updated      2021-09-24
- * @version           3.0.5
+ * @version           2.1.0
  */
 class PDOBaseModel extends BaseMySQLPDOBaseModel
 {
