@@ -83,7 +83,7 @@ trait Helper
      * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
      * @see      https://laravel.com/docs/6.x/queries#selects
      *
-     * @return array|string
+     * @return array|string|string[]
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/21/2021 10:57
@@ -120,7 +120,7 @@ trait Helper
      * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
      * @see      https://laravel.com/docs/6.x/queries#selects
      *
-     * @return array
+     * @return array|string|string[]
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/21/2021 12:12

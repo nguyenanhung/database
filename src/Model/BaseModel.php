@@ -10,7 +10,6 @@
 namespace nguyenanhung\MyDatabase\Model;
 
 use Exception;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
@@ -310,7 +309,12 @@ class BaseModel implements Environment
     public function getTableColumns()
     {
         try {
-            return Schema::getColumnListing($this->table);
+            $schema = $this->getSchema();
+            if ($schema === null) {
+                return array();
+            }
+
+            return $schema->getColumnListing($this->table);
         } catch (Exception $e) {
             $this->logger->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
             $this->logger->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
@@ -503,8 +507,8 @@ class BaseModel implements Environment
      *
      * Mặc định giá trị so sánh dựa trên column created_at
      *
-     * @param array  $select Danh sách các column cần lấy
-     * @param string $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+     * @param array|string $select Danh sách các column cần lấy
+     * @param string       $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
@@ -553,8 +557,8 @@ class BaseModel implements Environment
      *
      * Mặc định giá trị so sánh dựa trên column created_at
      *
-     * @param array  $select Danh sách các column cần lấy
-     * @param string $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+     * @param array|string $select Danh sách các column cần lấy
+     * @param string       $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
@@ -567,6 +571,7 @@ class BaseModel implements Environment
     public function getOldest($select = array('*'), $column = 'created_at')
     {
         $select = $this->prepareFormatSelectField($select);
+
         $this->connection();
         $db = DB::table($this->table)->oldest($column);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
