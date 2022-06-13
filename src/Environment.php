@@ -19,8 +19,8 @@ namespace nguyenanhung\MyDatabase;
 interface Environment
 {
     public const PROJECT_NAME  = 'My Database by HungNG';
-    public const VERSION       = '3.0.5';
-    public const LAST_MODIFIED = '2021-09-24';
+    public const VERSION       = '3.0.6';
+    public const LAST_MODIFIED = '2022-06-13';
     public const AUTHOR_NAME   = 'Hung Nguyen';
     public const AUTHOR_EMAIL  = 'dev@nguyenanhung.com';
     public const AUTHOR_URL    = 'https://nguyenanhung.com';
