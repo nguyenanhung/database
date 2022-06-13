@@ -627,8 +627,8 @@ class BaseModel implements Environment
         $this->connection();
         if (!empty($select)) {
             $select = $this->prepareFormatSelectField($select);
-            if (isset($select['expression'], $select['bindingParam']) && is_array($select) && $this->selectRaw === true) {
-                $db = DB::table($this->table)->selectRaw($select['expression'], $select['bindingParam']);
+            if (isset($select['expression'], $select['bindingParam']) && $this->selectRaw === true) {
+                $db = DB::table($this->table)->selectRaw($select['expression'], (array) $select['bindingParam']);
             } else {
                 $db = DB::table($this->table)->select($select);
             }
