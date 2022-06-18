@@ -158,7 +158,7 @@ trait Helper
      *
      * @param \Illuminate\Database\Query\Builder $builder Class Query Builder
      * @param string|array                       $wheres  Mảng hoặc giá trị dữ liệu cần so sánh
-     * @param string                             $fields  Column cần so sánh
+     * @param string|array                       $fields  Column cần so sánh
      * @param mixed                              $options Mảng dữ liệu các cấu hình tùy chọn
      *                                                    example $options = [
      *                                                    'format' => null,
@@ -177,28 +177,30 @@ trait Helper
      */
     protected function prepareWhereAndFieldStatement(Builder $builder, $wheres, string $fields, $options = null): Builder
     {
-        if (is_array($wheres)) {
-            if (count($wheres) > 0) {
-                foreach ($wheres as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $builder->whereIn($value['field'], $value['value']);
+        if (!empty($wheres)) {
+            if (is_array($wheres)) {
+                if (count($wheres) > 0) {
+                    foreach ($wheres as $field => $value) {
+                        if (is_array($value)) {
+                            if (isset($value['field'], $value['value'])) {
+                                if (is_array($value['value'])) {
+                                    $builder->whereIn($value['field'], $value['value']);
+                                } else {
+                                    $builder->where($value['field'], $value['operator'], $value['value']);
+                                }
                             } else {
-                                $builder->where($value['field'], $value['operator'], $value['value']);
+                                $builder->whereIn($field, $value);
                             }
                         } else {
-                            $builder->whereIn($field, $value);
+                            $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
                         }
-                    } else {
-                        $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
                     }
+                } else {
+                    $builder->whereIn($fields, $wheres);
                 }
             } else {
-                $builder->whereIn($fields, $wheres);
+                $builder->where($fields, self::OPERATOR_EQUAL_TO, $wheres);
             }
-        } else {
-            $builder->where($fields, self::OPERATOR_EQUAL_TO, $wheres);
         }
 
         if ($options !== null) {

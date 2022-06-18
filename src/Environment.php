@@ -20,7 +20,7 @@ interface Environment
 {
     public const PROJECT_NAME  = 'My Database by HungNG';
     public const VERSION       = '3.0.6';
-    public const LAST_MODIFIED = '2022-06-13';
+    public const LAST_MODIFIED = '2022-06-19';
     public const AUTHOR_NAME   = 'Hung Nguyen';
     public const AUTHOR_EMAIL  = 'dev@nguyenanhung.com';
     public const AUTHOR_URL    = 'https://nguyenanhung.com';
