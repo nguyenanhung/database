@@ -41,7 +41,7 @@ trait Helper
     public function preparePaging($pageIndex = 1, $pageSize = 10)
     {
         if ($pageIndex !== 0) {
-            if (!$pageIndex || $pageIndex <= 0 || empty($pageIndex)) {
+            if ($pageIndex <= 0 || empty($pageIndex)) {
                 $pageIndex = 1;
             }
             $offset = ($pageIndex - 1) * $pageSize;
@@ -177,29 +177,32 @@ trait Helper
      */
     protected function prepareWhereAndFieldStatement(Builder $builder, $wheres, $fields, $options = null)
     {
-        if (is_array($wheres)) {
-            if (count($wheres) > 0) {
-                foreach ($wheres as $field => $value) {
-                    if (is_array($value)) {
-                        if (isset($value['field'], $value['value'])) {
-                            if (is_array($value['value'])) {
-                                $builder->whereIn($value['field'], $value['value']);
+        if (!empty($wheres)) {
+            if (is_array($wheres)) {
+                if (count($wheres) > 0) {
+                    foreach ($wheres as $field => $value) {
+                        if (is_array($value)) {
+                            if (isset($value['field'], $value['value'])) {
+                                if (is_array($value['value'])) {
+                                    $builder->whereIn($value['field'], $value['value']);
+                                } else {
+                                    $builder->where($value['field'], $value['operator'], $value['value']);
+                                }
                             } else {
-                                $builder->where($value['field'], $value['operator'], $value['value']);
+                                $builder->whereIn($field, $value);
                             }
                         } else {
-                            $builder->whereIn($field, $value);
+                            $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
                         }
-                    } else {
-                        $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
                     }
+                } else {
+                    $builder->whereIn($fields, $wheres);
                 }
             } else {
-                $builder->whereIn($fields, $wheres);
+                $builder->where($fields, self::OPERATOR_EQUAL_TO, $wheres);
             }
-        } else {
-            $builder->where($fields, self::OPERATOR_EQUAL_TO, $wheres);
         }
+
 
         if ($options !== null) {
             // Case có cả Limit   và Offset -> active phân trang
