@@ -5,9 +5,9 @@
 Database Wrapper - Base Model
 
 - [x] PDO Support from package `nguyenanhung/pdo` version `^2.0`
-- [x] MySQLi Support from package `nguyenanhung/mysqli` version `^2.0`
-- [x] illuminate/events `^8.61` Support
-- [x] illuminate/database `^8.61` Support
+- [x] MySQLi Support from package `nguyenanhung/mysqli` version `^3.0`
+- [x] illuminate/events `^9.0 || ^8.61 || ^7.30 || ^6.20` Support
+- [x] illuminate/database `^9.0 || ^8.61 || ^7.30 || ^6.20` Support
 
 ## Version
 
@@ -19,7 +19,7 @@ Database Wrapper - Base Model
 If any question & request, please contact following information
 
 | Name        | Email                | Skype            | Facebook      |
-| ----------- | -------------------- | ---------------- | ------------- |
+|-------------|----------------------|------------------|---------------|
 | Hung Nguyen | dev@nguyenanhung.com | nguyenanhung5891 | @nguyenanhung |
 
 From Vietnam with Love <3
