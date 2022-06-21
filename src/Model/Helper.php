@@ -175,7 +175,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/22/2021 02:38
      */
-    protected function prepareWhereAndFieldStatement(Builder $builder, $wheres, string $fields, $options = null): Builder
+    protected function prepareWhereAndFieldStatement(Builder $builder, $wheres, $fields, $options = null): Builder
     {
         if (!empty($wheres)) {
             if (is_array($wheres)) {
