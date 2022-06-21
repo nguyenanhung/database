@@ -516,7 +516,7 @@ class BaseModel implements Environment
      * @time  : 10/17/18 01:06
      *
      */
-    public function getLatest(array $select = array('*'), string $column = 'created_at')
+    public function getLatest($select = array('*'), string $column = 'created_at')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -566,7 +566,7 @@ class BaseModel implements Environment
      * @time  : 10/17/18 01:06
      *
      */
-    public function getOldest(array $select = array('*'), string $column = 'created_at')
+    public function getOldest($select = array('*'), string $column = 'created_at')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -732,7 +732,7 @@ class BaseModel implements Environment
      * @time  : 11/26/18 16:41
      *
      */
-    public function getValueWithMultipleWhere(string $wheres = '', string $fields = 'id', string $fieldOutput = '')
+    public function getValueWithMultipleWhere($wheres = '', string $fields = 'id', string $fieldOutput = '')
     {
         return $this->getValue($wheres, $fields, $fieldOutput);
     }
