@@ -78,7 +78,7 @@ trait Helper
     /**
      * Function formatSelectFieldStringToArray
      *
-     * @param string $selectField String danh sác các cột cần lấy ra
+     * @param string $selectField
      *
      * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
      * @see      https://laravel.com/docs/6.x/queries#selects

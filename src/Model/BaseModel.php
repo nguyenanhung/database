@@ -505,8 +505,8 @@ class BaseModel implements Environment
      *
      * Mặc định giá trị so sánh dựa trên column created_at
      *
-     * @param array  $select Danh sách các column cần lấy
-     * @param string $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+     * @param string|array $select Danh sách các column cần lấy
+     * @param string       $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
@@ -555,8 +555,8 @@ class BaseModel implements Environment
      *
      * Mặc định giá trị so sánh dựa trên column created_at
      *
-     * @param array  $select Danh sách các column cần lấy
-     * @param string $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+     * @param string|array $select Danh sách các column cần lấy
+     * @param string       $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
@@ -611,7 +611,7 @@ class BaseModel implements Environment
      * @param array|string      $wheres Giá trị cần kiểm tra
      * @param string|null       $fields Field tương ứng, ví dụ: ID
      * @param string|null       $format Format dữ liệu đầu ra: null, json, array, base, result
-     * @param null|string|array $select Các field cần lấy
+     * @param string|array|null $select Các field cần lấy
      *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
      *                                                     map theo biến format truyền vào
@@ -669,7 +669,7 @@ class BaseModel implements Environment
      * @param array|string      $wheres Giá trị cần kiểm tra
      * @param string|null       $fields Field tương ứng, ví dụ: ID
      * @param string|null       $format Format dữ liệu đầu ra: null, json, array, base, result
-     * @param null|string|array $select Các field cần lấy
+     * @param string|array|null $select Các field cần lấy
      *
      * @return array|\Illuminate\Support\Collection|object|string|null
      * @author: 713uk13m <dev@nguyenanhung.com>
@@ -723,9 +723,9 @@ class BaseModel implements Environment
      *
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
-     * @param string $wheres      Giá trị cần kiểm tra
-     * @param string $fields      Field tương ứng với giá tri kiểm tra, ví dụ: ID
-     * @param string $fieldOutput field kết quả đầu ra
+     * @param string|array $wheres      Giá trị cần kiểm tra
+     * @param string       $fields      Field tương ứng với giá tri kiểm tra, ví dụ: ID
+     * @param string       $fieldOutput field kết quả đầu ra
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
      * @author: 713uk13m <dev@nguyenanhung.com>
