@@ -726,9 +726,9 @@ class BaseModel implements Environment
      *
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
-     * @param string $wheres      Giá trị cần kiểm tra
-     * @param string $fields      Field tương ứng với giá tri kiểm tra, ví dụ: ID
-     * @param string $fieldOutput field kết quả đầu ra
+     * @param string|array $wheres      Giá trị cần kiểm tra
+     * @param string       $fields      Field tương ứng với giá tri kiểm tra, ví dụ: ID
+     * @param string       $fieldOutput field kết quả đầu ra
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
      * @author: 713uk13m <dev@nguyenanhung.com>
