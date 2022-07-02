@@ -467,14 +467,14 @@ class BaseModel implements Environment
      * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào
      *
      * @param string|array $wheres Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
-     * @param string       $fields Field tương ứng cần kiểm tra đối chiếu
+     * @param string|mixed $fields Field tương ứng cần kiểm tra đối chiếu
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:45
      *
      */
-    public function checkExists($wheres = '', string $fields = 'id'): int
+    public function checkExists($wheres = '', $fields = 'id'): int
     {
         $this->connection();
         $db    = DB::table($this->table);
@@ -488,14 +488,14 @@ class BaseModel implements Environment
      * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào - Đa điều kiện
      *
      * @param string|array $wheres Giá trị cần kiểm tra
-     * @param string       $fields Field tương ứng, ví dụ: ID
+     * @param string|mixed $fields Field tương ứng, ví dụ: ID
      *
      * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 10/16/18 11:45
      *
      */
-    public function checkExistsWithMultipleWhere($wheres = '', string $fields = 'id'): int
+    public function checkExistsWithMultipleWhere($wheres = '', $fields = 'id'): int
     {
         return $this->checkExists($wheres, $fields);
     }
@@ -506,7 +506,7 @@ class BaseModel implements Environment
      * Mặc định giá trị so sánh dựa trên column created_at
      *
      * @param string|array $select Danh sách các column cần lấy
-     * @param string       $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+     * @param string|mixed $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
@@ -516,7 +516,7 @@ class BaseModel implements Environment
      * @time  : 10/17/18 01:06
      *
      */
-    public function getLatest($select = array('*'), string $column = 'created_at')
+    public function getLatest($select = array('*'), $column = 'created_at')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -531,14 +531,14 @@ class BaseModel implements Environment
      *
      * @param string|array $wheres Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
      * @param string|array $select Danh sách cột cần lấy dữ liệu ra
-     * @param string       $column Tên cột cần order theo điều kiện
-     * @param string       $fields Field tương ứng cần kiểm tra đối chiếu
+     * @param string|mixed $column Tên cột cần order theo điều kiện
+     * @param string|mixed $fields Field tương ứng cần kiểm tra đối chiếu
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:16
      */
-    public function getLatestByColumn($wheres = array(), $select = array('*'), string $column = 'created_at', string $fields = 'id')
+    public function getLatestByColumn($wheres = array(), $select = array('*'), $column = 'created_at', $fields = 'id')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -556,7 +556,7 @@ class BaseModel implements Environment
      * Mặc định giá trị so sánh dựa trên column created_at
      *
      * @param string|array $select Danh sách các column cần lấy
-     * @param string       $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+     * @param string|mixed $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
      *                                                                                            của bản ghi
@@ -566,7 +566,7 @@ class BaseModel implements Environment
      * @time  : 10/17/18 01:06
      *
      */
-    public function getOldest($select = array('*'), string $column = 'created_at')
+    public function getOldest($select = array('*'), $column = 'created_at')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -581,15 +581,15 @@ class BaseModel implements Environment
      *
      * @param string|array $wheres Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
      * @param string|array $select Danh sách cột cần lấy dữ liệu ra
-     * @param string       $column Tên cột cần order theo điều kiện
-     * @param string       $fields Field tương ứng cần kiểm tra đối chiếu
+     * @param string|mixed $column Tên cột cần order theo điều kiện
+     * @param string|mixed $fields Field tương ứng cần kiểm tra đối chiếu
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 2019-04-07 04:17
      *
      */
-    public function getOldestByColumn($wheres = array(), $select = array('*'), string $column = 'created_at', string $fields = 'id')
+    public function getOldestByColumn($wheres = array(), $select = array('*'), $column = 'created_at', $fields = 'id')
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
@@ -609,8 +609,8 @@ class BaseModel implements Environment
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
      * @param array|string      $wheres Giá trị cần kiểm tra
-     * @param string|null       $fields Field tương ứng, ví dụ: ID
-     * @param string|null       $format Format dữ liệu đầu ra: null, json, array, base, result
+     * @param string|mixed      $fields Field tương ứng, ví dụ: ID
+     * @param string|mixed      $format Format dữ liệu đầu ra: null, json, array, base, result
      * @param string|array|null $select Các field cần lấy
      *
      * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
@@ -621,7 +621,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 11:51
      *
      */
-    public function getInfo($wheres = '', string $fields = 'id', string $format = null, $select = null)
+    public function getInfo($wheres = '', $fields = 'id', $format = null, $select = null)
     {
         $format = $this->prepareOptionFormat($format);
         $this->connection();
@@ -667,8 +667,8 @@ class BaseModel implements Environment
      * Hàm lấy thông tin bản ghi theo tham số đầu vào - Đa điều kiện
      *
      * @param array|string      $wheres Giá trị cần kiểm tra
-     * @param string|null       $fields Field tương ứng, ví dụ: ID
-     * @param string|null       $format Format dữ liệu đầu ra: null, json, array, base, result
+     * @param string|mixed      $fields Field tương ứng, ví dụ: ID
+     * @param string|mixed      $format Format dữ liệu đầu ra: null, json, array, base, result
      * @param string|array|null $select Các field cần lấy
      *
      * @return array|\Illuminate\Support\Collection|object|string|null
@@ -676,7 +676,7 @@ class BaseModel implements Environment
      * @time  : 11/26/18 16:40
      *
      */
-    public function getInfoWithMultipleWhere($wheres = '', string $fields = 'id', string $format = null, $select = null)
+    public function getInfoWithMultipleWhere($wheres = '', $fields = 'id', $format = null, $select = null)
     {
         return $this->getInfo($wheres, $fields, $format, $select);
     }
@@ -689,8 +689,8 @@ class BaseModel implements Environment
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
      * @param string|array $wheres      Giá trị cần kiểm tra
-     * @param string       $fields      Field tương ứng với giá tri kiểm tra, ví dụ: ID
-     * @param string       $fieldOutput field kết quả đầu ra
+     * @param string|mixed $fields      Field tương ứng với giá tri kiểm tra, ví dụ: ID
+     * @param string|mixed $fieldOutput field kết quả đầu ra
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
      * @see   https://laravel.com/docs/6.x/queries#selects
@@ -699,7 +699,7 @@ class BaseModel implements Environment
      * @time  : 10/16/18 11:51
      *
      */
-    public function getValue($wheres = '', string $fields = 'id', string $fieldOutput = '')
+    public function getValue($wheres = '', $fields = 'id', $fieldOutput = '')
     {
         $this->connection();
         $db    = DB::table($this->table);
@@ -724,15 +724,15 @@ class BaseModel implements Environment
      * Lấy bản ghi đầu tiên phù hợp với điều kiện
      *
      * @param string|array $wheres      Giá trị cần kiểm tra
-     * @param string       $fields      Field tương ứng với giá tri kiểm tra, ví dụ: ID
-     * @param string       $fieldOutput field kết quả đầu ra
+     * @param string|mixed $fields      Field tương ứng với giá tri kiểm tra, ví dụ: ID
+     * @param string|mixed $fieldOutput field kết quả đầu ra
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
      * @author: 713uk13m <dev@nguyenanhung.com>
      * @time  : 11/26/18 16:41
      *
      */
-    public function getValueWithMultipleWhere($wheres = '', string $fields = 'id', string $fieldOutput = '')
+    public function getValueWithMultipleWhere($wheres = '', $fields = 'id', $fieldOutput = '')
     {
         return $this->getValue($wheres, $fields, $fieldOutput);
     }
