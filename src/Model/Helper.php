@@ -255,7 +255,11 @@ trait Helper
                 // Kiểm tra có các biến join cần thiết hay không
                 if (isset($join['table'], $join['first'], $join['operator'], $join['second'])) {
                     // Tiến hành join vào các bảng để lấy CSDL
-                    $builder->joinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
+                    if (isset($join['type'])) {
+                        $builder->join($join['table'], $join['first'], $join['operator'], $join['second'], $join['type']);
+                    } else {
+                        $builder->join($join['table'], $join['first'], $join['operator'], $join['second']);
+                    }
                 }
             }
         }
