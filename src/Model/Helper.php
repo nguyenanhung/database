@@ -69,7 +69,11 @@ trait Helper
         if (isset($options['format']) && is_string($options['format'])) {
             $format = strtolower($options['format']);
         } else {
-            $format = null;
+            if (is_string($options)) {
+                $format = strtolower($options);
+            } else {
+                $format = null;
+            }
         }
 
         return $format;
@@ -243,7 +247,12 @@ trait Helper
         if (!empty($this->joins) && is_array($this->joins)) {
             foreach ($this->joins as $join) {
                 if (isset($join['table'], $join['first'], $join['operator'], $join['second'])) {
-                    $builder->joinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
+                    // Tiến hành join vào các bảng để lấy CSDL
+                    if (isset($join['type'])) {
+                        $builder->join($join['table'], $join['first'], $join['operator'], $join['second'], $join['type']);
+                    } else {
+                        $builder->join($join['table'], $join['first'], $join['operator'], $join['second']);
+                    }
                 }
             }
         }
