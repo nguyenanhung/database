@@ -237,4 +237,17 @@ trait Helper
 
         return $builder;
     }
+
+    protected function prepareJoinStatement(Builder $builder)
+    {
+        if (!empty($this->joins) && is_array($this->joins)) {
+            foreach ($this->joins as $join) {
+                if (isset($join['table'], $join['first'], $join['operator'], $join['second'])) {
+                    $builder->joinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
+                }
+            }
+        }
+
+        return $builder;
+    }
 }

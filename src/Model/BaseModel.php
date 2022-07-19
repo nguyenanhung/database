@@ -56,6 +56,9 @@ class BaseModel implements Environment
     /** @var mixed $schema */
     protected $schema;
 
+    /** @var array $joins */
+    protected $joins;
+
     /** @var string DB Name */
     protected $dbName = 'default';
 
@@ -120,6 +123,18 @@ class BaseModel implements Environment
      */
     public function __destruct()
     {
+    }
+
+    public function setJoinStatement($joins = array())
+    {
+        $this->joins = $joins;
+
+        return $this;
+    }
+
+    public function getJoinStatement()
+    {
+        return $this->joins;
     }
 
     /**
@@ -631,12 +646,18 @@ class BaseModel implements Environment
         if (!empty($select)) {
             $select = $this->prepareFormatSelectField($select);
             if (isset($select['expression'], $select['bindingParam']) && is_array($select) && $this->selectRaw === true) {
-                $db = DB::table($this->table)->selectRaw($select['expression'], $select['bindingParam']);
+                $db = DB::table($this->table);
+                $db = $this->prepareJoinStatement($db);
+                $db->selectRaw($select['expression'], $select['bindingParam']);
             } else {
-                $db = DB::table($this->table)->select($select);
+                $db = DB::table($this->table);
+                $db = $this->prepareJoinStatement($db);
+                $db->select($select);
             }
         } else {
-            $db = DB::table($this->table)->select();
+            $db = DB::table($this->table);
+            $db = $this->prepareJoinStatement($db);
+            $db->select();
         }
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
