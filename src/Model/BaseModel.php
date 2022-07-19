@@ -648,16 +648,16 @@ class BaseModel implements Environment
             if (isset($select['expression'], $select['bindingParam']) && is_array($select) && $this->selectRaw === true) {
                 $db = DB::table($this->table);
                 $db = $this->prepareJoinStatement($db);
-                $db->selectRaw($select['expression'], $select['bindingParam']);
+                $db = $db->selectRaw($select['expression'], $select['bindingParam']);
             } else {
                 $db = DB::table($this->table);
                 $db = $this->prepareJoinStatement($db);
-                $db->select($select);
+                $db = $db->select($select);
             }
         } else {
             $db = DB::table($this->table);
             $db = $this->prepareJoinStatement($db);
-            $db->select();
+            $db = $db->select();
         }
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
