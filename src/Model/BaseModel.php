@@ -560,6 +560,7 @@ class BaseModel implements Environment
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
         $db    = DB::table($this->table);
+        $db    = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $query->latest($column);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
@@ -612,6 +613,7 @@ class BaseModel implements Environment
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
         $db    = DB::table($this->table);
+        $db    = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $query->oldest($column);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
@@ -727,6 +729,7 @@ class BaseModel implements Environment
     {
         $this->connection();
         $db    = DB::table($this->table);
+        $db    = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
         $result = $query->first();
@@ -778,6 +781,7 @@ class BaseModel implements Environment
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
         $db = DB::table($this->table);
+        $db = $this->prepareJoinStatement($db);
         $db->distinct();
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 
@@ -800,6 +804,7 @@ class BaseModel implements Environment
     {
         $this->connection();
         $db    = DB::table($this->table);
+        $db    = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $select);
         $query->distinct();
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
@@ -866,14 +871,11 @@ class BaseModel implements Environment
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
-
         $this->connection();
-        $db = DB::table($this->table);
-
+        $db    = DB::table($this->table);
+        $db    = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
-
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
-
         $result = $query->get($select);
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
 
@@ -935,6 +937,7 @@ class BaseModel implements Environment
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
         $db    = DB::table($this->table);
+        $db    = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
         $result = $query->get($select);
