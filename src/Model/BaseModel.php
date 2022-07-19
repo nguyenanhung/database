@@ -58,6 +58,8 @@ class BaseModel implements Environment
 
     /** @var mixed $schema */
     protected $schema;
+    /** @var array $joins */
+    protected $joins;
 
     /** @var string DB Name */
     protected $dbName = 'default';
@@ -123,6 +125,36 @@ class BaseModel implements Environment
      */
     public function __destruct()
     {
+    }
+
+    /**
+     * Function setJoinStatement
+     *
+     * @param array $joins
+     *
+     * @return $this
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 19/07/2022 35:54
+     */
+    public function setJoinStatement(array $joins = array()): self
+    {
+        $this->joins = $joins;
+
+        return $this;
+    }
+
+    /**
+     * Function getJoinStatement
+     *
+     * @return array
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 19/07/2022 36:04
+     */
+    public function getJoinStatement(): array
+    {
+        return $this->joins;
     }
 
     /**
@@ -625,15 +657,22 @@ class BaseModel implements Environment
     {
         $format = $this->prepareOptionFormat($format);
         $this->connection();
+
         if (!empty($select)) {
             $select = $this->prepareFormatSelectField($select);
             if (isset($select['expression'], $select['bindingParam']) && $this->selectRaw === true) {
-                $db = DB::table($this->table)->selectRaw($select['expression'], (array) $select['bindingParam']);
+                $db = DB::table($this->table);
+                $db = $this->prepareJoinStatement($db);
+                $db = $db->selectRaw($select['expression'], (array) $select['bindingParam']);
             } else {
-                $db = DB::table($this->table)->select($select);
+                $db = DB::table($this->table);
+                $db = $this->prepareJoinStatement($db);
+                $db = $db->select($select);
             }
         } else {
-            $db = DB::table($this->table)->select();
+            $db = DB::table($this->table);
+            $db = $this->prepareJoinStatement($db);
+            $db = $db->select();
         }
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
@@ -703,6 +742,7 @@ class BaseModel implements Environment
     {
         $this->connection();
         $db    = DB::table($this->table);
+        $db    = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
         $result = $query->first();
