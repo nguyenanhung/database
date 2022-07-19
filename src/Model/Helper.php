@@ -69,7 +69,11 @@ trait Helper
         if (isset($options['format']) && is_string($options['format'])) {
             $format = strtolower($options['format']);
         } else {
-            $format = null;
+            if (is_string($options)) {
+                $format = strtolower($options);
+            } else {
+                $format = null;
+            }
         }
 
         return $format;
