@@ -58,6 +58,7 @@ class BaseModel implements Environment
 
     /** @var mixed $schema */
     protected $schema;
+
     /** @var array $joins */
     protected $joins;
 
