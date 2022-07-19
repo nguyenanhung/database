@@ -1018,7 +1018,6 @@ class BaseModel implements Environment
     {
         $format = $this->prepareOptionFormat($options);
         $db     = DB::table($this->table);
-
         foreach ($joins as $join) {
             $db->join($join['table'], $join['first'], $join['operator'], $join['second']);
         }
