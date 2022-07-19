@@ -236,4 +236,30 @@ trait Helper
 
         return $builder;
     }
+
+    /**
+     * Function prepareJoinStatement
+     *
+     * @param \Illuminate\Database\Query\Builder $builder
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 19/07/2022 38:23
+     */
+    protected function prepareJoinStatement(Builder $builder): Builder
+    {
+        // Kiểm tra dữ liệu trong biến Join có tồn tại hay không
+        if (!empty($this->joins) && is_array($this->joins) && (count($this->joins) > 0)) {
+            foreach ($this->joins as $join) {
+                // Kiểm tra có các biến join cần thiết hay không
+                if (isset($join['table'], $join['first'], $join['operator'], $join['second'])) {
+                    // Tiến hành join vào các bảng để lấy CSDL
+                    $builder->joinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
+                }
+            }
+        }
+
+        return $builder;
+    }
 }
