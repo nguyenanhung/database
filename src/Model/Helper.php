@@ -99,7 +99,7 @@ trait Helper
                 return array('*');
             }
             $listSelectField = explode(',', $selectField);
-            $select          = array();
+            $select = array();
             foreach ($listSelectField as $field) {
                 $field = trim($field);
                 if (!empty($field)) {
@@ -142,7 +142,7 @@ trait Helper
 
         // Format: If Select Field is Array
         if (is_array($selectField) && !empty($selectField) && $selectField[0] !== '*') {
-            $listFirstField  = explode(',', $selectField[0]);
+            $listFirstField = explode(',', $selectField[0]);
             $countFirstField = count($listFirstField);
             if ($countFirstField > 1) {
                 /**
