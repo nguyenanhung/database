@@ -1,4 +1,4 @@
-w<?php
+<?php
 /**
  * Project database.
  * Created by PhpStorm.
