@@ -5,7 +5,7 @@ jobs:
     build:
         strategy:
             matrix:
-                operating-system: [ ubuntu-latest, ubuntu-20.04, ubuntu-22.04, macos-latest, macos-11 ]
+                operating-system: [ 'ubuntu-latest', 'ubuntu-20.04', 'ubuntu-22.04', 'macos-latest', 'macos-11', 'macos-12' ]
                 php-versions: [ '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2' ]
         runs-on: ${{ matrix.operating-system }}
         steps:
@@ -16,12 +16,6 @@ jobs:
                 with:
                     php-version: ${{ matrix.php-versions }}
                     extensions: mbstring, intl, curl, json, openssl, iconv, mysqli, pdo, pdo_mysql, pdo_sqlite
-                    coverage: xdebug #optional
-            -   name: Setup MariaDB Database
-                uses: ankane/setup-mariadb@v1
-                with:
-                    mariadb-version: 10.5
-                    database: test_database
             -   name: Get composer cache directory
                 id: composer-cache
                 run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
