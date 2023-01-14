@@ -68,12 +68,10 @@ trait Helper
     {
         if (isset($options['format']) && is_string($options['format'])) {
             $format = strtolower($options['format']);
+        } elseif (is_string($options)) {
+            $format = strtolower($options);
         } else {
-            if (is_string($options)) {
-                $format = strtolower($options);
-            } else {
-                $format = null;
-            }
+            $format = null;
         }
 
         return $format;
@@ -152,7 +150,6 @@ trait Helper
                 return $this->formatSelectFieldStringToArray($selectField[0]);
             }
         }
-
 
         return $selectField;
     }
@@ -236,7 +233,6 @@ trait Helper
                 $builder->groupBy($options['groupBy']);
             }
         }
-
 
         return $builder;
     }

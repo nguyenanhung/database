@@ -40,5 +40,11 @@
         "psr-4": {
             "nguyenanhung\\MyDatabase\\": "src/"
         }
+    },
+    "suggest": {
+        "ext-json": "Needed to support JSON",
+        "ext-pdo": "Needed to support PDO",
+        "ext-mysqli": "Needed to support MySQLi",
+        "sentry/sdk": "Need support for Logging with Sentry"
     }
 }

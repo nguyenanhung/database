@@ -48,7 +48,7 @@ class BaseModel implements Environment
     protected $logger;
 
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
-    protected $database = [];
+    protected $database = array();
 
     /** @var string|null Bảng cần lấy dữ liệu */
     protected $table = '';
