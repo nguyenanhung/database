@@ -14,16 +14,16 @@ return [
     'database'     => 'my_database',
     'dbdriver'     => 'mysqli',
     'dbprefix'     => '',
-    'pconnect'     => FALSE,
-    'db_debug'     => TRUE,
-    'cache_on'     => FALSE,
+    'pconnect'     => false,
+    'db_debug'     => true,
+    'cache_on'     => false,
     'cachedir'     => '',
     'char_set'     => 'utf8',
     'dbcollat'     => 'utf8_general_ci',
     'swap_pre'     => '',
-    'encrypt'      => FALSE,
-    'compress'     => FALSE,
-    'stricton'     => FALSE,
+    'encrypt'      => false,
+    'compress'     => false,
+    'stricton'     => false,
     'failover'     => array(),
-    'save_queries' => TRUE
+    'save_queries' => true
 ];
