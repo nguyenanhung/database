@@ -45,7 +45,7 @@ class BaseModel implements Environment
     protected $logger;
 
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
-    protected $database = [];
+    protected $database = array();
 
     /** @var string|null Bảng cần lấy dữ liệu */
     protected $table = '';
@@ -268,7 +268,7 @@ class BaseModel implements Environment
     public function setDatabase($database = array(), $name = 'default')
     {
         $this->database = $database;
-        $this->dbName   = $name;
+        $this->dbName = $name;
 
         return $this;
     }
@@ -494,7 +494,7 @@ class BaseModel implements Environment
     public function checkExists($wheres = '', $fields = 'id')
     {
         $this->connection();
-        $db    = DB::table($this->table);
+        $db = DB::table($this->table);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 
@@ -559,8 +559,8 @@ class BaseModel implements Environment
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
-        $db    = DB::table($this->table);
-        $db    = $this->prepareJoinStatement($db);
+        $db = DB::table($this->table);
+        $db = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $query->latest($column);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
@@ -612,8 +612,8 @@ class BaseModel implements Environment
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
-        $db    = DB::table($this->table);
-        $db    = $this->prepareJoinStatement($db);
+        $db = DB::table($this->table);
+        $db = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $query->oldest($column);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
@@ -728,8 +728,8 @@ class BaseModel implements Environment
     public function getValue($wheres = '', $fields = 'id', $fieldOutput = '')
     {
         $this->connection();
-        $db    = DB::table($this->table);
-        $db    = $this->prepareJoinStatement($db);
+        $db = DB::table($this->table);
+        $db = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
         $result = $query->first();
@@ -803,8 +803,8 @@ class BaseModel implements Environment
     public function getDistinctResultByColumn($select = '*', $wheres = array())
     {
         $this->connection();
-        $db    = DB::table($this->table);
-        $db    = $this->prepareJoinStatement($db);
+        $db = DB::table($this->table);
+        $db = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $select);
         $query->distinct();
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
@@ -872,8 +872,8 @@ class BaseModel implements Environment
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
         $this->connection();
-        $db    = DB::table($this->table);
-        $db    = $this->prepareJoinStatement($db);
+        $db = DB::table($this->table);
+        $db = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
         $result = $query->get($select);
@@ -936,8 +936,8 @@ class BaseModel implements Environment
     {
         $select = $this->prepareFormatSelectField($select);
         $this->connection();
-        $db    = DB::table($this->table);
-        $db    = $this->prepareJoinStatement($db);
+        $db = DB::table($this->table);
+        $db = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
         $result = $query->get($select);
@@ -1020,7 +1020,7 @@ class BaseModel implements Environment
     public function getResultWithSimpleInnerJoin($joins = array(), $select = array('*'), $options = null)
     {
         $format = $this->prepareOptionFormat($options);
-        $db     = DB::table($this->table);
+        $db = DB::table($this->table);
         foreach ($joins as $join) {
             $db->join($join['table'], $join['first'], $join['operator'], $join['second']);
         }
@@ -1077,11 +1077,11 @@ class BaseModel implements Environment
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
-        $db     = DB::table($this->table);
+        $db = DB::table($this->table);
         foreach ($joins as $join) {
             $db->joinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
         }
-        $query  = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
         $result = $query->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format === 'json') {
@@ -1131,7 +1131,7 @@ class BaseModel implements Environment
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
-        $db     = DB::table($this->table);
+        $db = DB::table($this->table);
         foreach ($joins as $join) {
             $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
@@ -1186,11 +1186,11 @@ class BaseModel implements Environment
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
-        $db     = DB::table($this->table);
+        $db = DB::table($this->table);
         foreach ($joins as $join) {
             $db->crossJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
-        $query  = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
         $result = $query->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format === 'json') {
@@ -1240,7 +1240,7 @@ class BaseModel implements Environment
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
-        $db     = DB::table($this->table);
+        $db = DB::table($this->table);
         foreach ($joins as $join) {
             $db->leftJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
@@ -1294,11 +1294,11 @@ class BaseModel implements Environment
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
-        $db     = DB::table($this->table);
+        $db = DB::table($this->table);
         foreach ($joins as $join) {
             $db->leftJoinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
         }
-        $query  = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
         $result = $query->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format === 'json') {
@@ -1348,7 +1348,7 @@ class BaseModel implements Environment
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
-        $db     = DB::table($this->table);
+        $db = DB::table($this->table);
         foreach ($joins as $join) {
             $db->rightJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
@@ -1402,11 +1402,11 @@ class BaseModel implements Environment
     {
         $select = $this->prepareFormatSelectField($select);
         $format = $this->prepareOptionFormat($options);
-        $db     = DB::table($this->table);
+        $db = DB::table($this->table);
         foreach ($joins as $join) {
             $db->rightJoinWhere($join['table'], $join['first'], $join['operator'], $join['second']);
         }
-        $query  = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
         $result = $query->select($select)->get();
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         if ($format === 'json') {
@@ -1467,7 +1467,7 @@ class BaseModel implements Environment
     public function update($data = array(), $wheres = array())
     {
         $this->connection();
-        $db    = DB::table($this->table);
+        $db = DB::table($this->table);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 
@@ -1508,7 +1508,7 @@ class BaseModel implements Environment
     public function delete($whereValue = array())
     {
         $this->connection();
-        $db    = DB::table($this->table);
+        $db = DB::table($this->table);
         $query = $this->prepareWhereAndFieldStatement($db, $whereValue, $this->table . '.' . $this->primaryKey);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 
@@ -1547,8 +1547,8 @@ class BaseModel implements Environment
     public function checkExistsAndInsertData($data = array(), $wheres = array())
     {
         $this->connection();
-        $db          = DB::table($this->table);
-        $query       = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
+        $db = DB::table($this->table);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
         $checkExists = $query->count();
         // $this->logger->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
         if (!$checkExists) {
@@ -1595,8 +1595,8 @@ class BaseModel implements Environment
     public function checkExistsAndInsertOrUpdateData($insert = array(), $update = array(), $wheres = array())
     {
         $this->connection();
-        $db          = DB::table($this->table);
-        $query       = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
+        $db = DB::table($this->table);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
         $checkExists = $query->count();
         // $this->logger->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
 

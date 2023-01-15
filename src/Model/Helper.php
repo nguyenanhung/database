@@ -68,12 +68,10 @@ trait Helper
     {
         if (isset($options['format']) && is_string($options['format'])) {
             $format = strtolower($options['format']);
+        } elseif (is_string($options)) {
+            $format = strtolower($options);
         } else {
-            if (is_string($options)) {
-                $format = strtolower($options);
-            } else {
-                $format = null;
-            }
+            $format = null;
         }
 
         return $format;
@@ -99,7 +97,7 @@ trait Helper
                 return array('*');
             }
             $listSelectField = explode(',', $selectField);
-            $select          = array();
+            $select = array();
             foreach ($listSelectField as $field) {
                 $field = trim($field);
                 if (!empty($field)) {
@@ -142,7 +140,7 @@ trait Helper
 
         // Format: If Select Field is Array
         if (is_array($selectField) && !empty($selectField) && $selectField[0] !== '*') {
-            $listFirstField  = explode(',', $selectField[0]);
+            $listFirstField = explode(',', $selectField[0]);
             $countFirstField = count($listFirstField);
             if ($countFirstField > 1) {
                 /**
@@ -152,7 +150,6 @@ trait Helper
                 return $this->formatSelectFieldStringToArray($selectField[0]);
             }
         }
-
 
         return $selectField;
     }
@@ -207,9 +204,8 @@ trait Helper
             }
         }
 
-
         if ($options !== null) {
-            // Case có cả Limit   và Offset -> active phân trang
+            // Case có cả Limit  và Offset -> active phân trang
             if (isset($options['limit'], $options['offset']) && $options['limit'] > 0) {
                 $page = $this->preparePaging($options['offset'], $options['limit']);
                 $builder->offset($page['offset'])->limit($page['limit']);
@@ -237,7 +233,6 @@ trait Helper
                 $builder->groupBy($options['groupBy']);
             }
         }
-
 
         return $builder;
     }
