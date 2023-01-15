@@ -13,8 +13,8 @@ return [
         'port'              => '3306',
         'user'              => 'root',
         'pass'              => '',
-        'database'          => 'vas_content',
-        'singleTransaction' => FALSE
+        'database'          => 'my_database_development',
+        'singleTransaction' => false
     ],
     'production'  => [
         'type'              => 'mysql',
@@ -22,7 +22,7 @@ return [
         'port'              => '3306',
         'user'              => 'root',
         'pass'              => '',
-        'database'          => 'vas_content',
-        'singleTransaction' => FALSE
+        'database'          => 'my_database_production',
+        'singleTransaction' => false
     ],
 ];

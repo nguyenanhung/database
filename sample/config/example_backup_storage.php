@@ -49,8 +49,8 @@ return [
         'password' => '',
         'root'     => '',
         'port'     => 21,
-        'passive'  => TRUE,
-        'ssl'      => TRUE,
+        'passive'  => true,
+        'ssl'      => true,
         'timeout'  => 30,
     ],
     'sftp'      => [
