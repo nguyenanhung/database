@@ -46,6 +46,8 @@ class BaseModel implements Environment
 
     /** @var \nguyenanhung\MyDebug\Logger $logger */
     protected $logger;
+    /** @var \nguyenanhung\MyDebug\Logger $debug */
+    protected $debug;
 
     /** @var array|null Mảng dữ liệu chứa thông tin database cần kết nối tới */
     protected $database = array();
@@ -108,6 +110,7 @@ class BaseModel implements Environment
             $this->logger->setLoggerSubPath(__CLASS__);
             $this->logger->setLoggerFilename($this->debugLoggerFilename);
         }
+        $this->debug = $this->logger;
         // Cấu trúc kết nối Database qua __construct
         if (!empty($database)) {
             $this->database = $database;
@@ -961,10 +964,10 @@ class BaseModel implements Environment
         $db = $this->prepareJoinStatement($db);
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
-        $result = $query->get($select);
+        // $result = $query->get($select);
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
         // $this->logger->debug(__FUNCTION__, 'Total Item Result => ' . json_encode($totalItem));
-        return $result->count();
+        return $query->get($select)->count();
     }
 
     /**
