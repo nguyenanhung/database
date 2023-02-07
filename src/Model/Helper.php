@@ -574,7 +574,7 @@ trait Helper
      */
     protected function filterRecordIsActive(Builder $db, $field = 'status')
     {
-        $db->where($this->table . '.' . $field, self::OPERATOR_EQUAL_TO, self::TABLE_IS_ACTIVE);
+        $db->where($this->table . '.' . $field, self::OPERATOR_EQUAL_TO, self::TABLE_OPERATOR_IS_ACTIVE);
 
         return $db;
     }
