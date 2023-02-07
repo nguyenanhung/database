@@ -11,6 +11,7 @@
 namespace nguyenanhung\MyDatabase\Model;
 
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 
 /**
  * Trait Helper
@@ -155,57 +156,20 @@ trait Helper
     }
 
     /**
-     * Function prepareWhereAndFieldStatement
+     * Function prepareQueryStatementOptions
      *
-     * @param \Illuminate\Database\Query\Builder $builder Class Query Builder
-     * @param string|array                       $wheres  Mảng hoặc giá trị dữ liệu cần so sánh
-     * @param string|array                       $fields  Column cần so sánh
-     * @param mixed                              $options Mảng dữ liệu các cấu hình tùy chọn
-     *                                                    example $options = [
-     *                                                    'format' => null,
-     *                                                    'orderBy => [
-     *                                                    'id' => 'desc'
-     *                                                    ]
-     *                                                    ];
-     *
-     * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
-     * @see      https://laravel.com/docs/6.x/queries
+     * @param \Illuminate\Database\Query\Builder $builder
+     * @param                                    $options
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
-     * @time     : 09/22/2021 02:38
+     * @time     : 07/02/2023 40:06
      */
-    protected function prepareWhereAndFieldStatement(Builder $builder, $wheres, $fields, $options = null): Builder
+    protected function prepareQueryStatementOptions(Builder $builder, $options = null): Builder
     {
-        if (!empty($wheres)) {
-            if (is_array($wheres)) {
-                if (count($wheres) > 0) {
-                    foreach ($wheres as $field => $value) {
-                        if (is_array($value)) {
-                            if (isset($value['field'], $value['value'])) {
-                                if (is_array($value['value'])) {
-                                    $builder->whereIn($value['field'], $value['value']);
-                                } else {
-                                    $builder->where($value['field'], $value['operator'], $value['value']);
-                                }
-                            } else {
-                                $builder->whereIn($field, $value);
-                            }
-                        } else {
-                            $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
-                        }
-                    }
-                } else {
-                    $builder->whereIn($fields, $wheres);
-                }
-            } else {
-                $builder->where($fields, self::OPERATOR_EQUAL_TO, $wheres);
-            }
-        }
-
         if ($options !== null) {
-            // Case có cả Limit   và Offset -> active phân trang
+            // Case có cả Limit  và Offset -> active phân trang
             if (isset($options['limit'], $options['offset']) && $options['limit'] > 0) {
                 $page = $this->preparePaging($options['offset'], $options['limit']);
                 $builder->offset($page['offset'])->limit($page['limit']);
@@ -238,6 +202,112 @@ trait Helper
     }
 
     /**
+     * Function prepareWhereAndFieldStatement
+     *
+     * @param \Illuminate\Database\Query\Builder $builder Class Query Builder
+     * @param string|array                       $wheres  Mảng hoặc giá trị dữ liệu cần so sánh
+     * @param string                             $fields  Column cần so sánh
+     * @param mixed                              $options Mảng dữ liệu các cấu hình tùy chọn
+     *                                                    example $options = [
+     *                                                    'format' => null,
+     *                                                    'orderBy => [
+     *                                                    'id' => 'desc'
+     *                                                    ]
+     *                                                    ];
+     *
+     * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
+     * @see      https://laravel.com/docs/6.x/queries
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 09/22/2021 02:38
+     */
+    protected function prepareWhereAndFieldStatement(Builder $builder, $wheres, string $fields, $options = null): Builder
+    {
+        if (!empty($wheres)) {
+            if (is_array($wheres)) {
+                if (count($wheres) > 0) {
+                    foreach ($wheres as $field => $value) {
+                        if (is_array($value)) {
+                            if (isset($value['field'], $value['value'])) {
+                                if (is_array($value['value'])) {
+                                    $builder->whereIn($value['field'], $value['value']);
+                                } else {
+                                    $builder->where($value['field'], $value['operator'], $value['value']);
+                                }
+                            } else {
+                                $builder->whereIn($field, $value);
+                            }
+                        } else {
+                            $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
+                        }
+                    }
+                } else {
+                    $builder->whereIn($fields, $wheres);
+                }
+            } else {
+                $builder->where($fields, self::OPERATOR_EQUAL_TO, $wheres);
+            }
+        }
+
+        return $this->prepareQueryStatementOptions($builder, $options);
+    }
+
+    /**
+     * Function prepareSimpleWheresWithStatement
+     *
+     * @param \Illuminate\Database\Query\Builder $builder
+     * @param                                    $wheres
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 43:10
+     */
+    protected function prepareSimpleWheresWithStatement(Builder $builder, $wheres): Builder
+    {
+        if (!empty($wheres) && is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    if (isset($value['field'], $value['value'])) {
+                        if (is_array($value['value'])) {
+                            $builder->whereIn($value['field'], $value['value']);
+                        } else {
+                            $builder->where($value['field'], $value['operator'], $value['value']);
+                        }
+                    } else {
+                        $builder->whereIn($field, $value);
+                    }
+                } else {
+                    $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
+                }
+            }
+        }
+
+        return $builder;
+    }
+
+    /**
+     * Function prepareSimpleWheresWithOptionsStatement
+     *
+     * @param \Illuminate\Database\Query\Builder $builder
+     * @param                                    $wheres
+     * @param                                    $options
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 43:56
+     */
+    protected function prepareSimpleWheresWithOptionsStatement(Builder $builder, $wheres, $options = null): Builder
+    {
+        $builder = $this->prepareSimpleWheresWithStatement($builder, $wheres);
+
+        return $this->prepareQueryStatementOptions($builder, $options);
+    }
+
+    /**
      * Function prepareSimpleWhereEqualToStatement
      *
      * @param \Illuminate\Database\Query\Builder $builder
@@ -252,11 +322,29 @@ trait Helper
     {
         if (is_array($wheres)) {
             foreach ($wheres as $field => $value) {
-                if (is_array($value)) {
-                    $builder->whereIn($field, $value);
-                } else {
-                    $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
-                }
+                $builder = $this->buildOperatorEqualTo($builder, $value, $field);
+            }
+        }
+
+        return $builder;
+    }
+
+    /**
+     * Function prepareSimpleWhereNotEqualToStatement
+     *
+     * @param \Illuminate\Database\Query\Builder $builder
+     * @param                                    $wheres
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 37:43
+     */
+    protected function prepareSimpleWhereNotEqualToStatement(Builder $builder, $wheres): Builder
+    {
+        if (is_array($wheres)) {
+            foreach ($wheres as $field => $value) {
+                $builder = $this->buildOperatorNotEqualTo($builder, $value, $field);
             }
         }
 
@@ -296,35 +384,78 @@ trait Helper
     /**
      * Function formatReturnResult
      *
-     * @param \Illuminate\Database\Eloquent\Model|object|static|null $result
-     * @param string|mixed                                           $format
+     * @param \Illuminate\Support\Collection $result
+     * @param                                $format
+     * @param bool                           $loggerStatus
      *
-     * @return array|object|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|string|null
+     * @return array|\Illuminate\Support\Collection|string
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
-     * @time     : 30/12/2022 30:57
+     * @time     : 07/02/2023 05:52
      */
-    protected function formatReturnResult($result, $format)
+    protected function formatReturnResult(Collection $result, $format, bool $loggerStatus = true)
     {
-        if (!$result) {
-            return null;
-        }
         if ($format === 'json') {
-            $this->logger->debug(__FUNCTION__, 'Output Result is Json');
+            if ($loggerStatus === true) {
+                $this->logger->debug(__FUNCTION__, 'Output Result is Json');
+            }
 
             return $result->toJson();
         }
 
         if ($format === 'array') {
-            $this->logger->debug(__FUNCTION__, 'Output Result is Array');
+            if ($loggerStatus === true) {
+                $this->logger->debug(__FUNCTION__, 'Output Result is Array');
+            }
 
             return $result->toArray();
         }
 
         if ($format === 'base') {
-            $this->logger->debug(__FUNCTION__, 'Output Result is Base');
+            if ($loggerStatus === true) {
+                $this->logger->debug(__FUNCTION__, 'Output Result is Base');
+            }
 
             return $result->toBase();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Function formatReturnRowsResult
+     *
+     * @param \Illuminate\Database\Query\Builder $builder
+     * @param                                    $format
+     *
+     * @return array|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|\Illuminate\Support\Collection|object|string|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 05:56
+     */
+    protected function formatReturnRowsResult(Builder $builder, $format)
+    {
+        if ($format === 'result') {
+            $result = $builder->get();
+            // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        } else {
+            $result = $builder->first();
+            // $this->logger->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
+        }
+        if ($format === 'json') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
+            return $result->toJson();
+        }
+        if ($format === 'array') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
+            return $result->toArray();
+        }
+        if ($format === 'base') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
+            return $result->toBase();
+        }
+        if (($format === 'result') && ($result->count() <= 0)) {
+            return null;
         }
 
         return $result;
