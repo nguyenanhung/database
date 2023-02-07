@@ -230,7 +230,7 @@ trait Helper
      *
      * @param \Illuminate\Database\Query\Builder $builder Class Query Builder
      * @param string|array                       $wheres  Mảng hoặc giá trị dữ liệu cần so sánh
-     * @param string                             $fields  Column cần so sánh
+     * @param mixed                              $fields  Column cần so sánh
      * @param mixed                              $options Mảng dữ liệu các cấu hình tùy chọn
      *                                                    example $options = [
      *                                                    'format' => null,
@@ -247,7 +247,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/22/2021 02:38
      */
-    public function prepareWhereAndFieldStatement(Builder $builder, $wheres, string $fields, $options = null): Builder
+    public function prepareWhereAndFieldStatement(Builder $builder, $wheres, $fields, $options = null): Builder
     {
         if (!empty($wheres)) {
             if (is_array($wheres)) {
@@ -267,10 +267,10 @@ trait Helper
                             $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
                         }
                     }
-                } else {
+                } elseif (!empty($fields)) {
                     $builder->whereIn($fields, $wheres);
                 }
-            } else {
+            } elseif (!empty($fields)) {
                 $builder->where($fields, self::OPERATOR_EQUAL_TO, $wheres);
             }
         }
