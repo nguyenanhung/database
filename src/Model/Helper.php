@@ -266,4 +266,318 @@ trait Helper
 
         return $builder;
     }
+
+    /**
+     * Function formatReturnResult
+     *
+     * @param \Illuminate\Database\Eloquent\Model|object|static|null $result
+     * @param string|mixed                                           $format
+     *
+     * @return array|object|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|string|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 30/12/2022 30:57
+     */
+    protected function formatReturnResult($result, $format)
+    {
+        if (!$result) {
+            return null;
+        }
+        if ($format === 'json') {
+            $this->logger->debug(__FUNCTION__, 'Output Result is Json');
+
+            return $result->toJson();
+        }
+
+        if ($format === 'array') {
+            $this->logger->debug(__FUNCTION__, 'Output Result is Array');
+
+            return $result->toArray();
+        }
+
+        if ($format === 'base') {
+            $this->logger->debug(__FUNCTION__, 'Output Result is Base');
+
+            return $result->toBase();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Function bindRecursiveFromCategory
+     *
+     * @param \Illuminate\Database\Query\Builder $db
+     * @param                                    $recursive
+     * @param                                    $parentId
+     * @param string                             $field
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 29:12
+     */
+    protected function bindRecursiveFromCategory(Builder $db, $recursive, $parentId, string $field = 'categoryId'): Builder
+    {
+        if (is_array($recursive) || is_object($recursive)) {
+            /**
+             * Xác định lấy toàn bộ tin tức ở các category con
+             */
+            $countSubCategory = count($recursive); // Đếm bảng ghi Category con
+            if ($countSubCategory) {
+                // Nếu tồn tại các category con
+                $listCategory = array();
+                $listCategory[] = $parentId; // Push category cha
+                foreach ($recursive as $item) {
+                    $itemId = is_array($item) ? $item['id'] : $item->id;
+                    $listCategory[] = (int) $itemId; // Push các category con vào mảng dữ liệu
+                }
+                $db->whereIn($this->table . '.' . $field, $listCategory); // Lấy theo where in
+            } else {
+                $db->where($this->table . '.' . $field, self::OPERATOR_EQUAL_TO, $parentId); // lấy theo where
+            }
+        } else {
+            // Trong trường hợp so sánh tuyệt đối đối với categoryId truyền vào
+            $db->where($this->table . '.' . $field, self::OPERATOR_EQUAL_TO, $parentId);
+        }
+
+        return $db;
+    }
+
+    /**
+     * Function filterByPrimaryId
+     *
+     * @param \Illuminate\Database\Query\Builder $db
+     * @param                                    $id
+     * @param string                             $field
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 07:22
+     */
+    protected function filterByPrimaryId(Builder $db, $id, string $field = 'id'): Builder
+    {
+        if ($id !== null) {
+            if (is_array($id)) {
+                $db->whereIn($this->table . '.' . $field, $id);
+            } else {
+                $db->where($this->table . '.' . $field, self::OPERATOR_EQUAL_TO, $id);
+            }
+        }
+
+        return $db;
+    }
+
+    /**
+     * Function buildOperatorEqualTo
+     *
+     * @param \Illuminate\Database\Query\Builder $db
+     * @param                                    $id
+     * @param string                             $field
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 18:00
+     */
+    protected function buildOperatorEqualTo(Builder $db, $id, string $field = 'id'): Builder
+    {
+        if ($id !== null) {
+            if (is_array($id)) {
+                $db->whereIn($this->table . '.' . $field, $id);
+            } else {
+                $db->where($this->table . '.' . $field, self::OPERATOR_EQUAL_TO, $id);
+            }
+        }
+
+        return $db;
+    }
+
+    /**
+     * Function buildOperatorNotEqualTo
+     *
+     * @param \Illuminate\Database\Query\Builder $db
+     * @param                                    $id
+     * @param string                             $field
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 29:17
+     */
+    protected function buildOperatorNotEqualTo(Builder $db, $id, string $field = 'id'): Builder
+    {
+        if ($id !== null) {
+            if (is_array($id)) {
+                $db->whereNotIn($this->table . '.' . $field, $id);
+            } else {
+                $db->where($this->table . '.' . $field, self::OPERATOR_NOT_EQUAL_TO, $id);
+            }
+        }
+
+        return $db;
+    }
+
+    /**
+     * Function buildOperatorLessThanTo
+     *
+     * @param \Illuminate\Database\Query\Builder $db
+     * @param                                    $id
+     * @param string                             $field
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 30:09
+     */
+    protected function buildOperatorLessThanTo(Builder $db, $id, string $field = 'id'): Builder
+    {
+        $db->where($this->table . '.' . $field, self::OPERATOR_LESS_THAN, $id);
+
+        return $db;
+    }
+
+    /**
+     * Function buildOperatorGreaterThanTo
+     *
+     * @param \Illuminate\Database\Query\Builder $db
+     * @param                                    $id
+     * @param string                             $field
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 30:05
+     */
+    protected function buildOperatorGreaterThanTo(Builder $db, $id, string $field = 'id'): Builder
+    {
+        $db->where($this->table . '.' . $field, self::OPERATOR_GREATER_THAN, $id);
+
+        return $db;
+    }
+
+    /**
+     * Function buildOperatorLessThanOrEqualTo
+     *
+     * @param \Illuminate\Database\Query\Builder $db
+     * @param                                    $id
+     * @param string                             $field
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 30:01
+     */
+    protected function buildOperatorLessThanOrEqualTo(Builder $db, $id, string $field = 'id'): Builder
+    {
+        $db->where($this->table . '.' . $field, self::OPERATOR_LESS_THAN_OR_EQUAL_TO, $id);
+
+        return $db;
+    }
+
+    /**
+     * Function buildOperatorGreaterThanOrEqualTo
+     *
+     * @param \Illuminate\Database\Query\Builder $db
+     * @param                                    $id
+     * @param string                             $field
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 29:57
+     */
+    protected function buildOperatorGreaterThanOrEqualTo(Builder $db, $id, string $field = 'id'): Builder
+    {
+        $db->where($this->table . '.' . $field, self::OPERATOR_GREATER_THAN_OR_EQUAL_TO, $id);
+
+        return $db;
+    }
+
+    /**
+     * Function buildOperatorSpaceShipTo
+     *
+     * @param \Illuminate\Database\Query\Builder $db
+     * @param                                    $id
+     * @param string                             $field
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 29:52
+     */
+    protected function buildOperatorSpaceShipTo(Builder $db, $id, string $field = 'id'): Builder
+    {
+        $db->where($this->table . '.' . $field, self::OPERATOR_IS_SPACESHIP, $id);
+
+        return $db;
+    }
+
+    /**
+     * Function bindOrderBy
+     *
+     * @param \Illuminate\Database\Query\Builder $db
+     * @param                                    $orderByField
+     * @param string                             $defaultField
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 28:46
+     */
+    protected function bindOrderBy(Builder $db, $orderByField, string $defaultField = 'updated_at'): Builder
+    {
+        if (isset($orderByField) && is_array($orderByField) && count($orderByField) > 0) {
+            foreach ($orderByField as $field) {
+                $db->orderBy($this->table . '.' . $field['field_name'], $field['order_value']);
+            }
+        } elseif (strtolower($defaultField) === 'random') {
+            $db->inRandomOrder();
+        } else {
+            $db->orderByDesc($this->table . '.' . $defaultField);
+        }
+
+        return $db;
+    }
+
+    /**
+     * Function bindOrderByNoDefault
+     *
+     * @param \Illuminate\Database\Query\Builder $db
+     * @param                                    $orderByField
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 28:41
+     */
+    protected function bindOrderByNoDefault(Builder $db, $orderByField): Builder
+    {
+        if (isset($orderByField) && is_array($orderByField) && count($orderByField) > 0) {
+            foreach ($orderByField as $field) {
+                $db->orderBy($this->table . '.' . $field['field_name'], $field['order_value']);
+            }
+        }
+
+        return $db;
+    }
+
+    /**
+     * Function filterRecordIsActive
+     *
+     * @param \Illuminate\Database\Query\Builder $db
+     * @param string                             $field
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 33:52
+     */
+    protected function filterRecordIsActive(Builder $db, string $field = 'status'): Builder
+    {
+        $db->where($this->table . '.' . $field, self::OPERATOR_EQUAL_TO, self::TABLE_IS_ACTIVE);
+
+        return $db;
+    }
 }
