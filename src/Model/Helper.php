@@ -384,7 +384,7 @@ trait Helper
     /**
      * Function formatReturnResult
      *
-     * @param \Illuminate\Support\Collection $result
+     * @param                                $result
      * @param                                $format
      * @param bool                           $loggerStatus
      *
@@ -393,7 +393,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 05:52
      */
-    protected function formatReturnResult(Collection $result, $format, bool $loggerStatus = true)
+    protected function formatReturnResult($result, $format, bool $loggerStatus = true)
     {
         if ($format === 'json') {
             if ($loggerStatus === true) {
