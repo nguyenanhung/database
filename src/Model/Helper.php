@@ -231,7 +231,7 @@ trait Helper
      *
      * @param \Illuminate\Database\Query\Builder $builder Class Query Builder
      * @param string|array                       $wheres  Mảng hoặc giá trị dữ liệu cần so sánh
-     * @param string                             $fields  Column cần so sánh
+     * @param mixed                              $fields  Column cần so sánh
      * @param mixed                              $options Mảng dữ liệu các cấu hình tùy chọn
      *                                                    example $options = [
      *                                                    'format' => null,
@@ -268,10 +268,10 @@ trait Helper
                             $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
                         }
                     }
-                } else {
+                } elseif (!empty($fields)) {
                     $builder->whereIn($fields, $wheres);
                 }
-            } else {
+            } elseif (!empty($fields)) {
                 $builder->where($fields, self::OPERATOR_EQUAL_TO, $wheres);
             }
         }
