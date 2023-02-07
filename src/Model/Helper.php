@@ -54,6 +54,31 @@ trait Helper
     }
 
     /**
+     * Function prepareOffset
+     *
+     * @param $page
+     * @param $size
+     *
+     * @return int
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 48:18
+     */
+    public function prepareOffset($page = 1, $size = 10)
+    {
+        if ($page !== 0) {
+            if ($page <= 0 || empty($page)) {
+                $page = 1;
+            }
+            $start = ($page - 1) * $size;
+        } else {
+            $start = $page;
+        }
+
+        return (int) $start;
+    }
+
+    /**
      * Function prepareOptionFormat
      *
      * @param mixed $options
