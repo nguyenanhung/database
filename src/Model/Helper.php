@@ -412,7 +412,7 @@ trait Helper
      * @param                                $format
      * @param bool                           $loggerStatus
      *
-     * @return array|\Illuminate\Support\Collection|string
+     * @return array|object|string|null|\Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 05:52
@@ -452,7 +452,7 @@ trait Helper
      * @param \Illuminate\Database\Query\Builder $builder
      * @param                                    $format
      *
-     * @return array|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|\Illuminate\Support\Collection|object|string|null
+     * @return array|object|string|null|\Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 05:56
