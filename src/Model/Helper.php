@@ -11,7 +11,6 @@
 namespace nguyenanhung\MyDatabase\Model;
 
 use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Collection;
 
 /**
  * Trait Helper
@@ -65,7 +64,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/22/2021 22:22
      */
-    protected function prepareOptionFormat($options = array()): ?string
+    public function prepareOptionFormat($options = array()): ?string
     {
         if (isset($options['format']) && is_string($options['format'])) {
             $format = strtolower($options['format']);
@@ -91,7 +90,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/21/2021 10:57
      */
-    protected function formatSelectFieldStringToArray(string $selectField = '')
+    public function formatSelectFieldStringToArray(string $selectField = '')
     {
         if (is_string($selectField)) {
             if ($selectField === '*') {
@@ -128,7 +127,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/21/2021 12:12
      */
-    protected function prepareFormatSelectField($selectField = array()): array
+    public function prepareFormatSelectField($selectField = array()): array
     {
         if ($selectField === null) {
             return array('*');
@@ -166,7 +165,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 40:06
      */
-    protected function prepareQueryStatementOptions(Builder $builder, $options = null): Builder
+    public function prepareQueryStatementOptions(Builder $builder, $options = null): Builder
     {
         if ($options !== null) {
             // Case có cả Limit  và Offset -> active phân trang
@@ -223,7 +222,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/22/2021 02:38
      */
-    protected function prepareWhereAndFieldStatement(Builder $builder, $wheres, string $fields, $options = null): Builder
+    public function prepareWhereAndFieldStatement(Builder $builder, $wheres, string $fields, $options = null): Builder
     {
         if (!empty($wheres)) {
             if (is_array($wheres)) {
@@ -265,7 +264,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 43:10
      */
-    protected function prepareSimpleWheresWithStatement(Builder $builder, $wheres): Builder
+    public function prepareSimpleWheresWithStatement(Builder $builder, $wheres): Builder
     {
         if (!empty($wheres) && is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
@@ -300,7 +299,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 43:56
      */
-    protected function prepareSimpleWheresWithOptionsStatement(Builder $builder, $wheres, $options = null): Builder
+    public function prepareSimpleWheresWithOptionsStatement(Builder $builder, $wheres, $options = null): Builder
     {
         $builder = $this->prepareSimpleWheresWithStatement($builder, $wheres);
 
@@ -318,7 +317,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 52:43
      */
-    protected function prepareSimpleWhereEqualToStatement(Builder $builder, $wheres): Builder
+    public function prepareSimpleWhereEqualToStatement(Builder $builder, $wheres): Builder
     {
         if (is_array($wheres)) {
             foreach ($wheres as $field => $value) {
@@ -340,7 +339,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 37:43
      */
-    protected function prepareSimpleWhereNotEqualToStatement(Builder $builder, $wheres): Builder
+    public function prepareSimpleWhereNotEqualToStatement(Builder $builder, $wheres): Builder
     {
         if (is_array($wheres)) {
             foreach ($wheres as $field => $value) {
@@ -361,7 +360,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 19/07/2022 38:23
      */
-    protected function prepareJoinStatement(Builder $builder): Builder
+    public function prepareJoinStatement(Builder $builder): Builder
     {
         // Kiểm tra dữ liệu trong biến Join có tồn tại hay không
         if (!empty($this->joins) && is_array($this->joins) && (count($this->joins) > 0)) {
@@ -393,7 +392,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 05:52
      */
-    protected function formatReturnResult($result, $format, bool $loggerStatus = true)
+    public function formatReturnResult($result, $format, bool $loggerStatus = true)
     {
         if ($format === 'json') {
             if ($loggerStatus === true) {
@@ -433,7 +432,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 05:56
      */
-    protected function formatReturnRowsResult(Builder $builder, $format)
+    public function formatReturnRowsResult(Builder $builder, $format)
     {
         if ($format === 'result') {
             $result = $builder->get();
@@ -474,7 +473,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 29:12
      */
-    protected function bindRecursiveFromCategory(Builder $db, $recursive, $parentId, string $field = 'categoryId'): Builder
+    public function bindRecursiveFromCategory(Builder $db, $recursive, $parentId, string $field = 'categoryId'): Builder
     {
         if (is_array($recursive) || is_object($recursive)) {
             /**
@@ -513,7 +512,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 07:22
      */
-    protected function filterByPrimaryId(Builder $db, $id, string $field = 'id'): Builder
+    public function filterByPrimaryId(Builder $db, $id, string $field = 'id'): Builder
     {
         if ($id !== null) {
             if (is_array($id)) {
@@ -538,7 +537,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 18:00
      */
-    protected function buildOperatorEqualTo(Builder $db, $id, string $field = 'id'): Builder
+    public function buildOperatorEqualTo(Builder $db, $id, string $field = 'id'): Builder
     {
         if ($id !== null) {
             if (is_array($id)) {
@@ -563,7 +562,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 29:17
      */
-    protected function buildOperatorNotEqualTo(Builder $db, $id, string $field = 'id'): Builder
+    public function buildOperatorNotEqualTo(Builder $db, $id, string $field = 'id'): Builder
     {
         if ($id !== null) {
             if (is_array($id)) {
@@ -588,7 +587,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 30:09
      */
-    protected function buildOperatorLessThanTo(Builder $db, $id, string $field = 'id'): Builder
+    public function buildOperatorLessThanTo(Builder $db, $id, string $field = 'id'): Builder
     {
         $db->where($this->table . '.' . $field, self::OPERATOR_LESS_THAN, $id);
 
@@ -607,7 +606,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 30:05
      */
-    protected function buildOperatorGreaterThanTo(Builder $db, $id, string $field = 'id'): Builder
+    public function buildOperatorGreaterThanTo(Builder $db, $id, string $field = 'id'): Builder
     {
         $db->where($this->table . '.' . $field, self::OPERATOR_GREATER_THAN, $id);
 
@@ -626,7 +625,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 30:01
      */
-    protected function buildOperatorLessThanOrEqualTo(Builder $db, $id, string $field = 'id'): Builder
+    public function buildOperatorLessThanOrEqualTo(Builder $db, $id, string $field = 'id'): Builder
     {
         $db->where($this->table . '.' . $field, self::OPERATOR_LESS_THAN_OR_EQUAL_TO, $id);
 
@@ -645,7 +644,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 29:57
      */
-    protected function buildOperatorGreaterThanOrEqualTo(Builder $db, $id, string $field = 'id'): Builder
+    public function buildOperatorGreaterThanOrEqualTo(Builder $db, $id, string $field = 'id'): Builder
     {
         $db->where($this->table . '.' . $field, self::OPERATOR_GREATER_THAN_OR_EQUAL_TO, $id);
 
@@ -664,7 +663,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 29:52
      */
-    protected function buildOperatorSpaceShipTo(Builder $db, $id, string $field = 'id'): Builder
+    public function buildOperatorSpaceShipTo(Builder $db, $id, string $field = 'id'): Builder
     {
         $db->where($this->table . '.' . $field, self::OPERATOR_IS_SPACESHIP, $id);
 
@@ -683,7 +682,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 28:46
      */
-    protected function bindOrderBy(Builder $db, $orderByField, string $defaultField = 'updated_at'): Builder
+    public function bindOrderBy(Builder $db, $orderByField, string $defaultField = 'updated_at'): Builder
     {
         if (isset($orderByField) && is_array($orderByField) && count($orderByField) > 0) {
             foreach ($orderByField as $field) {
@@ -709,7 +708,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 28:41
      */
-    protected function bindOrderByNoDefault(Builder $db, $orderByField): Builder
+    public function bindOrderByNoDefault(Builder $db, $orderByField): Builder
     {
         if (isset($orderByField) && is_array($orderByField) && count($orderByField) > 0) {
             foreach ($orderByField as $field) {
@@ -731,7 +730,7 @@ trait Helper
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 33:52
      */
-    protected function filterRecordIsActive(Builder $db, string $field = 'status'): Builder
+    public function filterRecordIsActive(Builder $db, string $field = 'status'): Builder
     {
         $db->where($this->table . '.' . $field, self::OPERATOR_EQUAL_TO, self::TABLE_OPERATOR_IS_ACTIVE);
 
