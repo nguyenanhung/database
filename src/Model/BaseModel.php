@@ -56,18 +56,6 @@ class BaseModel implements Environment
     /** @var \Illuminate\Database\Capsule\Manager|null $db Đối tượng khởi tạo dùng gọi đến Class Capsule Manager */
     protected $db;
 
-    /** @var mixed $schema */
-    protected $schema;
-
-    /** @var array $joins */
-    protected $joins;
-
-    /** @var string DB Name */
-    protected $dbName = 'default';
-
-    /** @var bool|null Cấu hình trạng thái select Raw */
-    protected $selectRaw;
-
     /** @var bool Cấu hình trạng thái Debug, TRUE nếu bật, FALSE nếu tắt */
     public $debugStatus = false;
 
@@ -80,8 +68,29 @@ class BaseModel implements Environment
     /** @var null|string Cấu hình File Log, VD: Log-2018-10-15.log | Log-date('Y-m-d').log */
     public $debugLoggerFilename = '';
 
+    /** @var mixed $schema */
+    protected $schema;
+
+    /** @var array $joins */
+    protected $joins;
+
+    /** @var string DB Name */
+    protected $dbName = 'default';
+
+    /** @var bool|null Cấu hình trạng thái select Raw */
+    protected $selectRaw;
+
     /** @var string Primary Key Default */
     public $primaryKey = 'id';
+
+    /** @var null|string Table Prefix */
+    protected $prefixTbl;
+
+    /** @var int $chunkCount */
+    protected $chunkCount;
+
+    /** @var string|array|null List Field Order for Query Results */
+    protected $orderColumn;
 
     /**
      * BaseModel constructor.
@@ -129,6 +138,16 @@ class BaseModel implements Environment
     {
     }
 
+    /**
+     * Function setJoinStatement
+     *
+     * @param $joins
+     *
+     * @return $this
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 26:41
+     */
     public function setJoinStatement($joins = array())
     {
         $this->joins = $joins;
@@ -136,9 +155,107 @@ class BaseModel implements Environment
         return $this;
     }
 
+    /**
+     * Function getJoinStatement
+     *
+     * @return array
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 26:36
+     */
     public function getJoinStatement()
     {
         return $this->joins;
+    }
+
+    /**
+     * Function setChunkCount
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 10:59
+     *
+     * @param int $chunkCount
+     *
+     * @return $this
+     */
+    public function setChunkCount($chunkCount = 100)
+    {
+        $this->chunkCount = $chunkCount;
+
+        return $this;
+    }
+
+    /**
+     * Function getChunkCount
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 10:59
+     *
+     * @return int
+     */
+    public function getChunkCount()
+    {
+        return $this->chunkCount;
+    }
+
+    /**
+     * Function setPrefixTbl
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-07 15:21
+     *
+     * @param string $prefixTbl
+     *
+     * @return $this
+     */
+    public function setPrefixTbl($prefixTbl = '')
+    {
+        $this->prefixTbl = $prefixTbl;
+
+        return $this;
+    }
+
+    /**
+     * Function getPrefixTbl
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-07 15:21
+     *
+     * @return string|null
+     */
+    public function getPrefixTbl()
+    {
+        return $this->prefixTbl;
+    }
+
+    /**
+     * Function getOrderColumn
+     *
+     * @return array|string|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 14/12/2022 34:06
+     */
+    public function getOrderColumn()
+    {
+        return $this->orderColumn;
+    }
+
+    /**
+     * Function setOrderColumn
+     *
+     * @param $orderColumn
+     *
+     * @return $this
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 14/12/2022 34:01
+     */
+    public function setOrderColumn($orderColumn)
+    {
+        $this->orderColumn = $orderColumn;
+
+        return $this;
     }
 
     /**
