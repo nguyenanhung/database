@@ -85,6 +85,15 @@ class BaseModel implements Environment
     /** @var string Primary Key Default */
     public $primaryKey = 'id';
 
+    /** @var null|string Table Prefix */
+    protected $prefixTbl;
+
+    /** @var int $chunkCount */
+    protected $chunkCount;
+
+    /** @var string|array|null List Field Order for Query Results */
+    protected $orderColumn;
+
     /**
      * BaseModel constructor.
      *
@@ -159,6 +168,96 @@ class BaseModel implements Environment
     public function getJoinStatement(): array
     {
         return $this->joins;
+    }
+
+    /**
+     * Function setChunkCount
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 10:59
+     *
+     * @param int $chunkCount
+     *
+     * @return $this
+     */
+    public function setChunkCount(int $chunkCount = 100): self
+    {
+        $this->chunkCount = $chunkCount;
+
+        return $this;
+    }
+
+    /**
+     * Function getChunkCount
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-03 10:59
+     *
+     * @return int
+     */
+    public function getChunkCount(): int
+    {
+        return $this->chunkCount;
+    }
+
+    /**
+     * Function setPrefixTbl
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-07 15:21
+     *
+     * @param string $prefixTbl
+     *
+     * @return $this
+     */
+    public function setPrefixTbl(string $prefixTbl = ''): self
+    {
+        $this->prefixTbl = $prefixTbl;
+
+        return $this;
+    }
+
+    /**
+     * Function getPrefixTbl
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 2018-12-07 15:21
+     *
+     * @return string|null
+     */
+    public function getPrefixTbl(): ?string
+    {
+        return $this->prefixTbl;
+    }
+
+    /**
+     * Function getOrderColumn
+     *
+     * @return array|string|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 14/12/2022 34:06
+     */
+    public function getOrderColumn()
+    {
+        return $this->orderColumn;
+    }
+
+    /**
+     * Function setOrderColumn
+     *
+     * @param $orderColumn
+     *
+     * @return $this
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 14/12/2022 34:01
+     */
+    public function setOrderColumn($orderColumn): self
+    {
+        $this->orderColumn = $orderColumn;
+
+        return $this;
     }
 
     /**
