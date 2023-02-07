@@ -238,6 +238,32 @@ trait Helper
     }
 
     /**
+     * Function prepareSimpleWhereEqualToStatement
+     *
+     * @param \Illuminate\Database\Query\Builder $builder
+     * @param                                    $wheres
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 52:43
+     */
+    protected function prepareSimpleWhereEqualToStatement(Builder $builder, $wheres): Builder
+    {
+        if (is_array($wheres)) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    $builder->whereIn($field, $value);
+                } else {
+                    $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
+                }
+            }
+        }
+
+        return $builder;
+    }
+
+    /**
      * Function prepareJoinStatement
      *
      * @param \Illuminate\Database\Query\Builder $builder
