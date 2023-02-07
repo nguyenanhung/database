@@ -11,6 +11,7 @@
 namespace nguyenanhung\MyDatabase\Model;
 
 use Illuminate\Database\Query\Builder;
+use \Illuminate\Support\Collection;
 
 /**
  * Trait Helper
@@ -155,6 +156,52 @@ trait Helper
     }
 
     /**
+     * Function prepareQueryStatementOptions
+     *
+     * @param \Illuminate\Database\Query\Builder $builder
+     * @param                                    $options
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 40:06
+     */
+    protected function prepareQueryStatementOptions(Builder $builder, $options = null)
+    {
+        if ($options !== null) {
+            // Case có cả Limit  và Offset -> active phân trang
+            if (isset($options['limit'], $options['offset']) && $options['limit'] > 0) {
+                $page = $this->preparePaging($options['offset'], $options['limit']);
+                $builder->offset($page['offset'])->limit($page['limit']);
+            }
+
+            // Case chỉ có Limit
+            if ((isset($options['limit']) && $options['limit'] > 0) && !isset($options['offset'])) {
+                $builder->limit($options['limit']);
+            }
+
+            // Sắp xếp dữ liệu đổ ra dựa vào Option Order By
+            if (isset($options['orderBy']) && is_array($options['orderBy'])) {
+                foreach ($options['orderBy'] as $column => $direction) {
+                    $builder->orderBy($column, $direction);
+                }
+            }
+
+            // Sắp xếp dữ liệu đổ ra ngẫu nhiên nếu như Option Order By ghi nhận giá trị random
+            if (isset($options['orderBy']) && is_string($options['orderBy']) && strtolower($options['orderBy']) === 'random') {
+                $builder->inRandomOrder();
+            }
+
+            // Group Query
+            if (isset($options['groupBy']) && !empty($options['groupBy'])) {
+                $builder->groupBy($options['groupBy']);
+            }
+        }
+
+        return $builder;
+    }
+
+    /**
      * Function prepareWhereAndFieldStatement
      *
      * @param \Illuminate\Database\Query\Builder $builder Class Query Builder
@@ -204,37 +251,60 @@ trait Helper
             }
         }
 
-        if ($options !== null) {
-            // Case có cả Limit  và Offset -> active phân trang
-            if (isset($options['limit'], $options['offset']) && $options['limit'] > 0) {
-                $page = $this->preparePaging($options['offset'], $options['limit']);
-                $builder->offset($page['offset'])->limit($page['limit']);
-            }
+        return $this->prepareQueryStatementOptions($builder, $options);
+    }
 
-            // Case chỉ có Limit
-            if ((isset($options['limit']) && $options['limit'] > 0) && !isset($options['offset'])) {
-                $builder->limit($options['limit']);
-            }
-
-            // Sắp xếp dữ liệu đổ ra dựa vào Option Order By
-            if (isset($options['orderBy']) && is_array($options['orderBy'])) {
-                foreach ($options['orderBy'] as $column => $direction) {
-                    $builder->orderBy($column, $direction);
+    /**
+     * Function prepareSimpleWheresWithStatement
+     *
+     * @param \Illuminate\Database\Query\Builder $builder
+     * @param                                    $wheres
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 43:10
+     */
+    protected function prepareSimpleWheresWithStatement(Builder $builder, $wheres)
+    {
+        if (!empty($wheres) && is_array($wheres) && count($wheres) > 0) {
+            foreach ($wheres as $field => $value) {
+                if (is_array($value)) {
+                    if (isset($value['field'], $value['value'])) {
+                        if (is_array($value['value'])) {
+                            $builder->whereIn($value['field'], $value['value']);
+                        } else {
+                            $builder->where($value['field'], $value['operator'], $value['value']);
+                        }
+                    } else {
+                        $builder->whereIn($field, $value);
+                    }
+                } else {
+                    $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
                 }
-            }
-
-            // Sắp xếp dữ liệu đổ ra ngẫu nhiên nếu như Option Order By ghi nhận giá trị random
-            if (isset($options['orderBy']) && is_string($options['orderBy']) && strtolower($options['orderBy']) === 'random') {
-                $builder->inRandomOrder();
-            }
-
-            // Group Query
-            if (isset($options['groupBy']) && !empty($options['groupBy'])) {
-                $builder->groupBy($options['groupBy']);
             }
         }
 
         return $builder;
+    }
+
+    /**
+     * Function prepareSimpleWheresWithOptionsStatement
+     *
+     * @param \Illuminate\Database\Query\Builder $builder
+     * @param                                    $wheres
+     * @param                                    $options
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 43:56
+     */
+    protected function prepareSimpleWheresWithOptionsStatement(Builder $builder, $wheres, $options = null)
+    {
+        $builder = $this->prepareSimpleWheresWithStatement($builder, $wheres);
+
+        return $this->prepareQueryStatementOptions($builder, $options);
     }
 
     /**
@@ -252,11 +322,29 @@ trait Helper
     {
         if (is_array($wheres)) {
             foreach ($wheres as $field => $value) {
-                if (is_array($value)) {
-                    $builder->whereIn($field, $value);
-                } else {
-                    $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
-                }
+                $builder = $this->buildOperatorEqualTo($builder, $value, $field);
+            }
+        }
+
+        return $builder;
+    }
+
+    /**
+     * Function prepareSimpleWhereNotEqualToStatement
+     *
+     * @param \Illuminate\Database\Query\Builder $builder
+     * @param                                    $wheres
+     *
+     * @return \Illuminate\Database\Query\Builder
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 37:43
+     */
+    protected function prepareSimpleWhereNotEqualToStatement(Builder $builder, $wheres)
+    {
+        if (is_array($wheres)) {
+            foreach ($wheres as $field => $value) {
+                $builder = $this->buildOperatorNotEqualTo($builder, $value, $field);
             }
         }
 
@@ -294,35 +382,78 @@ trait Helper
     /**
      * Function formatReturnResult
      *
-     * @param \Illuminate\Database\Eloquent\Model|object|static|null $result
-     * @param string|null                                            $format
+     * @param \Illuminate\Support\Collection $result
+     * @param                                $format
+     * @param                                $loggerStatus
      *
-     * @return array|object|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|string|null
+     * @return array|\Illuminate\Support\Collection|string
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
-     * @time     : 30/12/2022 30:57
+     * @time     : 07/02/2023 55:48
      */
-    protected function formatReturnResult($result, $format)
+    protected function formatReturnResult(Collection $result, $format, $loggerStatus = true)
     {
-        if (!$result) {
-            return null;
-        }
         if ($format === 'json') {
-            $this->logger->debug(__FUNCTION__, 'Output Result is Json');
+            if ($loggerStatus === true) {
+                $this->logger->debug(__FUNCTION__, 'Output Result is Json');
+            }
 
             return $result->toJson();
         }
 
         if ($format === 'array') {
-            $this->logger->debug(__FUNCTION__, 'Output Result is Array');
+            if ($loggerStatus === true) {
+                $this->logger->debug(__FUNCTION__, 'Output Result is Array');
+            }
 
             return $result->toArray();
         }
 
         if ($format === 'base') {
-            $this->logger->debug(__FUNCTION__, 'Output Result is Base');
+            if ($loggerStatus === true) {
+                $this->logger->debug(__FUNCTION__, 'Output Result is Base');
+            }
 
             return $result->toBase();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Function formatReturnRowsResult
+     *
+     * @param \Illuminate\Database\Query\Builder $builder
+     * @param                                    $format
+     *
+     * @return array|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|\Illuminate\Support\Collection|object|string|null
+     * @author   : 713uk13m <dev@nguyenanhung.com>
+     * @copyright: 713uk13m <dev@nguyenanhung.com>
+     * @time     : 07/02/2023 55:35
+     */
+    protected function formatReturnRowsResult(Builder $builder, $format)
+    {
+        if ($format === 'result') {
+            $result = $builder->get();
+            // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
+        } else {
+            $result = $builder->first();
+            // $this->logger->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
+        }
+        if ($format === 'json') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
+            return $result->toJson();
+        }
+        if ($format === 'array') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
+            return $result->toArray();
+        }
+        if ($format === 'base') {
+            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
+            return $result->toBase();
+        }
+        if (($format === 'result') && ($result->count() <= 0)) {
+            return null;
         }
 
         return $result;

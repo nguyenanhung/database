@@ -667,30 +667,8 @@ class BaseModel implements Environment
         }
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
-        if ($format === 'result') {
-            $result = $query->get();
-            // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        } else {
-            $result = $query->first();
-            // $this->logger->debug(__FUNCTION__, 'Format is get first Result => ' . json_encode($result));
-        }
-        if ($format === 'json') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
-            return $result->toJson();
-        }
-        if ($format === 'array') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
-            return $result->toArray();
-        }
-        if ($format === 'base') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
-            return $result->toBase();
-        }
-        if (($format === 'result') && ($result->count() <= 0)) {
-            return null;
-        }
 
-        return $result;
+        return $this->formatReturnRowsResult($query, $format);
     }
 
     /**
@@ -881,22 +859,9 @@ class BaseModel implements Environment
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
         $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
         $result = $query->get($select);
+
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-
-        if ($format === 'json') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
-            return $result->toJson();
-        }
-        if ($format === 'array') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
-            return $result->toArray();
-        }
-        if ($format === 'base') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
-            return $result->toBase();
-        }
-
-        return $result;
+        return $this->formatReturnResult($result, $format, false);
     }
 
     /**
@@ -1031,23 +996,9 @@ class BaseModel implements Environment
 
         $select = $this->prepareFormatSelectField($select);
         $result = $db->select($select)->get();
+
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format === 'json') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
-            return $result->toJson();
-        }
-
-        if ($format === 'array') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
-            return $result->toArray();
-        }
-
-        if ($format === 'base') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
-            return $result->toBase();
-        }
-
-        return $result;
+        return $this->formatReturnResult($result, $format, false);
     }
 
     /**
@@ -1087,23 +1038,9 @@ class BaseModel implements Environment
         }
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
         $result = $query->select($select)->get();
+
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format === 'json') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
-            return $result->toJson();
-        }
-
-        if ($format === 'array') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
-            return $result->toArray();
-        }
-
-        if ($format === 'base') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
-            return $result->toBase();
-        }
-
-        return $result;
+        return $this->formatReturnResult($result, $format, false);
     }
 
     /**
@@ -1141,23 +1078,9 @@ class BaseModel implements Environment
         }
 
         $result = $db->select($select)->get();
+
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format === 'json') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
-            return $result->toJson();
-        }
-
-        if ($format === 'array') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
-            return $result->toArray();
-        }
-
-        if ($format === 'base') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
-            return $result->toBase();
-        }
-
-        return $result;
+        return $this->formatReturnResult($result, $format, false);
     }
 
     /**
@@ -1196,23 +1119,9 @@ class BaseModel implements Environment
         }
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
         $result = $query->select($select)->get();
+
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format === 'json') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
-            return $result->toJson();
-        }
-
-        if ($format === 'array') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
-            return $result->toArray();
-        }
-
-        if ($format === 'base') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
-            return $result->toBase();
-        }
-
-        return $result;
+        return $this->formatReturnResult($result, $format, false);
     }
 
     /**
@@ -1249,23 +1158,9 @@ class BaseModel implements Environment
             $db->leftJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $result = $db->select($select)->get();
+
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format === 'json') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
-            return $result->toJson();
-        }
-
-        if ($format === 'array') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
-            return $result->toArray();
-        }
-
-        if ($format === 'base') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
-            return $result->toBase();
-        }
-
-        return $result;
+        return $this->formatReturnResult($result, $format, false);
     }
 
     /**
@@ -1304,23 +1199,9 @@ class BaseModel implements Environment
         }
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
         $result = $query->select($select)->get();
+
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format === 'json') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
-            return $result->toJson();
-        }
-
-        if ($format === 'array') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
-            return $result->toArray();
-        }
-
-        if ($format === 'base') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
-            return $result->toBase();
-        }
-
-        return $result;
+        return $this->formatReturnResult($result, $format, false);
     }
 
     /**
@@ -1357,23 +1238,9 @@ class BaseModel implements Environment
             $db->rightJoin($join['table'], $join['first'], $join['operator'], $join['second']);
         }
         $result = $db->select($select)->get();
+
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format === 'json') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
-            return $result->toJson();
-        }
-
-        if ($format === 'array') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
-            return $result->toArray();
-        }
-
-        if ($format === 'base') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
-            return $result->toBase();
-        }
-
-        return $result;
+        return $this->formatReturnResult($result, $format, false);
     }
 
     /**
@@ -1412,23 +1279,9 @@ class BaseModel implements Environment
         }
         $query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey, $options);
         $result = $query->select($select)->get();
+
         // $this->logger->debug(__FUNCTION__, 'Format is get all Result => ' . json_encode($result));
-        if ($format === 'json') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Json');
-            return $result->toJson();
-        }
-
-        if ($format === 'array') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Array');
-            return $result->toArray();
-        }
-
-        if ($format === 'base') {
-            // $this->logger->debug(__FUNCTION__, 'Output Result is Base');
-            return $result->toBase();
-        }
-
-        return $result;
+        return $this->formatReturnResult($result, $format, false);
     }
 
     /**
