@@ -19,8 +19,8 @@ namespace nguyenanhung\MyDatabase;
 interface Environment
 {
     const PROJECT_NAME = 'My Database by HungNG';
-    const VERSION = '2.1.7';
-    const LAST_MODIFIED = '2023-02-06';
+    const VERSION = '2.1.8';
+    const LAST_MODIFIED = '2023-02-07';
     const AUTHOR_NAME = 'Hung Nguyen';
     const AUTHOR_EMAIL = 'dev@nguyenanhung.com';
     const AUTHOR_URL = 'https://nguyenanhung.com';
@@ -49,6 +49,7 @@ interface Environment
     const OPERATOR_IS_NOT_NULL = 'IS NOT NULL';
     const ORDER_ASCENDING = 'ASC';
     const ORDER_DESCENDING = 'DESC';
+    const TABLE_IS_ACTIVE = 1;
 
     /**
      * Hàm lấy thông tin phiên bản Package
