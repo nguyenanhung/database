@@ -6,12 +6,13 @@ Database Wrapper - Base Model
 
 - [x] PDO Support from package `nguyenanhung/pdo` version `^2.0`
 - [x] MySQLi Support from package `nguyenanhung/mysqli` version `^2.0`
-- [x] illuminate/events `>=5.0` Support
-- [x] illuminate/database `>=5.0` Support
+- [x] illuminate/events `^5.0 || ^4.0` Support
+- [x] illuminate/database `^5.0 || ^4.0` Support
 
 ## Version
 
-- [x] V1.x, V2.x support all PHP version `>=5.6`
+- [x] V1.x support all PHP version `>=5.3`
+- [x] V2.x support all PHP version `>=5.6`
 - [x] V3.x support all PHP version `>=7.1`
 
 ## Support
