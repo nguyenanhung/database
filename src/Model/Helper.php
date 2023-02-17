@@ -11,7 +11,6 @@
 namespace nguyenanhung\MyDatabase\Model;
 
 use Illuminate\Database\Query\Builder;
-use \Illuminate\Support\Collection;
 
 /**
  * Trait Helper
@@ -491,14 +490,18 @@ trait Helper
      * @param                                    $recursive
      * @param                                    $parentId
      * @param                                    $field
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 29:12
      */
-    public function bindRecursiveFromCategory(Builder $db, $recursive, $parentId, $field = 'categoryId')
+    public function bindRecursiveFromCategory(Builder $db, $recursive, $parentId, $field = 'categoryId', $table = null)
     {
+        if (empty($table)) {
+            $table = $this->table;
+        }
         if (is_array($recursive) || is_object($recursive)) {
             /**
              * Xác định lấy toàn bộ tin tức ở các category con
@@ -512,13 +515,13 @@ trait Helper
                     $itemId = is_array($item) ? $item['id'] : $item->id;
                     $listCategory[] = (int) $itemId; // Push các category con vào mảng dữ liệu
                 }
-                $db->whereIn($this->table . '.' . $field, $listCategory); // Lấy theo where in
+                $db->whereIn($table . '.' . $field, $listCategory); // Lấy theo where in
             } else {
-                $db->where($this->table . '.' . $field, self::OPERATOR_EQUAL_TO, $parentId); // lấy theo where
+                $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, $parentId); // lấy theo where
             }
         } else {
             // Trong trường hợp so sánh tuyệt đối đối với categoryId truyền vào
-            $db->where($this->table . '.' . $field, self::OPERATOR_EQUAL_TO, $parentId);
+            $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, $parentId);
         }
 
         return $db;
@@ -530,19 +533,23 @@ trait Helper
      * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
      * @param                                    $field
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 07:22
      */
-    public function filterByPrimaryId(Builder $db, $id, $field = 'id')
+    public function filterByPrimaryId(Builder $db, $id, $field = 'id', $table = null)
     {
+        if (empty($table)) {
+            $table = $this->table;
+        }
         if ($id !== null) {
             if (is_array($id)) {
-                $db->whereIn($this->table . '.' . $field, $id);
+                $db->whereIn($table . '.' . $field, $id);
             } else {
-                $db->where($this->table . '.' . $field, self::OPERATOR_EQUAL_TO, $id);
+                $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, $id);
             }
         }
 
@@ -555,19 +562,23 @@ trait Helper
      * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
      * @param                                    $field
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 18:00
      */
-    public function buildOperatorEqualTo(Builder $db, $id, $field = 'id')
+    public function buildOperatorEqualTo(Builder $db, $id, $field = 'id', $table = null)
     {
+        if (empty($table)) {
+            $table = $this->table;
+        }
         if ($id !== null) {
             if (is_array($id)) {
-                $db->whereIn($this->table . '.' . $field, $id);
+                $db->whereIn($table . '.' . $field, $id);
             } else {
-                $db->where($this->table . '.' . $field, self::OPERATOR_EQUAL_TO, $id);
+                $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, $id);
             }
         }
 
@@ -580,19 +591,23 @@ trait Helper
      * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
      * @param                                    $field
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 29:17
      */
-    public function buildOperatorNotEqualTo(Builder $db, $id, $field = 'id')
+    public function buildOperatorNotEqualTo(Builder $db, $id, $field = 'id', $table = null)
     {
+        if (empty($table)) {
+            $table = $this->table;
+        }
         if ($id !== null) {
             if (is_array($id)) {
-                $db->whereNotIn($this->table . '.' . $field, $id);
+                $db->whereNotIn($table . '.' . $field, $id);
             } else {
-                $db->where($this->table . '.' . $field, self::OPERATOR_NOT_EQUAL_TO, $id);
+                $db->where($table . '.' . $field, self::OPERATOR_NOT_EQUAL_TO, $id);
             }
         }
 
@@ -605,15 +620,19 @@ trait Helper
      * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
      * @param                                    $field
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 30:09
      */
-    public function buildOperatorLessThanTo(Builder $db, $id, $field = 'id')
+    public function buildOperatorLessThanTo(Builder $db, $id, $field = 'id', $table = null)
     {
-        $db->where($this->table . '.' . $field, self::OPERATOR_LESS_THAN, $id);
+        if (empty($table)) {
+            $table = $this->table;
+        }
+        $db->where($table . '.' . $field, self::OPERATOR_LESS_THAN, $id);
 
         return $db;
     }
@@ -624,15 +643,19 @@ trait Helper
      * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
      * @param                                    $field
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 30:05
      */
-    public function buildOperatorGreaterThanTo(Builder $db, $id, $field = 'id')
+    public function buildOperatorGreaterThanTo(Builder $db, $id, $field = 'id', $table = null)
     {
-        $db->where($this->table . '.' . $field, self::OPERATOR_GREATER_THAN, $id);
+        if (empty($table)) {
+            $table = $this->table;
+        }
+        $db->where($table . '.' . $field, self::OPERATOR_GREATER_THAN, $id);
 
         return $db;
     }
@@ -643,15 +666,19 @@ trait Helper
      * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
      * @param                                    $field
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 30:01
      */
-    public function buildOperatorLessThanOrEqualTo(Builder $db, $id, $field = 'id')
+    public function buildOperatorLessThanOrEqualTo(Builder $db, $id, $field = 'id', $table = null)
     {
-        $db->where($this->table . '.' . $field, self::OPERATOR_LESS_THAN_OR_EQUAL_TO, $id);
+        if (empty($table)) {
+            $table = $this->table;
+        }
+        $db->where($table . '.' . $field, self::OPERATOR_LESS_THAN_OR_EQUAL_TO, $id);
 
         return $db;
     }
@@ -662,15 +689,19 @@ trait Helper
      * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
      * @param                                    $field
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 29:57
      */
-    public function buildOperatorGreaterThanOrEqualTo(Builder $db, $id, $field = 'id')
+    public function buildOperatorGreaterThanOrEqualTo(Builder $db, $id, $field = 'id', $table = null)
     {
-        $db->where($this->table . '.' . $field, self::OPERATOR_GREATER_THAN_OR_EQUAL_TO, $id);
+        if (empty($table)) {
+            $table = $this->table;
+        }
+        $db->where($table . '.' . $field, self::OPERATOR_GREATER_THAN_OR_EQUAL_TO, $id);
 
         return $db;
     }
@@ -681,15 +712,19 @@ trait Helper
      * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
      * @param                                    $field
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 29:52
      */
-    public function buildOperatorSpaceShipTo(Builder $db, $id, $field = 'id')
+    public function buildOperatorSpaceShipTo(Builder $db, $id, $field = 'id', $table = null)
     {
-        $db->where($this->table . '.' . $field, self::OPERATOR_IS_SPACESHIP, $id);
+        if (empty($table)) {
+            $table = $this->table;
+        }
+        $db->where($table . '.' . $field, self::OPERATOR_IS_SPACESHIP, $id);
 
         return $db;
     }
