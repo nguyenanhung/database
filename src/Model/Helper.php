@@ -735,22 +735,26 @@ trait Helper
      * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $orderByField
      * @param                                    $defaultField
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 28:46
      */
-    public function bindOrderBy(Builder $db, $orderByField, $defaultField = 'updated_at')
+    public function bindOrderBy(Builder $db, $orderByField, $defaultField = 'updated_at', $table = null)
     {
+        if (empty($table)) {
+            $table = $this->table;
+        }
         if (isset($orderByField) && is_array($orderByField) && count($orderByField) > 0) {
             foreach ($orderByField as $field) {
-                $db->orderBy($this->table . '.' . $field['field_name'], $field['order_value']);
+                $db->orderBy($table . '.' . $field['field_name'], $field['order_value']);
             }
         } elseif (strtolower($defaultField) === 'random') {
             $db->inRandomOrder();
         } else {
-            $db->orderByDesc($this->table . '.' . $defaultField);
+            $db->orderByDesc($table . '.' . $defaultField);
         }
 
         return $db;
@@ -761,17 +765,21 @@ trait Helper
      *
      * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $orderByField
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 28:41
      */
-    public function bindOrderByNoDefault(Builder $db, $orderByField)
+    public function bindOrderByNoDefault(Builder $db, $orderByField, $table = null)
     {
+        if (empty($table)) {
+            $table = $this->table;
+        }
         if (isset($orderByField) && is_array($orderByField) && count($orderByField) > 0) {
             foreach ($orderByField as $field) {
-                $db->orderBy($this->table . '.' . $field['field_name'], $field['order_value']);
+                $db->orderBy($table . '.' . $field['field_name'], $field['order_value']);
             }
         }
 
@@ -783,15 +791,19 @@ trait Helper
      *
      * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $field
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 33:52
      */
-    public function filterRecordIsActive(Builder $db, $field = 'status')
+    public function filterRecordIsActive(Builder $db, $field = 'status', $table = null)
     {
-        $db->where($this->table . '.' . $field, self::OPERATOR_EQUAL_TO, self::TABLE_OPERATOR_IS_ACTIVE);
+        if (empty($table)) {
+            $table = $this->table;
+        }
+        $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, self::TABLE_OPERATOR_IS_ACTIVE);
 
         return $db;
     }
