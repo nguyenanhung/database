@@ -794,7 +794,7 @@ trait Helper
      * @param \Illuminate\Database\Query\Builder $db
      * @param string                             $field
      * @param mixed                              $table
-     *w
+     *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
