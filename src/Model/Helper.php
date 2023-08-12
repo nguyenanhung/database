@@ -92,9 +92,9 @@ trait Helper
     public function prepareOptionFormat($options = array()): ?string
     {
         if (isset($options['format']) && is_string($options['format'])) {
-            $format = strtolower($options['format']);
+            $format = mb_strtolower($options['format']);
         } elseif (is_string($options)) {
-            $format = strtolower($options);
+            $format = mb_strtolower($options);
         } else {
             $format = null;
         }
@@ -212,7 +212,7 @@ trait Helper
             }
 
             // Sắp xếp dữ liệu đổ ra ngẫu nhiên nếu như Option Order By ghi nhận giá trị random
-            if (isset($options['orderBy']) && is_string($options['orderBy']) && strtolower($options['orderBy']) === 'random') {
+            if (isset($options['orderBy']) && is_string($options['orderBy']) && mb_strtolower($options['orderBy']) === 'random') {
                 $builder->inRandomOrder();
             }
 
@@ -753,7 +753,7 @@ trait Helper
             foreach ($orderByField as $field) {
                 $db->orderBy($table . '.' . $field['field_name'], $field['order_value']);
             }
-        } elseif (strtolower($defaultField) === 'random') {
+        } elseif (mb_strtolower($defaultField) === 'random') {
             $db->inRandomOrder();
         } else {
             $db->orderByDesc($table . '.' . $defaultField);
