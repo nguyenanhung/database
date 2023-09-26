@@ -845,6 +845,42 @@ class BaseModel implements Environment
     }
 
     /**
+     * Hàm lấy giá trị 1 field của bản ghi dựa trên điều kiện 1 bản ghi đầu vào
+     *
+     * Đây là hàm cơ bản, chỉ áp dụng check theo 1 field
+     *
+     * Lấy bản ghi đầu tiên phù hợp với điều kiện
+     *
+     * @param string|array $wheres      Giá trị cần kiểm tra
+     * @param string|mixed $fields      Field tương ứng với giá tri kiểm tra, ví dụ: ID
+     * @param string|mixed $fieldOutput field kết quả đầu ra
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
+     * @see   https://laravel.com/docs/6.x/queries#selects
+     *
+     * @author: 713uk13m <dev@nguyenanhung.com>
+     * @time  : 10/16/18 11:51
+     *
+     */
+    public function getValueOrEmpty($wheres = '', $fields = 'id', $fieldOutput = '')
+    {
+        $this->connection();
+        $db = DB::table($this->table);
+        $db = $this->prepareJoinStatement($db);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $fields);
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
+        $result = $query->first();
+        // $this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+        if (!empty($fieldOutput) && ($result !== null) && isset($result->$fieldOutput)) {
+            return $result->$fieldOutput;
+        }
+
+        $this->logger->error(__FUNCTION__, 'Không tìm thấy cột dữ liệu ' . $fieldOutput);
+
+        return null;
+    }
+
+    /**
      * Hàm lấy giá trị 1 field của bản ghi dựa trên điều kiện 1 bản ghi đầu vào - Đa điều kiện
      *
      * Đây là hàm cơ bản, chỉ áp dụng check theo 1 field
