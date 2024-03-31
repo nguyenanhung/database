@@ -19,45 +19,45 @@ namespace nguyenanhung\MyDatabase;
  */
 trait Version
 {
-    /**
-     * Function getVersion
-     *
-     * @return string
-     * @author   : 713uk13m <dev@nguyenanhung.com>
-     * @copyright: 713uk13m <dev@nguyenanhung.com>
-     * @time     : 08/29/2021 04:53
-     */
-    public function getVersion(): string
-    {
-        return self::VERSION;
-    }
+	/**
+	 * Function getVersion
+	 *
+	 * @return string
+	 * @author   : 713uk13m <dev@nguyenanhung.com>
+	 * @copyright: 713uk13m <dev@nguyenanhung.com>
+	 * @time     : 08/29/2021 04:53
+	 */
+	public function getVersion(): string
+	{
+		return self::VERSION;
+	}
 
-    /**
-     * Function getSDKPropertiesInfo
-     *
-     * @param bool $json
-     *
-     * @return array|false|string
-     * @author   : 713uk13m <dev@nguyenanhung.com>
-     * @copyright: 713uk13m <dev@nguyenanhung.com>
-     * @time     : 09/22/2021 04:23
-     */
-    public function getSDKPropertiesInfo(bool $json = false)
-    {
-        $properties = array(
-            'name'          => self::PROJECT_NAME,
-            'version'       => self::VERSION,
-            'last_modified' => self::LAST_MODIFIED,
-            'author_name'   => self::AUTHOR_NAME,
-            'author_email'  => self::AUTHOR_EMAIL,
-            'author_url'    => self::AUTHOR_URL,
-            'github_url'    => self::GITHUB_URL,
-            'packages_url'  => self::PACKAGES_URL
-        );
-        if ($json === true) {
-            return json_encode($properties);
-        }
+	/**
+	 * Function getSDKPropertiesInfo
+	 *
+	 * @param bool $json
+	 *
+	 * @return array|false|string
+	 * @author   : 713uk13m <dev@nguyenanhung.com>
+	 * @copyright: 713uk13m <dev@nguyenanhung.com>
+	 * @time     : 09/22/2021 04:23
+	 */
+	public function getSDKPropertiesInfo(bool $json = false)
+	{
+		$properties = array(
+			'name' => self::PROJECT_NAME,
+			'version' => self::VERSION,
+			'last_modified' => self::LAST_MODIFIED,
+			'author_name' => self::AUTHOR_NAME,
+			'author_email' => self::AUTHOR_EMAIL,
+			'author_url' => self::AUTHOR_URL,
+			'github_url' => self::GITHUB_URL,
+			'packages_url' => self::PACKAGES_URL
+		);
+		if ($json === true) {
+			return json_encode($properties);
+		}
 
-        return $properties;
-    }
+		return $properties;
+	}
 }
