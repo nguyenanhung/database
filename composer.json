@@ -22,16 +22,16 @@
 		}
 	],
 	"require": {
-		"php": "^7.1 || ^8.0",
+		"php": "^8.0",
 		"ext-json": "*",
 		"ext-pdo": "*",
 		"ext-mysqli": "*",
-		"nguyenanhung/my-debug": "^3.0",
+		"nguyenanhung/my-debug": "^4.0 || ^3.0",
 		"nguyenanhung/pdo": "^3.0",
 		"nguyenanhung/mysqli": "^3.0",
 		"nguyenanhung/database-helper": "^2.0",
-		"illuminate/events": "^11.0 || ^10.0 || ^9.0 || ^8.61 || ^7.30 || ^6.20",
-		"illuminate/database": "^11.0 || ^10.0 || ^9.0 || ^8.61 || ^7.30 || ^6.20"
+		"illuminate/events": "^11.0 || ^10.0 || ^9.0 || ^8.61",
+		"illuminate/database": "^11.0 || ^10.0 || ^9.0 || ^8.61"
 	},
 	"require-dev": {
 		"kint-php/kint": ">=3.0"
