@@ -506,6 +506,69 @@ class BaseModel implements Environment
 		return $this->selectRaw;
 	}
 
+	/**
+	 * Function startTransaction
+	 *
+	 * User: 713uk13m <dev@nguyenanhung.com>
+	 * Copyright: 713uk13m <dev@nguyenanhung.com>
+	 * @return void|null
+	 * @throws \Throwable
+	 */
+	public function startTransaction()
+	{
+		try {
+			$connection = $this->db->getConnection($this->dbName);
+			$connection->beginTransaction();
+		} catch (Exception $e) {
+			$this->logger->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+			$this->logger->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+			return null;
+		}
+	}
+
+	/**
+	 * Function transactionCommit
+	 *
+	 * User: 713uk13m <dev@nguyenanhung.com>
+	 * Copyright: 713uk13m <dev@nguyenanhung.com>
+	 * @return void|null
+	 * @throws \Throwable
+	 */
+	public function transactionCommit()
+	{
+		try {
+			$connection = $this->db->getConnection($this->dbName);
+			$connection->commit();
+		} catch (Exception $e) {
+			$this->logger->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+			$this->logger->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+			return null;
+		}
+	}
+
+	/**
+	 * Function transactionRollBack
+	 *
+	 * User: 713uk13m <dev@nguyenanhung.com>
+	 * Copyright: 713uk13m <dev@nguyenanhung.com>
+	 * @return void|null
+	 * @throws \Throwable
+	 */
+	public function transactionRollBack()
+	{
+		try {
+			$connection = $this->db->getConnection($this->dbName);
+			$connection->rollBack();
+		} catch (Exception $e) {
+			$this->logger->error(__FUNCTION__, 'Error Message: ' . $e->getMessage());
+			$this->logger->error(__FUNCTION__, 'Error Trace As String: ' . $e->getTraceAsString());
+
+			return null;
+		}
+	}
+
 	/*************************** DATABASE METHOD ***************************/
 
 	/**
