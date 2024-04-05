@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Project database
  * Created by PhpStorm
@@ -14,19 +15,19 @@ use nguyenanhung\Bear\Database\Support;
 use nguyenanhung\MyDatabase\Model\BaseModel;
 
 $database = [
-    'driver'    => 'mysql',
-    'host'      => 'localhost',
-    'database'  => 'test_database',
-    'username'  => 'root',
-    'password'  => '',
-    'charset'   => 'utf8',
-    'collation' => 'utf8_unicode_ci',
-    'prefix'    => '',
+	'driver' => 'mysql',
+	'host' => 'localhost',
+	'database' => 'test_database',
+	'username' => 'root',
+	'password' => '',
+	'charset' => 'utf8',
+	'collation' => 'utf8_unicode_ci',
+	'prefix' => '',
 ];
 
-$model                  = new BaseModel();
-$model->debugStatus     = true;
-$model->debugLevel      = 'info';
+$model = new BaseModel();
+$model->debugStatus = true;
+$model->debugLevel = 'info';
 $model->debugLoggerPath = __DIR__ . '/../../tmp';
 $model->__construct();
 $model->setDatabase($database, 'connectionTest');

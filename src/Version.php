@@ -35,7 +35,7 @@ trait Version
 	/**
 	 * Function getSDKPropertiesInfo
 	 *
-	 * @param bool $json
+	 * @param  bool  $json
 	 *
 	 * @return array|false|string
 	 * @author   : 713uk13m <dev@nguyenanhung.com>
