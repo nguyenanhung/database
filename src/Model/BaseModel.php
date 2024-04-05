@@ -97,7 +97,7 @@ class BaseModel implements Environment
 	/**
 	 * BaseModel constructor.
 	 *
-	 * @param array $database
+	 * @param  array  $database
 	 *
 	 * @author   : 713uk13m <dev@nguyenanhung.com>
 	 * @copyright: 713uk13m <dev@nguyenanhung.com>
@@ -121,10 +121,10 @@ class BaseModel implements Environment
 		}
 		$this->debug = $this->logger;
 		// Cấu trúc kết nối Database qua __construct
-		if (!empty($database)) {
+		if ( ! empty($database)) {
 			$this->database = $database;
 		}
-		if (is_array($this->database) && !empty($this->database)) {
+		if (is_array($this->database) && ! empty($this->database)) {
 			$this->db = new DB;
 			$this->db->addConnection($this->database);
 			$this->db->setEventDispatcher(new Dispatcher(new Container));
@@ -143,7 +143,7 @@ class BaseModel implements Environment
 	/**
 	 * Function setJoinStatement
 	 *
-	 * @param array $joins
+	 * @param  array  $joins
 	 *
 	 * @return $this
 	 * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -173,7 +173,7 @@ class BaseModel implements Environment
 	/**
 	 * Function setChunkCount
 	 *
-	 * @param int $chunkCount
+	 * @param  int  $chunkCount
 	 *
 	 * @return $this
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -203,7 +203,7 @@ class BaseModel implements Environment
 	/**
 	 * Function setPrefixTbl
 	 *
-	 * @param string $prefixTbl
+	 * @param  string  $prefixTbl
 	 *
 	 * @return $this
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -276,7 +276,7 @@ class BaseModel implements Environment
 	/**
 	 * Function setPrimaryKey
 	 *
-	 * @param string $primaryKey
+	 * @param  string  $primaryKey
 	 *
 	 * @return $this
 	 * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -300,7 +300,7 @@ class BaseModel implements Environment
 	 */
 	public function connection(): self
 	{
-		if (!is_object($this->db)) {
+		if ( ! is_object($this->db)) {
 			try {
 				$this->db = new DB;
 				$this->db->addConnection($this->database);
@@ -377,8 +377,8 @@ class BaseModel implements Environment
 	/**
 	 * Hàm set và kết nối cơ sở dữ liệu
 	 *
-	 * @param array $database Mảng dữ liệu thông tin DB cần kết nối
-	 * @param string $name Tên DB kết nối
+	 * @param  array  $database  Mảng dữ liệu thông tin DB cần kết nối
+	 * @param  string  $name  Tên DB kết nối
 	 *
 	 * @return  $this;
 	 *
@@ -411,7 +411,7 @@ class BaseModel implements Environment
 	/**
 	 * Hàm set và kết nối đến bảng dữ liệu
 	 *
-	 * @param string $table Bảng cần lấy dữ liệu
+	 * @param  string  $table  Bảng cần lấy dữ liệu
 	 *
 	 * @return  $this;
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -479,7 +479,7 @@ class BaseModel implements Environment
 	/**
 	 * Function setSelectRaw
 	 *
-	 * @param bool $selectRaw TRUE nếu lấy Select Raw Queries
+	 * @param  bool  $selectRaw  TRUE nếu lấy Select Raw Queries
 	 *
 	 * @return $this
 	 * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -592,7 +592,7 @@ class BaseModel implements Environment
 	/**
 	 * Function checkExistsColumn - Hàm kiểm tra 1 column có tồn tại trong bảng hay không?
 	 *
-	 * @param string $column
+	 * @param  string  $column
 	 *
 	 * @return bool
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -606,13 +606,12 @@ class BaseModel implements Environment
 		}
 
 		return false;
-
 	}
 
 	/**
 	 * Function checkExistsColumns - Hàm kiểm tra 1 mảng nhiều cột có tồn tại trong bảng hay không?
 	 *
-	 * @param array $columns
+	 * @param  array  $columns
 	 *
 	 * @return bool
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -627,7 +626,6 @@ class BaseModel implements Environment
 		}
 
 		return false;
-
 	}
 
 	/**
@@ -664,8 +662,8 @@ class BaseModel implements Environment
 	/**
 	 * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào
 	 *
-	 * @param string|array $wheres Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
-	 * @param string|mixed $fields Field tương ứng cần kiểm tra đối chiếu
+	 * @param  string|array  $wheres  Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
+	 * @param  string|mixed  $fields  Field tương ứng cần kiểm tra đối chiếu
 	 *
 	 * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -686,8 +684,8 @@ class BaseModel implements Environment
 	/**
 	 * Hàm kiểm tra sự tồn tại bản ghi theo tham số đầu vào - Đa điều kiện
 	 *
-	 * @param string|array $wheres Giá trị cần kiểm tra
-	 * @param string|mixed $fields Field tương ứng, ví dụ: ID
+	 * @param  string|array  $wheres  Giá trị cần kiểm tra
+	 * @param  string|mixed  $fields  Field tương ứng, ví dụ: ID
 	 *
 	 * @return int Số lượng bàn ghi tồn tại phù hợp với điều kiện đưa ra
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -704,8 +702,8 @@ class BaseModel implements Environment
 	 *
 	 * Mặc định giá trị so sánh dựa trên column created_at
 	 *
-	 * @param string|array $select Danh sách các column cần lấy
-	 * @param string|mixed $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+	 * @param  string|array  $select  Danh sách các column cần lấy
+	 * @param  string|mixed  $column  Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
 	 *
 	 * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
 	 *                                                                                            của bản ghi
@@ -730,10 +728,10 @@ class BaseModel implements Environment
 	/**
 	 * Hàm lấy bản ghi mới nhất theo điều kiện đầu vào
 	 *
-	 * @param string|array $wheres Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
-	 * @param string|array $select Danh sách cột cần lấy dữ liệu ra
-	 * @param string|mixed $column Tên cột cần order theo điều kiện
-	 * @param string|mixed $fields Field tương ứng cần kiểm tra đối chiếu
+	 * @param  string|array  $wheres  Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
+	 * @param  string|array  $select  Danh sách cột cần lấy dữ liệu ra
+	 * @param  string|mixed  $column  Tên cột cần order theo điều kiện
+	 * @param  string|mixed  $fields  Field tương ứng cần kiểm tra đối chiếu
 	 *
 	 * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -757,8 +755,8 @@ class BaseModel implements Environment
 	 *
 	 * Mặc định giá trị so sánh dựa trên column created_at
 	 *
-	 * @param string|array $select Danh sách các column cần lấy
-	 * @param string|mixed $column Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
+	 * @param  string|array  $select  Danh sách các column cần lấy
+	 * @param  string|mixed  $column  Column cần so sánh dữ liệu, mặc định sẽ sử dụng column created_at
 	 *
 	 * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null|object Object dữ liệu đầu ra
 	 *                                                                                            của bản ghi
@@ -783,10 +781,10 @@ class BaseModel implements Environment
 	/**
 	 * Hàm lấy bản ghi cũ nhất nhất theo điều kiện đầu vào
 	 *
-	 * @param string|array $wheres Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
-	 * @param string|array $select Danh sách cột cần lấy dữ liệu ra
-	 * @param string|mixed $column Tên cột cần order theo điều kiện
-	 * @param string|mixed $fields Field tương ứng cần kiểm tra đối chiếu
+	 * @param  string|array  $wheres  Giá trị cần kiểm tra, có thể là 1 string hoặc 1 array chứa nhiều cột
+	 * @param  string|array  $select  Danh sách cột cần lấy dữ liệu ra
+	 * @param  string|mixed  $column  Tên cột cần order theo điều kiện
+	 * @param  string|mixed  $fields  Field tương ứng cần kiểm tra đối chiếu
 	 *
 	 * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|null
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -813,10 +811,10 @@ class BaseModel implements Environment
 	 *
 	 * Lấy bản ghi đầu tiên phù hợp với điều kiện
 	 *
-	 * @param array|string $wheres Giá trị cần kiểm tra
-	 * @param string|mixed $fields Field tương ứng, ví dụ: ID
-	 * @param string|mixed $format Format dữ liệu đầu ra: null, json, array, base, result
-	 * @param string|array|null $select Các field cần lấy
+	 * @param  array|string  $wheres  Giá trị cần kiểm tra
+	 * @param  string|mixed  $fields  Field tương ứng, ví dụ: ID
+	 * @param  string|mixed  $format  Format dữ liệu đầu ra: null, json, array, base, result
+	 * @param  string|array|null  $select  Các field cần lấy
 	 *
 	 * @return object|array|\Illuminate\Support\Collection|string Mảng|String|Object dữ liều phụ hợp với yêu cầu
 	 *                                                     map theo biến format truyền vào
@@ -831,7 +829,7 @@ class BaseModel implements Environment
 		$format = $this->prepareOptionFormat($format);
 		$this->connection();
 
-		if (!empty($select)) {
+		if ( ! empty($select)) {
 			$select = $this->prepareFormatSelectField($select);
 			if (isset($select['expression'], $select['bindingParam']) && $this->selectRaw === true) {
 				$db = DB::table($this->table);
@@ -856,10 +854,10 @@ class BaseModel implements Environment
 	/**
 	 * Hàm lấy thông tin bản ghi theo tham số đầu vào - Đa điều kiện
 	 *
-	 * @param array|string $wheres Giá trị cần kiểm tra
-	 * @param string|mixed $fields Field tương ứng, ví dụ: ID
-	 * @param string|mixed $format Format dữ liệu đầu ra: null, json, array, base, result
-	 * @param string|array|null $select Các field cần lấy
+	 * @param  array|string  $wheres  Giá trị cần kiểm tra
+	 * @param  string|mixed  $fields  Field tương ứng, ví dụ: ID
+	 * @param  string|mixed  $format  Format dữ liệu đầu ra: null, json, array, base, result
+	 * @param  string|array|null  $select  Các field cần lấy
 	 *
 	 * @return array|\Illuminate\Support\Collection|object|string|null
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -878,9 +876,9 @@ class BaseModel implements Environment
 	 *
 	 * Lấy bản ghi đầu tiên phù hợp với điều kiện
 	 *
-	 * @param string|array $wheres Giá trị cần kiểm tra
-	 * @param string|mixed $fields Field tương ứng với giá tri kiểm tra, ví dụ: ID
-	 * @param string|mixed $fieldOutput field kết quả đầu ra
+	 * @param  string|array  $wheres  Giá trị cần kiểm tra
+	 * @param  string|mixed  $fields  Field tương ứng với giá tri kiểm tra, ví dụ: ID
+	 * @param  string|mixed  $fieldOutput  field kết quả đầu ra
 	 *
 	 * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
 	 * @see   https://laravel.com/docs/6.x/queries#selects
@@ -898,7 +896,7 @@ class BaseModel implements Environment
 		$this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 		$result = $query->first();
 		// $this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
-		if (!empty($fieldOutput) && ($result !== null) && isset($result->$fieldOutput)) {
+		if ( ! empty($fieldOutput) && ($result !== null) && isset($result->$fieldOutput)) {
 			return $result->$fieldOutput;
 		}
 
@@ -914,9 +912,9 @@ class BaseModel implements Environment
 	 *
 	 * Lấy bản ghi đầu tiên phù hợp với điều kiện
 	 *
-	 * @param string|array $wheres Giá trị cần kiểm tra
-	 * @param string|mixed $fields Field tương ứng với giá tri kiểm tra, ví dụ: ID
-	 * @param string|mixed $fieldOutput field kết quả đầu ra
+	 * @param  string|array  $wheres  Giá trị cần kiểm tra
+	 * @param  string|mixed  $fields  Field tương ứng với giá tri kiểm tra, ví dụ: ID
+	 * @param  string|mixed  $fieldOutput  field kết quả đầu ra
 	 *
 	 * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
 	 * @see   https://laravel.com/docs/6.x/queries#selects
@@ -934,7 +932,7 @@ class BaseModel implements Environment
 		$this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
 		$result = $query->first();
 		// $this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
-		if (!empty($fieldOutput) && ($result !== null) && isset($result->$fieldOutput)) {
+		if ( ! empty($fieldOutput) && ($result !== null) && isset($result->$fieldOutput)) {
 			return $result->$fieldOutput;
 		}
 
@@ -950,9 +948,9 @@ class BaseModel implements Environment
 	 *
 	 * Lấy bản ghi đầu tiên phù hợp với điều kiện
 	 *
-	 * @param string|array $wheres Giá trị cần kiểm tra
-	 * @param string|mixed $fields Field tương ứng với giá tri kiểm tra, ví dụ: ID
-	 * @param string|mixed $fieldOutput field kết quả đầu ra
+	 * @param  string|array  $wheres  Giá trị cần kiểm tra
+	 * @param  string|mixed  $fields  Field tương ứng với giá tri kiểm tra, ví dụ: ID
+	 * @param  string|mixed  $fieldOutput  field kết quả đầu ra
 	 *
 	 * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -967,7 +965,7 @@ class BaseModel implements Environment
 	/**
 	 * Hàm lấy danh sách Distinct toàn bộ bản ghi trong 1 bảng
 	 *
-	 * @param string|array $select Mảng dữ liệu danh sách các field cần so sánh
+	 * @param  string|array  $select  Mảng dữ liệu danh sách các field cần so sánh
 	 *
 	 * @return \Illuminate\Support\Collection
 	 * @see   https://laravel.com/docs/6.x/queries#selects
@@ -992,8 +990,8 @@ class BaseModel implements Environment
 	/**
 	 * Hàm lấy danh sách Distinct toàn bộ bản ghi theo điều kiện
 	 *
-	 * @param string|array $select Danh sách các cột dữ liệu cần lấy ra
-	 * @param array|string $wheres Điều kiện kiểm tra đầu vào của dữ liệu
+	 * @param  string|array  $select  Danh sách các cột dữ liệu cần lấy ra
+	 * @param  array|string  $wheres  Điều kiện kiểm tra đầu vào của dữ liệu
 	 *
 	 * @return \Illuminate\Support\Collection
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1018,7 +1016,7 @@ class BaseModel implements Environment
 	 *
 	 * Các tham số đầu ra và đầu vào theo quy chuẩn của hàm getDistinctResult
 	 *
-	 * @param string|array $select Mảng dữ liệu danh sách các field cần so sánh
+	 * @param  string|array  $select  Mảng dữ liệu danh sách các field cần so sánh
 	 *
 	 * @return \Illuminate\Support\Collection
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1033,8 +1031,8 @@ class BaseModel implements Environment
 	/**
 	 * Hàm getResultDistinctByColumn là alias của hàm getDistinctResultByColumn
 	 *
-	 * @param string|array $select Danh sách các cột dữ liệu cần lấy ra
-	 * @param array|string $wheres Điều kiện kiểm tra đầu vào của dữ liệu
+	 * @param  string|array  $select  Danh sách các cột dữ liệu cần lấy ra
+	 * @param  array|string  $wheres  Điều kiện kiểm tra đầu vào của dữ liệu
 	 *
 	 * @return \Illuminate\Support\Collection
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1049,9 +1047,9 @@ class BaseModel implements Environment
 	/**
 	 * Function getResult
 	 *
-	 * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-	 * @param string|array $select Mảng dữ liệu danh sách các field cần so sánh
-	 * @param null|string|array $options Mảng dữ liệu các cấu hình tùy chọn
+	 * @param  array|string  $wheres  Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+	 * @param  string|array  $select  Mảng dữ liệu danh sách các field cần so sánh
+	 * @param  null|string|array  $options  Mảng dữ liệu các cấu hình tùy chọn
 	 *                                          example $options = [
 	 *                                          'format' => null,
 	 *                                          'orderBy => [
@@ -1085,9 +1083,9 @@ class BaseModel implements Environment
 	/**
 	 * Function getResult - Đa điều kiện
 	 *
-	 * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
-	 * @param string|array $select Mảng dữ liệu danh sách các field cần so sánh
-	 * @param null|string|array $options Mảng dữ liệu các cấu hình tùy chọn
+	 * @param  array|string  $wheres  Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+	 * @param  string|array  $select  Mảng dữ liệu danh sách các field cần so sánh
+	 * @param  null|string|array  $options  Mảng dữ liệu các cấu hình tùy chọn
 	 *                                          example $options = [
 	 *                                          'format' => null,
 	 *                                          'orderBy => [
@@ -1111,8 +1109,8 @@ class BaseModel implements Environment
 	/**
 	 * Function countResult
 	 *
-	 * @param string|array $wheres Điều kiện cần thực thi đối với các cột (queries)
-	 * @param string|array $select Danh sách các cột cần lấy ra. Mặc định sẽ là select *
+	 * @param  string|array  $wheres  Điều kiện cần thực thi đối với các cột (queries)
+	 * @param  string|array  $select  Danh sách các cột cần lấy ra. Mặc định sẽ là select *
 	 *
 	 * @return int
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1136,8 +1134,8 @@ class BaseModel implements Environment
 	/**
 	 * Function countResultWithMultipleWhere
 	 *
-	 * @param string|array $wheres Điều kiện cần thực thi đối với các cột (queries)
-	 * @param string|array $select Danh sách các cột cần lấy ra. Mặc định sẽ là select *
+	 * @param  string|array  $wheres  Điều kiện cần thực thi đối với các cột (queries)
+	 * @param  string|array  $select  Danh sách các cột cần lấy ra. Mặc định sẽ là select *
 	 *
 	 * @return int
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1152,7 +1150,7 @@ class BaseModel implements Environment
 	/**
 	 * Function getResultWithSimpleJoin
 	 *
-	 * @param array $joins Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+	 * @param  array  $joins  Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
 	 *                                          'tableA' => [
 	 *                                          'table' => 'tableA',
 	 *                                          'first' => 'tableAID',
@@ -1160,8 +1158,8 @@ class BaseModel implements Environment
 	 *                                          'second' => 'CurrentTableNameID'
 	 *                                          ]
 	 *                                          ]
-	 * @param string|array $select Danh sách các cột cần lấy dữ liệu ra
-	 * @param null|string|array $options Mảng dữ liệu các cấu hình tùy chọn
+	 * @param  string|array  $select  Danh sách các cột cần lấy dữ liệu ra
+	 * @param  null|string|array  $options  Mảng dữ liệu các cấu hình tùy chọn
 	 *                                          example $options = [
 	 *                                          'format' => null,
 	 *                                          'orderBy => [
@@ -1182,7 +1180,7 @@ class BaseModel implements Environment
 	/**
 	 * Function getResultWithSimpleInnerJoin
 	 *
-	 * @param array $joins Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+	 * @param  array  $joins  Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
 	 *                                          'tableA' => [
 	 *                                          'table' => 'tableA',
 	 *                                          'first' => 'tableAID',
@@ -1190,8 +1188,8 @@ class BaseModel implements Environment
 	 *                                          'second' => 'CurrentTableNameID'
 	 *                                          ]
 	 *                                          ]
-	 * @param string|array $select Danh sách các cột cần lấy dữ liệu ra
-	 * @param null|string|array $options Mảng dữ liệu các cấu hình tùy chọn
+	 * @param  string|array  $select  Danh sách các cột cần lấy dữ liệu ra
+	 * @param  null|string|array  $options  Mảng dữ liệu các cấu hình tùy chọn
 	 *                                          example $options = [
 	 *                                          'format' => null,
 	 *                                          'orderBy => [
@@ -1221,7 +1219,7 @@ class BaseModel implements Environment
 	/**
 	 * Function getResultWithInnerJoinAndWheres
 	 *
-	 * @param array $joins Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+	 * @param  array  $joins  Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
 	 *                                          'tableA' => [
 	 *                                          'table' => 'tableA',
 	 *                                          'first' => 'tableAID',
@@ -1229,9 +1227,9 @@ class BaseModel implements Environment
 	 *                                          'second' => 'CurrentTableNameID'
 	 *                                          ]
 	 *                                          ]
-	 * @param string|array $wheres Mảng chứa danh sách các điều kiện để lấy ra dữ liệu, cần map với tất cả các bảng joins
-	 * @param string|array $select Danh sách các cột cần lấy dữ liệu ra
-	 * @param null|string|array $options Mảng dữ liệu các cấu hình tùy chọn
+	 * @param  string|array  $wheres  Mảng chứa danh sách các điều kiện để lấy ra dữ liệu, cần map với tất cả các bảng joins
+	 * @param  string|array  $select  Danh sách các cột cần lấy dữ liệu ra
+	 * @param  null|string|array  $options  Mảng dữ liệu các cấu hình tùy chọn
 	 *                                          example $options = [
 	 *                                          'format' => null,
 	 *                                          'orderBy => [
@@ -1245,8 +1243,12 @@ class BaseModel implements Environment
 	 * @time     : 09/21/2021 51:55
 	 *
 	 */
-	public function getResultWithInnerJoinAndWheres(array $joins = array(), $wheres = array(), $select = array('*'), $options = null)
-	{
+	public function getResultWithInnerJoinAndWheres(
+		array $joins = array(),
+		$wheres = array(),
+		$select = array('*'),
+		$options = null
+	) {
 		$select = $this->prepareFormatSelectField($select);
 		$format = $this->prepareOptionFormat($options);
 		$db = DB::table($this->table);
@@ -1263,7 +1265,7 @@ class BaseModel implements Environment
 	/**
 	 * Function getResultWithSimpleCrossJoin
 	 *
-	 * @param array $joins Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+	 * @param  array  $joins  Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
 	 *                                          'tableA' => [
 	 *                                          'table' => 'tableA',
 	 *                                          'first' => 'tableAID',
@@ -1271,8 +1273,8 @@ class BaseModel implements Environment
 	 *                                          'second' => 'CurrentTableNameID'
 	 *                                          ]
 	 *                                          ]
-	 * @param string|array $select Danh sách các cột cần lấy dữ liệu ra
-	 * @param null|string|array $options Mảng dữ liệu các cấu hình tùy chọn
+	 * @param  string|array  $select  Danh sách các cột cần lấy dữ liệu ra
+	 * @param  null|string|array  $options  Mảng dữ liệu các cấu hình tùy chọn
 	 *                                          example $options = [
 	 *                                          'format' => null,
 	 *                                          'orderBy => [
@@ -1303,7 +1305,7 @@ class BaseModel implements Environment
 	/**
 	 * Function getResultWithCrossJoinAndWheres
 	 *
-	 * @param array $joins Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+	 * @param  array  $joins  Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
 	 *                                          'tableA' => [
 	 *                                          'table' => 'tableA',
 	 *                                          'first' => 'tableAID',
@@ -1311,9 +1313,9 @@ class BaseModel implements Environment
 	 *                                          'second' => 'CurrentTableNameID'
 	 *                                          ]
 	 *                                          ]
-	 * @param string|array $wheres Mảng chứa danh sách các điều kiện để lấy ra dữ liệu, cần map với tất cả các bảng joins
-	 * @param string|array $select Danh sách các cột cần lấy dữ liệu ra
-	 * @param null|string|array $options Mảng dữ liệu các cấu hình tùy chọn
+	 * @param  string|array  $wheres  Mảng chứa danh sách các điều kiện để lấy ra dữ liệu, cần map với tất cả các bảng joins
+	 * @param  string|array  $select  Danh sách các cột cần lấy dữ liệu ra
+	 * @param  null|string|array  $options  Mảng dữ liệu các cấu hình tùy chọn
 	 *                                          example $options = [
 	 *                                          'format' => null,
 	 *                                          'orderBy => [
@@ -1326,8 +1328,12 @@ class BaseModel implements Environment
 	 * @time  : 2018-12-03 02:06
 	 *
 	 */
-	public function getResultWithCrossJoinAndWheres(array $joins = array(), $wheres = array(), $select = '*', $options = null)
-	{
+	public function getResultWithCrossJoinAndWheres(
+		array $joins = array(),
+		$wheres = array(),
+		$select = '*',
+		$options = null
+	) {
 		$select = $this->prepareFormatSelectField($select);
 		$format = $this->prepareOptionFormat($options);
 		$db = DB::table($this->table);
@@ -1344,7 +1350,7 @@ class BaseModel implements Environment
 	/**
 	 * Function getResultWithSimpleLeftJoin
 	 *
-	 * @param array $joins Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+	 * @param  array  $joins  Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
 	 *                                          'tableA' => [
 	 *                                          'table' => 'tableA',
 	 *                                          'first' => 'tableAID',
@@ -1352,8 +1358,8 @@ class BaseModel implements Environment
 	 *                                          'second' => 'CurrentTableNameID'
 	 *                                          ]
 	 *                                          ]
-	 * @param string|array $select Danh sách các cột cần lấy dữ liệu ra
-	 * @param null|string|array $options Mảng dữ liệu các cấu hình tùy chọn
+	 * @param  string|array  $select  Danh sách các cột cần lấy dữ liệu ra
+	 * @param  null|string|array  $options  Mảng dữ liệu các cấu hình tùy chọn
 	 *                                          example $options = [
 	 *                                          'format' => null,
 	 *                                          'orderBy => [
@@ -1383,7 +1389,7 @@ class BaseModel implements Environment
 	/**
 	 * Function getResultWithLeftJoinAndWheres
 	 *
-	 * @param array $joins Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+	 * @param  array  $joins  Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
 	 *                                          'tableA' => [
 	 *                                          'table' => 'tableA',
 	 *                                          'first' => 'tableAID',
@@ -1391,9 +1397,9 @@ class BaseModel implements Environment
 	 *                                          'second' => 'CurrentTableNameID'
 	 *                                          ]
 	 *                                          ]
-	 * @param string|array $wheres Mảng chứa danh sách các điều kiện để lấy ra dữ liệu, cần map với tất cả các bảng joins
-	 * @param string|array $select Danh sách các cột cần lấy dữ liệu ra
-	 * @param null|string|array $options Mảng dữ liệu các cấu hình tùy chọn
+	 * @param  string|array  $wheres  Mảng chứa danh sách các điều kiện để lấy ra dữ liệu, cần map với tất cả các bảng joins
+	 * @param  string|array  $select  Danh sách các cột cần lấy dữ liệu ra
+	 * @param  null|string|array  $options  Mảng dữ liệu các cấu hình tùy chọn
 	 *                                          example $options = [
 	 *                                          'format' => null,
 	 *                                          'orderBy => [
@@ -1406,8 +1412,12 @@ class BaseModel implements Environment
 	 * @time  : 2018-12-03 02:05
 	 *
 	 */
-	public function getResultWithLeftJoinAndWheres(array $joins = array(), $wheres = array(), $select = array('*'), $options = null)
-	{
+	public function getResultWithLeftJoinAndWheres(
+		array $joins = array(),
+		$wheres = array(),
+		$select = array('*'),
+		$options = null
+	) {
 		$select = $this->prepareFormatSelectField($select);
 		$format = $this->prepareOptionFormat($options);
 		$db = DB::table($this->table);
@@ -1424,7 +1434,7 @@ class BaseModel implements Environment
 	/**
 	 * Function getResultWithSimpleRightJoin
 	 *
-	 * @param array $joins Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+	 * @param  array  $joins  Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
 	 *                                          'tableA' => [
 	 *                                          'table' => 'tableA',
 	 *                                          'first' => 'tableAID',
@@ -1432,8 +1442,8 @@ class BaseModel implements Environment
 	 *                                          'second' => 'CurrentTableNameID'
 	 *                                          ]
 	 *                                          ]
-	 * @param string|array $select Danh sách các cột cần lấy dữ liệu ra
-	 * @param null|string|array $options Mảng dữ liệu các cấu hình tùy chọn
+	 * @param  string|array  $select  Danh sách các cột cần lấy dữ liệu ra
+	 * @param  null|string|array  $options  Mảng dữ liệu các cấu hình tùy chọn
 	 *                                          example $options = [
 	 *                                          'format' => null,
 	 *                                          'orderBy => [
@@ -1463,7 +1473,7 @@ class BaseModel implements Environment
 	/**
 	 * Function getResultWithRightJoinAndWheres
 	 *
-	 * @param array $joins Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
+	 * @param  array  $joins  Danh sách các bảng dữ liệu cần join vào để lấy dữ liệu. Cấu trúc dạng $joins = [
 	 *                                          'tableA' => [
 	 *                                          'table' => 'tableA',
 	 *                                          'first' => 'tableAID',
@@ -1471,9 +1481,9 @@ class BaseModel implements Environment
 	 *                                          'second' => 'CurrentTableNameID'
 	 *                                          ]
 	 *                                          ]
-	 * @param string|array $wheres Mảng chứa danh sách các điều kiện để lấy ra dữ liệu, cần map với tất cả các bảng joins
-	 * @param string|array $select Danh sách các cột cần lấy dữ liệu ra
-	 * @param null|string|array $options Mảng dữ liệu các cấu hình tùy chọn
+	 * @param  string|array  $wheres  Mảng chứa danh sách các điều kiện để lấy ra dữ liệu, cần map với tất cả các bảng joins
+	 * @param  string|array  $select  Danh sách các cột cần lấy dữ liệu ra
+	 * @param  null|string|array  $options  Mảng dữ liệu các cấu hình tùy chọn
 	 *                                          example $options = [
 	 *                                          'format' => null,
 	 *                                          'orderBy => [
@@ -1486,8 +1496,12 @@ class BaseModel implements Environment
 	 * @time  : 2018-12-03 02:05
 	 *
 	 */
-	public function getResultWithRightJoinAndWheres(array $joins = array(), $wheres = array(), $select = array('*'), $options = null)
-	{
+	public function getResultWithRightJoinAndWheres(
+		array $joins = array(),
+		$wheres = array(),
+		$select = array('*'),
+		$options = null
+	) {
 		$select = $this->prepareFormatSelectField($select);
 		$format = $this->prepareOptionFormat($options);
 		$db = DB::table($this->table);
@@ -1504,7 +1518,7 @@ class BaseModel implements Environment
 	/**
 	 * Hàm thêm mới bản ghi vào bảng
 	 *
-	 * @param array $data Mảng chứa dữ liệu cần insert
+	 * @param  array  $data  Mảng chứa dữ liệu cần insert
 	 *
 	 * @return int Insert ID của bản ghi
 	 * @see   https://laravel.com/docs/6.x/queries#inserts
@@ -1528,8 +1542,8 @@ class BaseModel implements Environment
 	/**
 	 * Hàm update dữ liệu
 	 *
-	 * @param array $data Mảng dữ liệu cần Update
-	 * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+	 * @param  array  $data  Mảng dữ liệu cần Update
+	 * @param  array|string  $wheres  Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
 	 *
 	 * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
 	 * @see   https://laravel.com/docs/6.x/queries#updates
@@ -1552,8 +1566,8 @@ class BaseModel implements Environment
 	/**
 	 * Hàm update dữ liệu - Đa điều kiện
 	 *
-	 * @param array $data Mảng dữ liệu cần Update
-	 * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+	 * @param  array  $data  Mảng dữ liệu cần Update
+	 * @param  array|string  $wheres  Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
 	 *
 	 * @return int Số bản ghi được update thỏa mãn với điều kiện đầu vào
 	 * @see   https://laravel.com/docs/6.x/queries#updates
@@ -1570,7 +1584,7 @@ class BaseModel implements Environment
 	/**
 	 * Hàm xóa dữ liệu
 	 *
-	 * @param array|string $whereValue Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+	 * @param  array|string  $whereValue  Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
 	 *
 	 * @return int Số bản ghi đã xóa
 	 * @see   https://laravel.com/docs/6.x/queries#deletes
@@ -1593,7 +1607,7 @@ class BaseModel implements Environment
 	/**
 	 * Hàm xóa dữ liệu - Đa điều kiện
 	 *
-	 * @param array|string $wheres Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
+	 * @param  array|string  $wheres  Mảng dữ liệu hoặc giá trị primaryKey cần so sánh điều kiện để update
 	 *
 	 * @return int Số bản ghi đã xóa
 	 * @see   https://laravel.com/docs/6.x/queries#deletes
@@ -1610,8 +1624,8 @@ class BaseModel implements Environment
 	/**
 	 * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới
 	 *
-	 * @param array $data Mảng dữ liệu cần ghi mới hoặc update
-	 * @param array|string $wheres Điều kiện để kiểm tra và xác định bản ghi là ghi mới hay update
+	 * @param  array  $data  Mảng dữ liệu cần ghi mới hoặc update
+	 * @param  array|string  $wheres  Điều kiện để kiểm tra và xác định bản ghi là ghi mới hay update
 	 *
 	 * @return bool|int
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1625,7 +1639,7 @@ class BaseModel implements Environment
 		$query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
 		$checkExists = $query->count();
 		// $this->logger->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
-		if (!$checkExists) {
+		if ( ! $checkExists) {
 			$id = $db->insertGetId($data);
 			$this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
 			$this->logger->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
@@ -1641,8 +1655,8 @@ class BaseModel implements Environment
 	/**
 	 * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới - Đa điều kiện
 	 *
-	 * @param array $data Mảng dữ liệu cần ghi mới hoặc update
-	 * @param array|string $wheres Điều kiện để kiểm tra và xác định bản ghi là ghi mới hay update
+	 * @param  array  $data  Mảng dữ liệu cần ghi mới hoặc update
+	 * @param  array|string  $wheres  Điều kiện để kiểm tra và xác định bản ghi là ghi mới hay update
 	 *
 	 * @return bool|int
 	 * @author: 713uk13m <dev@nguyenanhung.com>
@@ -1657,24 +1671,27 @@ class BaseModel implements Environment
 	/**
 	 * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới, nếu tồn tại sẵn sẽ update
 	 *
-	 * @param array $insert Mảng dữ liệu cần ghi mới
-	 * @param array $update Mảng dữ liệu cần update
-	 * @param array|string $wheres Mảng / điều kiện để xác định query là update hay insert
+	 * @param  array  $insert  Mảng dữ liệu cần ghi mới
+	 * @param  array  $update  Mảng dữ liệu cần update
+	 * @param  array|string  $wheres  Mảng / điều kiện để xác định query là update hay insert
 	 *
 	 * @return int
 	 * @author: 713uk13m <dev@nguyenanhung.com>
 	 * @time  : 2019-04-07 04:01
 	 *
 	 */
-	public function checkExistsAndInsertOrUpdateData(array $insert = array(), array $update = array(), $wheres = array()): int
-	{
+	public function checkExistsAndInsertOrUpdateData(
+		array $insert = array(),
+		array $update = array(),
+		$wheres = array()
+	): int {
 		$this->connection();
 		$db = DB::table($this->table);
 		$query = $this->prepareWhereAndFieldStatement($db, $wheres, $this->table . '.' . $this->primaryKey);
 		$checkExists = $query->count();
 		// $this->logger->debug(__FUNCTION__, 'Check Exists Data: ' . $checkExists);
 
-		if (!$checkExists) {
+		if ( ! $checkExists) {
 			$id = $db->insertGetId($insert);
 			$this->logger->debug(__FUNCTION__, 'SQL Queries Insert Data: ' . $db->toSql());
 			$this->logger->debug(__FUNCTION__, 'Result Insert ID: ' . $id);
@@ -1692,17 +1709,20 @@ class BaseModel implements Environment
 	/**
 	 * Hàm kiểm tra dữ liệu đã tồn tại hay chưa, nếu chưa sẽ ghi mới, nếu tồn tại sẵn sẽ update - Đa điều kiện
 	 *
-	 * @param array $insert Mảng dữ liệu cần ghi mới
-	 * @param array $update Mảng dữ liệu cần update
-	 * @param array|string $wheres Mảng / điều kiện để xác định query là update hay insert
+	 * @param  array  $insert  Mảng dữ liệu cần ghi mới
+	 * @param  array  $update  Mảng dữ liệu cần update
+	 * @param  array|string  $wheres  Mảng / điều kiện để xác định query là update hay insert
 	 *
 	 * @return int
 	 * @author: 713uk13m <dev@nguyenanhung.com>
 	 * @time  : 2019-04-07 04:01
 	 *
 	 */
-	public function checkExistsAndInsertOrUpdateDataWithMultipleWhere(array $insert = array(), array $update = array(), $wheres = array()): int
-	{
+	public function checkExistsAndInsertOrUpdateDataWithMultipleWhere(
+		array $insert = array(),
+		array $update = array(),
+		$wheres = array()
+	): int {
 		return $this->checkExistsAndInsertOrUpdateData($insert, $update, $wheres);
 	}
 }

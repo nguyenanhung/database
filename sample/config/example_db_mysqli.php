@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Project database.
  * Created by PhpStorm.
@@ -7,11 +8,11 @@
  * Time: 00:23
  */
 return [
-    'host'     => 'host',
-    'port'     => 3306,
-    'username' => 'username',
-    'password' => 'password',
-    'db'       => 'databaseName',
-    'prefix'   => 'my_',
-    'charset'  => 'utf8'
+	'host' => 'host',
+	'port' => 3306,
+	'username' => 'username',
+	'password' => 'password',
+	'db' => 'databaseName',
+	'prefix' => 'my_',
+	'charset' => 'utf8'
 ];
