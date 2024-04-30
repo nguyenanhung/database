@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Project database.
  * Created by PhpStorm.
@@ -7,60 +8,60 @@
  * Time: 00:23
  */
 return [
-    'local'     => [
+    'local' => [
         'type' => 'Local',
         'root' => testBackupPath()
     ],
-    's3'        => [
-        'type'    => 'AwsS3',
-        'key'     => '',
-        'secret'  => '',
-        'region'  => 'us-east-1',
+    's3' => [
+        'type' => 'AwsS3',
+        'key' => '',
+        'secret' => '',
+        'region' => 'us-east-1',
         'version' => 'latest',
-        'bucket'  => '',
-        'root'    => '',
+        'bucket' => '',
+        'root' => '',
     ],
-    'gcs'       => [
-        'type'    => 'Gcs',
-        'key'     => '',
-        'secret'  => '',
+    'gcs' => [
+        'type' => 'Gcs',
+        'key' => '',
+        'secret' => '',
         'version' => 'latest',
-        'bucket'  => '',
-        'root'    => '',
+        'bucket' => '',
+        'root' => '',
     ],
     'rackspace' => [
-        'type'      => 'Rackspace',
-        'username'  => '',
-        'password'  => '',
-        'container' => '',
-    ],
-    'dropbox'   => [
-        'type'   => 'Dropbox',
-        'token'  => '',
-        'key'    => '',
-        'secret' => '',
-        'app'    => '',
-        'root'   => '',
-    ],
-    'ftp'       => [
-        'type'     => 'Ftp',
-        'host'     => '',
+        'type' => 'Rackspace',
         'username' => '',
         'password' => '',
-        'root'     => '',
-        'port'     => 21,
-        'passive'  => true,
-        'ssl'      => true,
-        'timeout'  => 30,
+        'container' => '',
     ],
-    'sftp'      => [
-        'type'       => 'Sftp',
-        'host'       => '',
-        'username'   => '',
-        'password'   => '',
-        'root'       => '',
-        'port'       => 21,
-        'timeout'    => 10,
+    'dropbox' => [
+        'type' => 'Dropbox',
+        'token' => '',
+        'key' => '',
+        'secret' => '',
+        'app' => '',
+        'root' => '',
+    ],
+    'ftp' => [
+        'type' => 'Ftp',
+        'host' => '',
+        'username' => '',
+        'password' => '',
+        'root' => '',
+        'port' => 21,
+        'passive' => true,
+        'ssl' => true,
+        'timeout' => 30,
+    ],
+    'sftp' => [
+        'type' => 'Sftp',
+        'host' => '',
+        'username' => '',
+        'password' => '',
+        'root' => '',
+        'port' => 21,
+        'timeout' => 10,
         'privateKey' => '',
     ],
 ];

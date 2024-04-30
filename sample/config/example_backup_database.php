@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Project database.
  * Created by PhpStorm.
@@ -8,21 +9,21 @@
  */
 return [
     'development' => [
-        'type'              => 'mysql',
-        'host'              => '127.0.0.1',
-        'port'              => '3306',
-        'user'              => 'root',
-        'pass'              => '',
-        'database'          => 'my_database_development',
+        'type' => 'mysql',
+        'host' => '127.0.0.1',
+        'port' => '3306',
+        'user' => 'root',
+        'pass' => '',
+        'database' => 'my_database_development',
         'singleTransaction' => false
     ],
-    'production'  => [
-        'type'              => 'mysql',
-        'host'              => '127.0.0.1',
-        'port'              => '3306',
-        'user'              => 'root',
-        'pass'              => '',
-        'database'          => 'my_database_production',
+    'production' => [
+        'type' => 'mysql',
+        'host' => '127.0.0.1',
+        'port' => '3306',
+        'user' => 'root',
+        'pass' => '',
+        'database' => 'my_database_production',
         'singleTransaction' => false
     ],
 ];
