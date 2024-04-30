@@ -15,14 +15,14 @@ use nguyenanhung\Bear\Database\Support;
 use nguyenanhung\MyDatabase\Model\BaseModel;
 
 $database = [
-	'driver' => 'mysql',
-	'host' => 'localhost',
-	'database' => 'test_database',
-	'username' => 'root',
-	'password' => '',
-	'charset' => 'utf8',
-	'collation' => 'utf8_unicode_ci',
-	'prefix' => '',
+    'driver' => 'mysql',
+    'host' => 'localhost',
+    'database' => 'test_database',
+    'username' => 'root',
+    'password' => '',
+    'charset' => 'utf8',
+    'collation' => 'utf8_unicode_ci',
+    'prefix' => '',
 ];
 
 $model = new BaseModel();
