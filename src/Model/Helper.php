@@ -11,6 +11,7 @@
 namespace nguyenanhung\MyDatabase\Model;
 
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 
 /**
  * Trait Helper
@@ -821,5 +822,19 @@ trait Helper
         $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, self::TABLE_OPERATOR_IS_ACTIVE);
 
         return $db;
+    }
+
+    /**
+     * Function bindUniqueColumn
+     *
+     * @param  Collection  $result
+     * @param  string  $column
+     * User: 713uk13m <dev@nguyenanhung.com>
+     * Copyright: 713uk13m <dev@nguyenanhung.com>
+     * @return Collection
+     */
+    public function bindUniqueColumn(Collection $result, string $column): Collection
+    {
+        return collect($result)->unique($column);
     }
 }

@@ -988,6 +988,31 @@ class BaseModel implements Environment
     }
 
     /**
+     * Function getDistinctResultUniqueColumn - Hàm lấy danh sách Distinct toàn bộ bản ghi trong 1 bảng theo 1 cột unique bất kì
+     *
+     * @param  string|array  $select  Mảng dữ liệu danh sách các field cần so sánh
+     * @param  string  $uniqueColumn  Cột dữ liệu cần đối chiếu và lấy kết quả duy nhất
+     * User: 713uk13m <dev@nguyenanhung.com>
+     * Copyright: 713uk13m <dev@nguyenanhung.com>
+     * @return Collection
+     */
+    public function getDistinctResultUniqueColumn($select = array('*'), string $uniqueColumn = '*'): Collection
+    {
+        $select = $this->prepareFormatSelectField($select);
+        $this->connection();
+        $db = DB::table($this->table);
+        $db = $this->prepareJoinStatement($db);
+        $db->distinct();
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $db->toSql());
+        $result = $db->get($select);
+        //$this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+        if ( ! empty($uniqueColumn) && $uniqueColumn !== '*') {
+            return $this->bindUniqueColumn($result, $uniqueColumn);
+        }
+        return $result;
+    }
+
+    /**
      * Hàm lấy danh sách Distinct toàn bộ bản ghi theo điều kiện
      *
      * @param  string|array  $select  Danh sách các cột dữ liệu cần lấy ra
@@ -1009,6 +1034,35 @@ class BaseModel implements Environment
 
         //$this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
         return $query->get($select);
+    }
+
+    /**
+     * Function getDistinctResultByColumnUnique - Hàm lấy danh sách Distinct toàn bộ bản ghi theo điều kiện và theo 1 cột unique bất kì
+     *
+     * @param  string|array  $select  Danh sách các cột dữ liệu cần lấy ra
+     * @param  array|string  $wheres  Điều kiện kiểm tra đầu vào của dữ liệu
+     * @param  string  $uniqueColumn  Cột dữ liệu cần đối chiếu và lấy kết quả duy nhất
+     * User: 713uk13m <dev@nguyenanhung.com>
+     * Copyright: 713uk13m <dev@nguyenanhung.com>
+     * @return Collection
+     */
+    public function getDistinctResultByColumnUnique(
+        $select = '*',
+        $wheres = array(),
+        string $uniqueColumn = '*'
+    ): Collection {
+        $this->connection();
+        $db = DB::table($this->table);
+        $db = $this->prepareJoinStatement($db);
+        $query = $this->prepareWhereAndFieldStatement($db, $wheres, $select);
+        $query->distinct();
+        $this->logger->debug(__FUNCTION__, 'SQL Queries: ' . $query->toSql());
+        $result = $query->get($select);
+        //$this->logger->debug(__FUNCTION__, 'Result from DB => ' . json_encode($result));
+        if ( ! empty($uniqueColumn) && $uniqueColumn !== '*') {
+            return $this->bindUniqueColumn($result, $uniqueColumn);
+        }
+        return $result;
     }
 
     /**
