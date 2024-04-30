@@ -8,12 +8,12 @@
  * Time: 00:23
  */
 return [
-	'driver' => 'mysql',
-	'host' => 'localhost',
-	'database' => 'database',
-	'username' => 'root',
-	'password' => 'password',
-	'charset' => 'utf8',
-	'collation' => 'utf8_unicode_ci',
-	'prefix' => '',
+    'driver' => 'mysql',
+    'host' => 'localhost',
+    'database' => 'database',
+    'username' => 'root',
+    'password' => 'password',
+    'charset' => 'utf8',
+    'collation' => 'utf8_unicode_ci',
+    'prefix' => '',
 ];
