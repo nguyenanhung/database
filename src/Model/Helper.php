@@ -28,8 +28,8 @@ trait Helper
     /**
      * Function preparePaging
      *
-     * @param  int  $pageIndex
-     * @param  int  $pageSize
+     * @param int $pageIndex
+     * @param int $pageSize
      *
      * @return array
      * @see      https://laravel.com/docs/6.x/queries#ordering-grouping-limit-and-offset
@@ -56,8 +56,8 @@ trait Helper
     /**
      * Function prepareOffset
      *
-     * @param  int  $page
-     * @param  int  $size
+     * @param int $page
+     * @param int $size
      *
      * @return int
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -81,7 +81,7 @@ trait Helper
     /**
      * Function prepareOptionFormat
      *
-     * @param  mixed  $options
+     * @param mixed $options
      *
      * @return string|null
      * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
@@ -106,7 +106,7 @@ trait Helper
     /**
      * Function formatSelectFieldStringToArray
      *
-     * @param  string  $selectField
+     * @param string $selectField
      *
      * @return array|string|string[]
      * @see      https://laravel.com/docs/6.x/queries#selects
@@ -126,7 +126,7 @@ trait Helper
             $select = array();
             foreach ($listSelectField as $field) {
                 $field = trim($field);
-                if ( ! empty($field)) {
+                if (!empty($field)) {
                     $select[] = trim($field);
                 }
             }
@@ -143,7 +143,7 @@ trait Helper
     /**
      * Function prepareFormatSelectField
      *
-     * @param  array|string|null  $selectField  Mảng hoặc string danh sác các cột cần lấy ra
+     * @param array|string|null $selectField Mảng hoặc string danh sác các cột cần lấy ra
      *
      * @return array|string[]
      * @see      https://laravel.com/docs/6.x/queries#selects
@@ -165,7 +165,7 @@ trait Helper
         }
 
         // Format: If Select Field is Array
-        if (is_array($selectField) && ! empty($selectField) && $selectField[0] !== '*') {
+        if (is_array($selectField) && !empty($selectField) && $selectField[0] !== '*') {
             $listFirstField = explode(',', $selectField[0]);
             $countFirstField = count($listFirstField);
             if ($countFirstField > 1) {
@@ -183,7 +183,7 @@ trait Helper
     /**
      * Function prepareQueryStatementOptions
      *
-     * @param  \Illuminate\Database\Query\Builder  $builder
+     * @param \Illuminate\Database\Query\Builder $builder
      * @param                                    $options
      *
      * @return \Illuminate\Database\Query\Builder
@@ -201,7 +201,7 @@ trait Helper
             }
 
             // Case chỉ có Limit
-            if ((isset($options['limit']) && $options['limit'] > 0) && ! isset($options['offset'])) {
+            if ((isset($options['limit']) && $options['limit'] > 0) && !isset($options['offset'])) {
                 $builder->limit($options['limit']);
             }
 
@@ -220,7 +220,7 @@ trait Helper
             }
 
             // Group Query
-            if (isset($options['groupBy']) && ! empty($options['groupBy'])) {
+            if (isset($options['groupBy']) && !empty($options['groupBy'])) {
                 $builder->groupBy($options['groupBy']);
             }
         }
@@ -231,10 +231,10 @@ trait Helper
     /**
      * Function prepareWhereAndFieldStatement
      *
-     * @param  \Illuminate\Database\Query\Builder  $builder  Class Query Builder
-     * @param  string|array  $wheres  Mảng hoặc giá trị dữ liệu cần so sánh
-     * @param  mixed  $fields  Column cần so sánh
-     * @param  mixed  $options  Mảng dữ liệu các cấu hình tùy chọn
+     * @param \Illuminate\Database\Query\Builder $builder Class Query Builder
+     * @param string|array $wheres Mảng hoặc giá trị dữ liệu cần so sánh
+     * @param mixed $fields Column cần so sánh
+     * @param mixed $options Mảng dữ liệu các cấu hình tùy chọn
      *                                                    example $options = [
      *                                                    'format' => null,
      *                                                    'orderBy => [
@@ -252,7 +252,7 @@ trait Helper
      */
     public function prepareWhereAndFieldStatement(Builder $builder, $wheres, $fields, $options = null): Builder
     {
-        if ( ! empty($wheres)) {
+        if (!empty($wheres)) {
             if (is_array($wheres)) {
                 if (count($wheres) > 0) {
                     foreach ($wheres as $field => $value) {
@@ -270,10 +270,10 @@ trait Helper
                             $builder->where($field, self::OPERATOR_EQUAL_TO, $value);
                         }
                     }
-                } elseif ( ! empty($fields)) {
+                } elseif (!empty($fields)) {
                     $builder->whereIn($fields, $wheres);
                 }
-            } elseif ( ! empty($fields)) {
+            } elseif (!empty($fields)) {
                 $builder->where($fields, self::OPERATOR_EQUAL_TO, $wheres);
             }
         }
@@ -284,7 +284,7 @@ trait Helper
     /**
      * Function prepareSimpleWheresWithStatement
      *
-     * @param  \Illuminate\Database\Query\Builder  $builder
+     * @param \Illuminate\Database\Query\Builder $builder
      * @param                                    $wheres
      *
      * @return \Illuminate\Database\Query\Builder
@@ -294,7 +294,7 @@ trait Helper
      */
     public function prepareSimpleWheresWithStatement(Builder $builder, $wheres): Builder
     {
-        if ( ! empty($wheres) && is_array($wheres) && count($wheres) > 0) {
+        if (!empty($wheres) && is_array($wheres) && count($wheres) > 0) {
             foreach ($wheres as $field => $value) {
                 if (is_array($value)) {
                     if (isset($value['field'], $value['value'])) {
@@ -318,7 +318,7 @@ trait Helper
     /**
      * Function prepareSimpleWheresWithOptionsStatement
      *
-     * @param  \Illuminate\Database\Query\Builder  $builder
+     * @param \Illuminate\Database\Query\Builder $builder
      * @param                                    $wheres
      * @param                                    $options
      *
@@ -337,7 +337,7 @@ trait Helper
     /**
      * Function prepareSimpleWhereEqualToStatement
      *
-     * @param  \Illuminate\Database\Query\Builder  $builder
+     * @param \Illuminate\Database\Query\Builder $builder
      * @param                                    $wheres
      *
      * @return \Illuminate\Database\Query\Builder
@@ -359,7 +359,7 @@ trait Helper
     /**
      * Function prepareSimpleWhereNotEqualToStatement
      *
-     * @param  \Illuminate\Database\Query\Builder  $builder
+     * @param \Illuminate\Database\Query\Builder $builder
      * @param                                    $wheres
      *
      * @return \Illuminate\Database\Query\Builder
@@ -381,7 +381,7 @@ trait Helper
     /**
      * Function prepareJoinStatement
      *
-     * @param  \Illuminate\Database\Query\Builder  $builder
+     * @param \Illuminate\Database\Query\Builder $builder
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -391,7 +391,7 @@ trait Helper
     public function prepareJoinStatement(Builder $builder): Builder
     {
         // Kiểm tra dữ liệu trong biến Join có tồn tại hay không
-        if ( ! empty($this->joins) && is_array($this->joins) && (count($this->joins) > 0)) {
+        if (!empty($this->joins) && is_array($this->joins) && (count($this->joins) > 0)) {
             foreach ($this->joins as $join) {
                 // Kiểm tra có các biến join cần thiết hay không
                 if (isset($join['table'], $join['first'], $join['operator'], $join['second'])) {
@@ -419,7 +419,7 @@ trait Helper
      *
      * @param                                $result
      * @param                                $format
-     * @param  bool  $loggerStatus
+     * @param bool $loggerStatus
      *
      * @return array|object|string|null|\Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -458,7 +458,7 @@ trait Helper
     /**
      * Function formatReturnRowsResult
      *
-     * @param  \Illuminate\Database\Query\Builder  $builder
+     * @param \Illuminate\Database\Query\Builder $builder
      * @param                                    $format
      *
      * @return array|object|string|null|\Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder
@@ -497,11 +497,11 @@ trait Helper
     /**
      * Function bindRecursiveFromCategory
      *
-     * @param  \Illuminate\Database\Query\Builder  $db
+     * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $recursive
      * @param                                    $parentId
-     * @param  string  $field
-     * @param  mixed  $table
+     * @param string $field
+     * @param mixed $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -546,24 +546,33 @@ trait Helper
     /**
      * Function filterByPrimaryId
      *
-     * @param  \Illuminate\Database\Query\Builder  $db
+     * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
-     * @param  string  $field
-     * @param  mixed  $table
+     * @param                                    $field
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 07:22
      */
-    public function filterByPrimaryId(Builder $db, $id, string $field = 'id', $table = null): Builder
+    public function filterByPrimaryId(Builder $db, $id, $field = 'id', $table = null)
     {
         if (empty($table)) {
             $table = $this->table;
         }
         if ($id !== null) {
             if (is_array($id)) {
-                $db->whereIn($table . '.' . $field, $id);
+                $countId = count($id);
+                if ($countId > 1) {
+                    $db->whereIn($table . '.' . $field, $id);
+                } else {
+                    if (isset($id[0])) {
+                        $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, $id[0]);
+                    } else {
+                        $db->whereIn($table . '.' . $field, $id);
+                    }
+                }
             } else {
                 $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, $id);
             }
@@ -575,24 +584,33 @@ trait Helper
     /**
      * Function buildOperatorEqualTo
      *
-     * @param  \Illuminate\Database\Query\Builder  $db
+     * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
-     * @param  string  $field
-     * @param  mixed  $table
+     * @param                                    $field
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 18:00
      */
-    public function buildOperatorEqualTo(Builder $db, $id, string $field = 'id', $table = null): Builder
+    public function buildOperatorEqualTo(Builder $db, $id, $field = 'id', $table = null)
     {
         if (empty($table)) {
             $table = $this->table;
         }
         if ($id !== null) {
             if (is_array($id)) {
-                $db->whereIn($table . '.' . $field, $id);
+                $countId = count($id);
+                if ($countId > 1) {
+                    $db->whereIn($table . '.' . $field, $id);
+                } else {
+                    if (isset($id[0])) {
+                        $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, $id[0]);
+                    } else {
+                        $db->whereIn($table . '.' . $field, $id);
+                    }
+                }
             } else {
                 $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, $id);
             }
@@ -604,24 +622,33 @@ trait Helper
     /**
      * Function buildOperatorNotEqualTo
      *
-     * @param  \Illuminate\Database\Query\Builder  $db
+     * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
-     * @param  string  $field
-     * @param  mixed  $table
+     * @param                                    $field
+     * @param                                    $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 29:17
      */
-    public function buildOperatorNotEqualTo(Builder $db, $id, string $field = 'id', $table = null): Builder
+    public function buildOperatorNotEqualTo(Builder $db, $id, $field = 'id', $table = null)
     {
         if (empty($table)) {
             $table = $this->table;
         }
         if ($id !== null) {
             if (is_array($id)) {
-                $db->whereNotIn($table . '.' . $field, $id);
+                $countId = count($id);
+                if ($countId > 1) {
+                    $db->whereNotIn($table . '.' . $field, $id);
+                } else {
+                    if (isset($id[0])) {
+                        $db->where($table . '.' . $field, self::OPERATOR_NOT_EQUAL_TO, $id[0]);
+                    } else {
+                        $db->whereNotIn($table . '.' . $field, $id);
+                    }
+                }
             } else {
                 $db->where($table . '.' . $field, self::OPERATOR_NOT_EQUAL_TO, $id);
             }
@@ -633,10 +660,10 @@ trait Helper
     /**
      * Function buildOperatorLessThanTo
      *
-     * @param  \Illuminate\Database\Query\Builder  $db
+     * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
-     * @param  string  $field
-     * @param  mixed  $table
+     * @param string $field
+     * @param mixed $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -656,10 +683,10 @@ trait Helper
     /**
      * Function buildOperatorGreaterThanTo
      *
-     * @param  \Illuminate\Database\Query\Builder  $db
+     * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
-     * @param  string  $field
-     * @param  mixed  $table
+     * @param string $field
+     * @param mixed $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -679,10 +706,10 @@ trait Helper
     /**
      * Function buildOperatorLessThanOrEqualTo
      *
-     * @param  \Illuminate\Database\Query\Builder  $db
+     * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
-     * @param  string  $field
-     * @param  mixed  $table
+     * @param string $field
+     * @param mixed $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -702,10 +729,10 @@ trait Helper
     /**
      * Function buildOperatorGreaterThanOrEqualTo
      *
-     * @param  \Illuminate\Database\Query\Builder  $db
+     * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
-     * @param  string  $field
-     * @param  mixed  $table
+     * @param string $field
+     * @param mixed $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -725,10 +752,10 @@ trait Helper
     /**
      * Function buildOperatorSpaceShipTo
      *
-     * @param  \Illuminate\Database\Query\Builder  $db
+     * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $id
-     * @param  string  $field
-     * @param  mixed  $table
+     * @param string $field
+     * @param mixed $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -748,10 +775,10 @@ trait Helper
     /**
      * Function bindOrderBy
      *
-     * @param  \Illuminate\Database\Query\Builder  $db
+     * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $orderByField
-     * @param  string  $defaultField
-     * @param  mixed  $table
+     * @param string $defaultField
+     * @param mixed $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -779,9 +806,9 @@ trait Helper
     /**
      * Function bindOrderByNoDefault
      *
-     * @param  \Illuminate\Database\Query\Builder  $db
+     * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $orderByField
-     * @param  mixed  $table
+     * @param mixed $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -805,9 +832,9 @@ trait Helper
     /**
      * Function filterRecordIsActive
      *
-     * @param  \Illuminate\Database\Query\Builder  $db
-     * @param  string  $field
-     * @param  mixed  $table
+     * @param \Illuminate\Database\Query\Builder $db
+     * @param string $field
+     * @param mixed $table
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
@@ -827,8 +854,8 @@ trait Helper
     /**
      * Function bindUniqueColumn
      *
-     * @param  Collection  $result
-     * @param  string  $column
+     * @param Collection $result
+     * @param string $column
      * User: 713uk13m <dev@nguyenanhung.com>
      * Copyright: 713uk13m <dev@nguyenanhung.com>
      * @return Collection
