@@ -30,10 +30,10 @@ trait Helper
      * @param int $pageIndex
      * @param int $pageSize
      *
-     * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
+     * @return array
      * @see      https://laravel.com/docs/6.x/queries#ordering-grouping-limit-and-offset
      *
-     * @return array
+     * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 08/21/2021 23:24
@@ -74,7 +74,7 @@ trait Helper
             $start = $page;
         }
 
-        return (int) $start;
+        return (int)$start;
     }
 
     /**
@@ -82,9 +82,9 @@ trait Helper
      *
      * @param mixed $options
      *
+     * @return string|null
      * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
      *
-     * @return string|null
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/22/2021 22:22
@@ -107,10 +107,10 @@ trait Helper
      *
      * @param string $selectField String danh sác các cột cần lấy ra
      *
-     * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
+     * @return array|string|string[]
      * @see      https://laravel.com/docs/6.x/queries#selects
      *
-     * @return array|string|string[]
+     * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/21/2021 10:57
@@ -144,10 +144,10 @@ trait Helper
      *
      * @param array|string|null $selectField Mảng hoặc string danh sác các cột cần lấy ra
      *
-     * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
+     * @return array|string|string[]
      * @see      https://laravel.com/docs/6.x/queries#selects
      *
-     * @return array|string|string[]
+     * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/21/2021 12:12
@@ -212,7 +212,9 @@ trait Helper
             }
 
             // Sắp xếp dữ liệu đổ ra ngẫu nhiên nếu như Option Order By ghi nhận giá trị random
-            if (isset($options['orderBy']) && is_string($options['orderBy']) && strtolower($options['orderBy']) === 'random') {
+            if (isset($options['orderBy']) && is_string($options['orderBy']) && strtolower(
+                    $options['orderBy']
+                ) === 'random') {
                 $builder->inRandomOrder();
             }
 
@@ -229,9 +231,9 @@ trait Helper
      * Function prepareWhereAndFieldStatement
      *
      * @param \Illuminate\Database\Query\Builder $builder Class Query Builder
-     * @param string|array                       $wheres  Mảng hoặc giá trị dữ liệu cần so sánh
-     * @param mixed                              $fields  Column cần so sánh
-     * @param mixed                              $options Mảng dữ liệu các cấu hình tùy chọn
+     * @param string|array $wheres Mảng hoặc giá trị dữ liệu cần so sánh
+     * @param mixed $fields Column cần so sánh
+     * @param mixed $options Mảng dữ liệu các cấu hình tùy chọn
      *                                                    example $options = [
      *                                                    'format' => null,
      *                                                    'orderBy => [
@@ -239,10 +241,10 @@ trait Helper
      *                                                    ]
      *                                                    ];
      *
-     * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
+     * @return \Illuminate\Database\Query\Builder
      * @see      https://laravel.com/docs/6.x/queries
      *
-     * @return \Illuminate\Database\Query\Builder
+     * @see      https://github.com/nguyenanhung/database/blob/master/src/Model/Helper.php
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 09/22/2021 02:38
@@ -392,7 +394,13 @@ trait Helper
                 if (isset($join['table'], $join['first'], $join['operator'], $join['second'])) {
                     // Tiến hành join vào các bảng để lấy CSDL
                     if (isset($join['type'])) {
-                        $builder->join($join['table'], $join['first'], $join['operator'], $join['second'], $join['type']);
+                        $builder->join(
+                            $join['table'],
+                            $join['first'],
+                            $join['operator'],
+                            $join['second'],
+                            $join['type']
+                        );
                     } else {
                         $builder->join($join['table'], $join['first'], $join['operator'], $join['second']);
                     }
@@ -513,7 +521,7 @@ trait Helper
                 $listCategory[] = $parentId; // Push category cha
                 foreach ($recursive as $item) {
                     $itemId = is_array($item) ? $item['id'] : $item->id;
-                    $listCategory[] = (int) $itemId; // Push các category con vào mảng dữ liệu
+                    $listCategory[] = (int)$itemId; // Push các category con vào mảng dữ liệu
                 }
                 $db->whereIn($table . '.' . $field, $listCategory); // Lấy theo where in
             } else {
@@ -547,7 +555,16 @@ trait Helper
         }
         if ($id !== null) {
             if (is_array($id)) {
-                $db->whereIn($table . '.' . $field, $id);
+                $countId = count($id);
+                if ($countId > 1) {
+                    $db->whereIn($table . '.' . $field, $id);
+                } else {
+                    if (isset($id[0])) {
+                        $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, $id[0]);
+                    } else {
+                        $db->whereIn($table . '.' . $field, $id);
+                    }
+                }
             } else {
                 $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, $id);
             }
@@ -576,7 +593,16 @@ trait Helper
         }
         if ($id !== null) {
             if (is_array($id)) {
-                $db->whereIn($table . '.' . $field, $id);
+                $countId = count($id);
+                if ($countId > 1) {
+                    $db->whereIn($table . '.' . $field, $id);
+                } else {
+                    if (isset($id[0])) {
+                        $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, $id[0]);
+                    } else {
+                        $db->whereIn($table . '.' . $field, $id);
+                    }
+                }
             } else {
                 $db->where($table . '.' . $field, self::OPERATOR_EQUAL_TO, $id);
             }
@@ -605,7 +631,16 @@ trait Helper
         }
         if ($id !== null) {
             if (is_array($id)) {
-                $db->whereNotIn($table . '.' . $field, $id);
+                $countId = count($id);
+                if ($countId > 1) {
+                    $db->whereNotIn($table . '.' . $field, $id);
+                } else {
+                    if (isset($id[0])) {
+                        $db->where($table . '.' . $field, self::OPERATOR_NOT_EQUAL_TO, $id[0]);
+                    } else {
+                        $db->whereNotIn($table . '.' . $field, $id);
+                    }
+                }
             } else {
                 $db->where($table . '.' . $field, self::OPERATOR_NOT_EQUAL_TO, $id);
             }
