@@ -771,25 +771,49 @@ trait Helper
      * @param                                    $orderByField
      * @param                                    $defaultField
      * @param                                    $table
+     * @param                                    $tmpTable
+     * @param                                    $tmpField
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 28:46
      */
-    public function bindOrderBy(Builder $db, $orderByField, $defaultField = 'updated_at', $table = null)
-    {
+    public function bindOrderBy(
+        Builder $db,
+        $orderByField,
+        $defaultField = 'updated_at',
+        $table = null,
+        $tmpTable = null,
+        $tmpField = null
+    ) {
         if (empty($table)) {
             $table = $this->table;
         }
         if (isset($orderByField) && is_array($orderByField) && count($orderByField) > 0) {
             foreach ($orderByField as $field) {
-                $db->orderBy($table . '.' . $field['field_name'], $field['order_value']);
+                if (
+                    ($tmpTable !== null && $tmpField !== null) &&
+                    $field['field_name'] === $tmpField &&
+                    $this->getSchema()->hasColumn($tmpTable, $tmpField)
+                ) {
+                    $db->orderBy($tmpTable . '.' . $tmpField, $field['order_value']);
+                } else {
+                    $db->orderBy($table . '.' . $field['field_name'], $field['order_value']);
+                }
             }
         } elseif (strtolower($defaultField) === 'random') {
             $db->inRandomOrder();
         } else {
-            $db->orderByDesc($table . '.' . $defaultField);
+            if (
+                ($tmpTable !== null && $tmpField !== null) &&
+                $defaultField === $tmpField &&
+                $this->getSchema()->hasColumn($tmpTable, $tmpField)
+            ) {
+                $db->orderByDesc($tmpTable . '.' . $tmpField);
+            } else {
+                $db->orderByDesc($table . '.' . $defaultField);
+            }
         }
 
         return $db;
@@ -801,20 +825,35 @@ trait Helper
      * @param \Illuminate\Database\Query\Builder $db
      * @param                                    $orderByField
      * @param                                    $table
+     * @param                                    $tmpTable
+     * @param                                    $tmpField
      *
      * @return \Illuminate\Database\Query\Builder
      * @author   : 713uk13m <dev@nguyenanhung.com>
      * @copyright: 713uk13m <dev@nguyenanhung.com>
      * @time     : 07/02/2023 28:41
      */
-    public function bindOrderByNoDefault(Builder $db, $orderByField, $table = null)
-    {
+    public function bindOrderByNoDefault(
+        Builder $db,
+        $orderByField,
+        $table = null,
+        $tmpTable = null,
+        $tmpField = null
+    ) {
         if (empty($table)) {
             $table = $this->table;
         }
         if (isset($orderByField) && is_array($orderByField) && count($orderByField) > 0) {
             foreach ($orderByField as $field) {
-                $db->orderBy($table . '.' . $field['field_name'], $field['order_value']);
+                if (
+                    ($tmpTable !== null && $tmpField !== null) &&
+                    $field['field_name'] === $tmpField &&
+                    $this->getSchema()->hasColumn($tmpTable, $tmpField)
+                ) {
+                    $db->orderBy($tmpTable . '.' . $tmpField, $field['order_value']);
+                } else {
+                    $db->orderBy($table . '.' . $field['field_name'], $field['order_value']);
+                }
             }
         }
 
