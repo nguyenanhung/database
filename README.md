@@ -1,4 +1,9 @@
-[![Latest Stable Version](http://poser.pugx.org/nguyenanhung/database/v)](https://packagist.org/packages/nguyenanhung/database) [![Total Downloads](http://poser.pugx.org/nguyenanhung/database/downloads)](https://packagist.org/packages/nguyenanhung/database) [![Latest Unstable Version](http://poser.pugx.org/nguyenanhung/database/v/unstable)](https://packagist.org/packages/nguyenanhung/database) [![License](http://poser.pugx.org/nguyenanhung/database/license)](https://packagist.org/packages/nguyenanhung/database) [![PHP Version Require](http://poser.pugx.org/nguyenanhung/database/require/php)](https://packagist.org/packages/nguyenanhung/database)
+[![Latest Stable Version](https://img.shields.io/packagist/v/nguyenanhung/database.svg?style=flat-square)](https://packagist.org/packages/nguyenanhung/database)
+[![Total Downloads](https://img.shields.io/packagist/dt/nguyenanhung/database.svg?style=flat-square)](https://packagist.org/packages/nguyenanhung/database)
+[![Daily Downloads](https://img.shields.io/packagist/dd/nguyenanhung/database.svg?style=flat-square)](https://packagist.org/packages/nguyenanhung/database)
+[![Monthly Downloads](https://img.shields.io/packagist/dm/nguyenanhung/database.svg?style=flat-square)](https://packagist.org/packages/nguyenanhung/database)
+[![License](https://img.shields.io/packagist/l/nguyenanhung/database.svg?style=flat-square)](https://packagist.org/packages/nguyenanhung/database)
+[![PHP Version Require](https://img.shields.io/packagist/dependency-v/nguyenanhung/database/php)](https://packagist.org/packages/nguyenanhung/database)
 
 # Database
 
