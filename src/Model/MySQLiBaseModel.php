@@ -9,7 +9,7 @@
 
 namespace nguyenanhung\MyDatabase\Model;
 
-use nguyenanhung\MySQLi\MySQLiBaseModel as BaseMySQLiBaseModel;
+use nguyenanhung\PDO\MySQLPDOBaseModel as BaseMySQLPDOBaseModel;
 
 /**
  * Class MySQLiBaseModel
@@ -21,6 +21,6 @@ use nguyenanhung\MySQLi\MySQLiBaseModel as BaseMySQLiBaseModel;
  * @last_updated      2021-09-24
  * @version           3.0.5
  */
-class MySQLiBaseModel extends BaseMySQLiBaseModel
+class MySQLiBaseModel extends BaseMySQLPDOBaseModel
 {
 }
