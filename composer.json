@@ -28,7 +28,6 @@
         "ext-mysqli": "*",
         "nguyenanhung/my-debug": "^4.0 || ^3.0",
         "nguyenanhung/pdo": "^3.0",
-        "nguyenanhung/mysqli": "^3.0",
         "nguyenanhung/database-helper": "^2.0",
         "illuminate/events": "^11.0 || ^10.0 || ^9.0 || ^8.61",
         "illuminate/database": "^11.0 || ^10.0 || ^9.0 || ^8.61"
