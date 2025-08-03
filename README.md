@@ -11,8 +11,8 @@ Database Wrapper - Base Model
 
 - [x] PDO Support from package `nguyenanhung/pdo` version `^3.0`
 - [x] MySQLi Support from package `nguyenanhung/mysqli` version `^3.0`
-- [x] illuminate/events `^11.0 || ^10.0 || ^9.0 || ^8.61` Support
-- [x] illuminate/database `^11.0 || ^10.0 || ^9.0 || ^8.61` Support
+- [x] illuminate/events `^12.0 || ^11.0 || ^10.0 || ^9.0 || ^8.61` Support
+- [x] illuminate/database `^12.0 || ^11.0 || ^10.0 || ^9.0 || ^8.61` Support
 
 ## Version
 
