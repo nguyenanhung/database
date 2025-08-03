@@ -29,8 +29,8 @@
         "nguyenanhung/my-debug": "^4.0 || ^3.0",
         "nguyenanhung/pdo": "^3.0",
         "nguyenanhung/database-helper": "^2.0",
-        "illuminate/events": "^11.0 || ^10.0 || ^9.0 || ^8.61",
-        "illuminate/database": "^11.0 || ^10.0 || ^9.0 || ^8.61"
+        "illuminate/events": "^12.0 || ^11.0 || ^10.0 || ^9.0 || ^8.61",
+        "illuminate/database": "^12.0 || ^11.0 || ^10.0 || ^9.0 || ^8.61"
     },
     "require-dev": {
         "kint-php/kint": ">=3.0"
